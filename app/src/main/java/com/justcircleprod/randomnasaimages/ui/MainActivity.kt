@@ -12,14 +12,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.justcircleprod.randomnasaimages.ui.imagesList.ImagesListScreen
+import androidx.navigation.navArgument
+import com.justcircleprod.randomnasaimages.data.models.ImageEntry
+import com.justcircleprod.randomnasaimages.data.models.ImageEntryParamType
+import com.justcircleprod.randomnasaimages.ui.detailImage.DetailImageScreen
+import com.justcircleprod.randomnasaimages.ui.imageList.ImageListScreen
 import com.justcircleprod.randomnasaimages.ui.theme.RandomNASAImagesTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     companion object {
-        const val IMAGES_LIST_SCREEN_DESTINATION = "IMAGES_LIST_SCREEN"
+        const val IMAGE_LIST_SCREEN_DESTINATION = "image_list"
+
+        const val DETAIL_IMAGE_SCREEN_DESTINATION = "detail_image"
+        const val IMAGE_ENTRY_ARGUMENT_NAME = "IMAGE_ENTRY"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,10 +42,20 @@ class MainActivity : ComponentActivity() {
 
                     NavHost(
                         navController = navController,
-                        startDestination = IMAGES_LIST_SCREEN_DESTINATION
+                        startDestination = IMAGE_LIST_SCREEN_DESTINATION
                     ) {
-                        composable(IMAGES_LIST_SCREEN_DESTINATION) {
-                            ImagesListScreen()
+                        composable(IMAGE_LIST_SCREEN_DESTINATION) {
+                            ImageListScreen(navController = navController)
+                        }
+                        composable("$DETAIL_IMAGE_SCREEN_DESTINATION/{$IMAGE_ENTRY_ARGUMENT_NAME}", arguments = listOf(
+                            navArgument(IMAGE_ENTRY_ARGUMENT_NAME) {
+                                type = ImageEntryParamType()
+                            }
+                        )) {
+                            val imageEntry = it.arguments?.getParcelable<ImageEntry>(
+                                IMAGE_ENTRY_ARGUMENT_NAME
+                            )
+                            DetailImageScreen(navController = navController, imageEntry = imageEntry)
                         }
                     }
                 }

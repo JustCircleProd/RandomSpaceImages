@@ -10,9 +10,19 @@ import javax.inject.Inject
 class DefaultNASALibraryRepository @Inject constructor(private val nasaLibraryAPI: NASALibraryAPI) :
     NASALibraryRepository {
 
-    override suspend fun getImages(page: Int): Resource<NASAImagesList> {
+    override suspend fun getImages(
+        page: Int,
+        yearStart: Int,
+        yearEnd: Int
+    ): Resource<NASAImagesList> {
         return try {
-            Resource.Success(nasaLibraryAPI.getImages(page = page))
+            Resource.Success(
+                nasaLibraryAPI.getImages(
+                    page = page,
+                    yearStart = yearStart,
+                    yearEnd = yearEnd
+                )
+            )
         } catch (e: Exception) {
             Resource.Error("Error")
         }

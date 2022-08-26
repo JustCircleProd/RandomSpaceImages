@@ -5,9 +5,11 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface NASALibraryAPI {
-    @GET
+    @GET("search")
     suspend fun getImages(
         @Query("media_type") mediaType: String = "image",
+        @Query("year_start") yearStart: Int,
+        @Query("year_end") yearEnd: Int,
         @Query("page") page: Int
     ): NASAImagesList
 }

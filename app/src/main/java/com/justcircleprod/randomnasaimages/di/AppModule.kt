@@ -2,6 +2,7 @@ package com.justcircleprod.randomnasaimages.di
 
 import com.justcircleprod.randomnasaimages.data.remote.NASALibraryAPI
 import com.justcircleprod.randomnasaimages.data.remote.RemoteConstants
+import com.justcircleprod.randomnasaimages.data.repositories.DefaultNASALibraryRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,7 +20,7 @@ object AppModule {
     @Provides
     fun provideNASALibraryAPI(): NASALibraryAPI {
         val interceptor = HttpLoggingInterceptor()
-        interceptor.level = HttpLoggingInterceptor.Level.BODY
+        interceptor.level = HttpLoggingInterceptor.Level.HEADERS
         val client: OkHttpClient = OkHttpClient.Builder().addInterceptor(interceptor).build()
 
         return Retrofit.Builder()
@@ -29,4 +30,8 @@ object AppModule {
             .build()
             .create(NASALibraryAPI::class.java)
     }
+
+    @Singleton
+    @Provides
+    fun provideDefaultNASALibraryRepository(nasaLibraryAPI: NASALibraryAPI) = DefaultNASALibraryRepository(nasaLibraryAPI)
 }
