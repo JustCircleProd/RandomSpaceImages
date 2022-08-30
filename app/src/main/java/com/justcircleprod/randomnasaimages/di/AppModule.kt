@@ -1,16 +1,14 @@
 package com.justcircleprod.randomnasaimages.di
 
-import com.justcircleprod.randomnasaimages.data.remote.NASALibraryAPI
-import com.justcircleprod.randomnasaimages.data.remote.RemoteConstants
-import com.justcircleprod.randomnasaimages.data.repositories.DefaultNASALibraryRepository
+import android.content.Context
+import androidx.room.Room
+import com.justcircleprod.randomnasaimages.data.repositories.roomRepository.DefaultRoomRepository
+import com.justcircleprod.randomnasaimages.data.room.database.AppDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -18,20 +16,12 @@ import javax.inject.Singleton
 object AppModule {
     @Singleton
     @Provides
-    fun provideNASALibraryAPI(): NASALibraryAPI {
-        val interceptor = HttpLoggingInterceptor()
-        interceptor.level = HttpLoggingInterceptor.Level.HEADERS
-        val client: OkHttpClient = OkHttpClient.Builder().addInterceptor(interceptor).build()
-
-        return Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(RemoteConstants.NASA_LIBRARY_BASE_URL)
-            .client(client)
+    fun provideRoomDatabase(@ApplicationContext context: Context) =
+        Room.databaseBuilder(context, AppDatabase::class.java, "RandomNASAImagesDatabase.db")
             .build()
-            .create(NASALibraryAPI::class.java)
-    }
 
     @Singleton
     @Provides
-    fun provideDefaultNASALibraryRepository(nasaLibraryAPI: NASALibraryAPI) = DefaultNASALibraryRepository(nasaLibraryAPI)
+    fun provideDefaultRoomRepository(roomDatabase: AppDatabase) =
+        DefaultRoomRepository(roomDatabase)
 }

@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">RandomNASAImages</string>
+
+    <string name="home">Home</string>
+    <string name="detail_image">Detail Image</string>
+    <string name="favourites">Favourites</string>
+
+    <string name="error_info_text">There is an error.\nSwipe down to Retry</string>
+    <string name="error_info_card_text">There is an error. Scroll or Swipe down to Retry</string>
+    <string name="retry">Retry</string>
+
+    <string name="additional_information">Additional Information</string>
+
+    <string name="location">Location:</string>
+    <string name="secondary_creator">Secondary Creator:</string>
+    <string name="photographer">Photographer:</string>
+
+    <string name="back_button">Back button</string>
+
+    <string name="favourite_button">Favourite button</string>
+
+    <string name="no_favourites">No favourites</string>
 </resources>

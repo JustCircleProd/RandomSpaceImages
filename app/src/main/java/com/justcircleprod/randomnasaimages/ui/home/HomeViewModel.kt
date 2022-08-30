@@ -1,49 +1,61 @@
-package com.justcircleprod.randomnasaimages.ui.imageList
+package com.justcircleprod.randomnasaimages.ui.home
 
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.justcircleprod.randomnasaimages.data.models.ImageEntry
 import com.justcircleprod.randomnasaimages.data.remote.RemoteConstants
-import com.justcircleprod.randomnasaimages.data.repositories.DefaultNASALibraryRepository
+import com.justcircleprod.randomnasaimages.data.repositories.nasaLibraryRepository.DefaultNASALibraryRepository
+import com.justcircleprod.randomnasaimages.data.repositories.roomRepository.DefaultRoomRepository
+import com.justcircleprod.randomnasaimages.ui.baseViewModel.BaseViewModel
 import com.justcircleprod.randomnasaimages.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import kotlin.math.ceil
 
 @HiltViewModel
-class ImageListViewModel @Inject constructor(private val nasaLibraryRepository: DefaultNASALibraryRepository) :
-    ViewModel() {
-    private val page = mutableStateOf(0)
-    private val year = mutableStateOf(RemoteConstants.NASA_LIBRARY_DATE_END)
+class HomeViewModel @Inject constructor(
+    private val nasaLibraryRepository: DefaultNASALibraryRepository,
+    roomRepository: DefaultRoomRepository
+) : BaseViewModel(roomRepository = roomRepository) {
+
+    private val page = MutableStateFlow(0)
+    private val year = MutableStateFlow(RemoteConstants.NASA_LIBRARY_DATE_END)
 
     // contains checked years and corresponding pages count and pages
     private val yearsToPagesCount: MutableMap<Int, Int> = mutableMapOf()
     private val yearsToPages: MutableMap<Int, MutableList<Int>?> = mutableMapOf()
 
-    val imageEntries = mutableStateOf<List<ImageEntry>>(listOf())
-    val loadError = mutableStateOf("")
-    val isLoading = mutableStateOf(true)
-    val endReached = mutableStateOf(false)
+    val images = MutableStateFlow<List<ImageEntry>>(listOf())
 
-    fun loadImages() {
+    val isLoading = MutableStateFlow(true)
+    val loadError = MutableStateFlow(false)
+
+    val isRefreshing = MutableStateFlow(false)
+
+    val endReached = MutableStateFlow(false)
+
+    init {
+        loadImages()
+    }
+
+    fun loadImages(refresh: Boolean = false) {
         viewModelScope.launch(Dispatchers.Default) {
-            isLoading.value = true
+            setLoadingOrRefreshing(refresh = refresh, value = true)
 
             setEndReach()
             if (endReached.value) {
-                isLoading.value = false
+                setLoadingOrRefreshing(refresh = refresh, value = false)
                 return@launch
             }
 
             // if calculations in setYearAndPage went wrong
             // then loadError will be set in that method
             setYearAndPage()
-            if (loadError.value.isNotEmpty()) {
-                isLoading.value = false
+            if (loadError.value) {
+                setLoadingOrRefreshing(refresh = refresh, value = false)
                 return@launch
             }
 
@@ -53,24 +65,35 @@ class ImageListViewModel @Inject constructor(private val nasaLibraryRepository: 
 
             when (result) {
                 is Resource.Success -> {
-                    imageEntries.value += result.data!!.collection.items.map {
+                    val images = result.data!!.collection.items.map {
                         ImageEntry(
+                            nasaId = it.data.first().nasa_id,
                             title = it.data.first().title,
                             description = it.data.first().description,
-                            creator = it.data.first().secondary_creator,
+                            center = it.data.first().center,
+                            location = it.data.first().location,
                             dateCreated = it.data.first().date_created,
-                            imageHref = it.links.first().href
+                            imageHref = it.links.first().href,
+                            secondaryCreator = it.data.first().secondary_creator,
+                            photographer = it.data.first().photographer
                         )
-                    }.shuffled()
+                    }
 
-                    loadError.value = ""
+                    if (isRefreshing.value) {
+                        this@HomeViewModel.images.value = images
+                    } else {
+                        this@HomeViewModel.images.value += images
+                    }
+
+                    loadError.value = false
                 }
                 is Resource.Error -> {
-                    loadError.value = result.errorMessage!!
+                    loadError.value = true
+                    setLoadingOrRefreshing(refresh = refresh, value = false)
                 }
             }
 
-            isLoading.value = false
+            setLoadingOrRefreshing(refresh = refresh, value = false)
         }
     }
 
@@ -158,11 +181,11 @@ class ImageListViewModel @Inject constructor(private val nasaLibraryRepository: 
         }
 
         if (result is Resource.Error) {
-            loadError.value = result.errorMessage!!
+            loadError.value = true
             return null
         }
 
-        loadError.value = ""
+        loadError.value = false
 
         if (result.data!!.collection.items.isEmpty()) {
             yearsToPagesCount[year] = 0
@@ -191,4 +214,13 @@ class ImageListViewModel @Inject constructor(private val nasaLibraryRepository: 
 
         return pagesCount
     }
+
+    private fun setLoadingOrRefreshing(refresh: Boolean, value: Boolean) {
+        if (refresh) {
+            isRefreshing.value = value
+        } else {
+            isLoading.value = value
+        }
+    }
 }
+

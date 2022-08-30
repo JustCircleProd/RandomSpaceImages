@@ -1,15 +1,14 @@
-package com.justcircleprod.randomnasaimages.data.repositories
+package com.justcircleprod.randomnasaimages.data.repositories.nasaLibraryRepository
 
 import com.justcircleprod.randomnasaimages.data.remote.NASALibraryAPI
 import com.justcircleprod.randomnasaimages.data.remote.responses.NASAImagesList
 import com.justcircleprod.randomnasaimages.util.Resource
-import dagger.hilt.android.scopes.ActivityScoped
+import dagger.hilt.android.scopes.ViewModelScoped
 import javax.inject.Inject
 
-@ActivityScoped
+@ViewModelScoped
 class DefaultNASALibraryRepository @Inject constructor(private val nasaLibraryAPI: NASALibraryAPI) :
     NASALibraryRepository {
-
     override suspend fun getImages(
         page: Int,
         yearStart: Int,
@@ -24,7 +23,7 @@ class DefaultNASALibraryRepository @Inject constructor(private val nasaLibraryAP
                 )
             )
         } catch (e: Exception) {
-            Resource.Error("Error")
+            Resource.Error(true)
         }
     }
 }

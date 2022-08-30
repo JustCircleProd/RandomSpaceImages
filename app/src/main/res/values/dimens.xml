@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="elements_space_size">6dp</dimen>
+
+    <dimen name="bottom_navigation_width">140dp</dimen>
+    <dimen name="bottom_navigation_height">60dp</dimen>
+    <dimen name="bottom_navigation_rounded_radius">40dp</dimen>
+
+    <dimen name="main_rounded_corner_radius">12dp</dimen>
+
+    <dimen name="min_grid_cell_size">150dp</dimen>
+    <dimen name="image_list_item_title_padding_top">4dp</dimen>
+    <dimen name="image_list_favourite_button_size">24dp</dimen>
+    <dimen name="image_list_favourite_icon_size">20dp</dimen>
+
+    <dimen name="card_content_horizontal_space">20dp</dimen>
+    <dimen name="card_elevation">3dp</dimen>
+
+    <dimen name="progress_card_padding">10dp</dimen>
+    <dimen name="progress_card_elevation">4dp</dimen>
+    <dimen name="progress_indicator_stroke_width">3dp</dimen>
+    <dimen name="progress_indicator_size">22dp</dimen>
+
+    <dimen name="bottom_navigation_icon_size">24dp</dimen>
+
+    <dimen name="bottom_space">80dp</dimen>
+
+    <dimen name="center_and_date_info_padding_top">6dp</dimen>
+    <dimen name="center_and_date_info_padding_bottom">4dp</dimen>
+
+    <dimen name="detail_card_content_vertical_space">12dp</dimen>
+    <dimen name="description_top_space_size">4dp</dimen>
+
+    <dimen name="action_buttons_horizontal_space_size">6dp</dimen>
+
+    <dimen name="detail_image_back_button_size">40dp</dimen>
+    <dimen name="detail_image_back_button_icon_size">40dp</dimen>
+
+    <dimen name="detail_image_favourite_button_size">26dp</dimen>
+    <dimen name="detail_image_favourite_button_icon_size">26dp</dimen>
+
+    <dimen name="action_button_icon_blur">1dp</dimen>
+
+    <dimen name="rocket_icon_space_size">2dp</dimen>
+    <dimen name="rocket_launch_icon_space_size">4dp</dimen>
+
+    <dimen name="info_icon_size">24dp</dimen>
+
+    <dimen name="error_info_card_horizontal_space_size">6dp</dimen>
+    <dimen name="error_info_card_vertical_space_size">8dp</dimen>
+    <dimen name="error_info_card_icon_size">20dp</dimen>
+</resources>

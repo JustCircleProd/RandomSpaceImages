@@ -8,4 +8,6 @@ object RemoteConstants {
 
     const val NASA_LIBRARY_ITEMS_PER_PAGE = 100
     const val NASA_LIBRARY_MAX_PAGES = 100
+
+    const val NASA_LIBRARY_DATE_CREATED_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'"
 }

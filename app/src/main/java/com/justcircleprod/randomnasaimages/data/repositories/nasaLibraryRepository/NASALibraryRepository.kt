@@ -1,4 +1,4 @@
-package com.justcircleprod.randomnasaimages.data.repositories
+package com.justcircleprod.randomnasaimages.data.repositories.nasaLibraryRepository
 
 import com.justcircleprod.randomnasaimages.data.remote.responses.NASAImagesList
 import com.justcircleprod.randomnasaimages.util.Resource
