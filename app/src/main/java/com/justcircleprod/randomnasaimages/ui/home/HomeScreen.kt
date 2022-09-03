@@ -23,7 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -34,7 +34,7 @@ import com.justcircleprod.randomnasaimages.ui.theme.ErrorCardBackground
 
 @Composable
 fun HomeScreen(
-    navController: NavController
+    navController: NavHostController
 ) {
     val viewModel: HomeViewModel = hiltViewModel()
 
@@ -46,7 +46,7 @@ fun HomeScreen(
 
 @Composable
 fun ImageList(
-    navController: NavController,
+    navController: NavHostController,
     viewModel: HomeViewModel
 ) {
     val images by viewModel.images.collectAsState()

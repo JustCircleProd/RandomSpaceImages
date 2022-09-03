@@ -6,5 +6,5 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class DetailImageViewModel @Inject constructor(roomRepository: DefaultRoomRepository) :
+class DetailViewModel @Inject constructor(roomRepository: DefaultRoomRepository) :
     BaseViewModel(roomRepository = roomRepository)

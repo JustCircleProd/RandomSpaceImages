@@ -23,7 +23,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
@@ -63,7 +63,7 @@ fun ProgressIndicator() {
 @Composable
 fun ImageItem(
     imageEntry: ImageEntry,
-    navController: NavController,
+    navController: NavHostController,
     viewModel: BaseViewModel
 ) {
     val isClickEnabled = remember { mutableStateOf(false) }
@@ -83,15 +83,15 @@ fun ImageItem(
     }
 }
 
-private fun navigateToDetailScreen(navController: NavController, imageEntry: ImageEntry) {
+private fun navigateToDetailScreen(navController: NavHostController, imageEntry: ImageEntry) {
     val json = Uri.encode(Gson().toJson(imageEntry))
-    navController.navigate(Screen.DetailImage(json).route)
+    navController.navigate(Screen.Detail(json).route)
 }
 
 @Composable
 fun Image(
     imageEntry: ImageEntry,
-    clickEnabled: MutableState<Boolean>
+    isClickEnabled: MutableState<Boolean>
 ) {
     GlideImage(
         imageModel = imageEntry.imageHref,
@@ -102,7 +102,7 @@ fun Image(
                 target: Target<Drawable>?,
                 isFirstResource: Boolean
             ): Boolean {
-                clickEnabled.value = false
+                isClickEnabled.value = false
                 return false
             }
 
@@ -113,7 +113,7 @@ fun Image(
                 dataSource: DataSource?,
                 isFirstResource: Boolean
             ): Boolean {
-                clickEnabled.value = true
+                isClickEnabled.value = true
                 return true
             }
         },

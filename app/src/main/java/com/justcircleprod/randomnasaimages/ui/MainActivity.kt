@@ -83,14 +83,14 @@ class MainActivity : ComponentActivity() {
             composable(Screen.Favourites.route) {
                 FavouritesScreen(navController = navController)
             }
-            composable(Screen.DetailImage().route,
+            composable(Screen.Detail().route,
                 arguments = listOf(
-                    navArgument(Screen.DetailImage.IMAGE_ENTRY_ARGUMENT_NAME) {
+                    navArgument(Screen.Detail.IMAGE_ENTRY_ARGUMENT_NAME) {
                         type = ImageEntryParamType()
                     }
                 )) {
                 val imageEntry = it.arguments?.getParcelable<ImageEntry>(
-                    Screen.DetailImage.IMAGE_ENTRY_ARGUMENT_NAME
+                    Screen.Detail.IMAGE_ENTRY_ARGUMENT_NAME
                 )
                 DetailImageScreen(
                     navController = navController,

@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -30,7 +30,7 @@ import com.justcircleprod.randomnasaimages.R
 import com.justcircleprod.randomnasaimages.ui.common.ImageItem
 
 @Composable
-fun FavouritesScreen(navController: NavController) {
+fun FavouritesScreen(navController: NavHostController) {
     val viewModel: FavouritesViewModel = hiltViewModel()
 
     LaunchedEffect(true) {
@@ -42,7 +42,7 @@ fun FavouritesScreen(navController: NavController) {
 
 @Composable
 fun ImageList(
-    navController: NavController,
+    navController: NavHostController,
     viewModel: FavouritesViewModel
 ) {
     val images by viewModel.favourites.observeAsState()

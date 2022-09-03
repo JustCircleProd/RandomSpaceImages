@@ -31,7 +31,8 @@
     <dimen name="detail_card_content_vertical_space">12dp</dimen>
     <dimen name="description_top_space_size">4dp</dimen>
 
-    <dimen name="action_buttons_horizontal_space_size">6dp</dimen>
+    <dimen name="action_buttons_start_space_size">6dp</dimen>
+    <dimen name="action_buttons_end_space_size">12dp</dimen>
 
     <dimen name="detail_image_back_button_size">40dp</dimen>
     <dimen name="detail_image_back_button_icon_size">40dp</dimen>

@@ -7,8 +7,8 @@ sealed class Screen(
 
     object Favourites : Screen("favourites")
 
-    class DetailImage(imageEntry: String = "{image_entry}") :
-        Screen("detail_image/$imageEntry") {
+    class Detail(imageEntry: String = "{$IMAGE_ENTRY_ARGUMENT_NAME}") :
+        Screen("detail/$imageEntry") {
         companion object {
             const val IMAGE_ENTRY_ARGUMENT_NAME = "image_entry"
         }

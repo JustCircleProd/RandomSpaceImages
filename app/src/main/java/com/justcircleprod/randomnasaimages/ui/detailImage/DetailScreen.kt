@@ -1,5 +1,7 @@
 package com.justcircleprod.randomnasaimages.ui.detailImage
 
+import androidx.compose.foundation.MutatePriority
+import androidx.compose.foundation.gestures.*
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -10,15 +12,17 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -32,19 +36,24 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.justcircleprod.randomnasaimages.R
 import com.justcircleprod.randomnasaimages.data.models.ImageEntry
 import com.justcircleprod.randomnasaimages.data.remote.RemoteConstants
+import com.justcircleprod.randomnasaimages.ui.common.BackButton
 import com.justcircleprod.randomnasaimages.ui.theme.IconButtonShadow
 import com.justcircleprod.randomnasaimages.ui.theme.Red
 import com.skydoves.landscapist.ShimmerParams
 import com.skydoves.landscapist.glide.GlideImage
+import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
-fun DetailImageScreen(navController: NavController, imageEntry: ImageEntry?) {
-    val viewModel: DetailImageViewModel = hiltViewModel()
+fun DetailImageScreen(navController: NavHostController, imageEntry: ImageEntry?) {
+    val viewModel: DetailViewModel = hiltViewModel()
+    val scrollState = rememberScrollState()
 
     ConstraintLayout {
         val (contentColumn, actionButtons) = createRefs()
@@ -58,9 +67,9 @@ fun DetailImageScreen(navController: NavController, imageEntry: ImageEntry?) {
                     end.linkTo(parent.end)
                 }
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(scrollState)
         ) {
-            ImageCard(imageEntry = imageEntry!!)
+            ImageCard(imageEntry = imageEntry!!, scrollState = scrollState)
 
             if (imageEntry.title != null || imageEntry.description != null) {
                 Spacer(Modifier.height(dimensionResource(id = R.dimen.elements_space_size)))
@@ -91,7 +100,7 @@ fun DetailImageScreen(navController: NavController, imageEntry: ImageEntry?) {
 }
 
 @Composable
-fun ImageCard(imageEntry: ImageEntry) {
+fun ImageCard(imageEntry: ImageEntry, scrollState: ScrollableState) {
     Card(
         shape = RoundedCornerShape(
             bottomStart = dimensionResource(id = R.dimen.main_rounded_corner_radius),
@@ -101,14 +110,24 @@ fun ImageCard(imageEntry: ImageEntry) {
         elevation = dimensionResource(id = R.dimen.card_elevation)
     ) {
         Column(Modifier.fillMaxWidth()) {
-            Image(imageEntry = imageEntry)
+            ZoomableImage(imageEntry = imageEntry, scrollState = scrollState)
             CenterAndDateInfo(imageEntry = imageEntry)
         }
     }
 }
 
 @Composable
-fun Image(imageEntry: ImageEntry) {
+fun ZoomableImage(imageEntry: ImageEntry, scrollState: ScrollableState) {
+    val coroutineScope = rememberCoroutineScope()
+
+    val localDensity = LocalDensity.current
+    var width by remember { mutableStateOf(0f) }
+    var height by remember { mutableStateOf(0f) }
+
+    var scale by remember { mutableStateOf(1f) }
+    var offsetX by remember { mutableStateOf(1f) }
+    var offsetY by remember { mutableStateOf(1f) }
+
     GlideImage(
         imageModel = imageEntry.imageHref,
         contentDescription = imageEntry.title,
@@ -122,7 +141,74 @@ fun Image(imageEntry: ImageEntry) {
         ),
         modifier = Modifier
             .fillMaxWidth()
+            .onGloballyPositioned { coordinates ->
+                width = with(localDensity) { coordinates.size.width.toDp().value }
+                height = with(localDensity) { coordinates.size.height.toDp().value }
+            }
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onDoubleTap = {
+                        if (scale > 1f) {
+                            scale = 1f
+                            offsetX = 1f
+                            offsetY = 1f
+                        } else {
+                            scale = 3f
+                        }
+                    }
+                )
+            }
+            .pointerInput(Unit) {
+                forEachGesture {
+                    awaitPointerEventScope {
+                        awaitFirstDown()
+                        do {
+                            val event = awaitPointerEvent()
+                            scale = (scale * event.calculateZoom()).coerceIn(1f..3f)
+
+                            if (scale > 1) {
+                                coroutineScope.launch {
+                                    scrollState.setScrolling(false)
+                                }
+
+                                val offset = event.calculatePan()
+
+                                offsetX = (offsetX + offset.x)
+                                    .coerceIn(-(width * scale)..width * scale)
+
+                                offsetY = (offsetY + offset.y)
+                                    .coerceIn(-(height * scale)..height * scale)
+
+
+                                coroutineScope.launch {
+                                    scrollState.setScrolling(true)
+                                }
+                            } else {
+                                scale = 1f
+                                offsetX = 1f
+                                offsetY = 1f
+                            }
+                        } while (event.changes.any { it.pressed })
+                    }
+                }
+            }
+            .graphicsLayer {
+                scaleX = scale.coerceIn(1f..3f)
+                scaleY = scale.coerceIn(1f..3f)
+
+                translationX = offsetX
+                translationY = offsetY
+            }
     )
+}
+
+private suspend fun ScrollableState.setScrolling(value: Boolean) {
+    scroll(scrollPriority = MutatePriority.PreventUserInput) {
+        when (value) {
+            true -> Unit
+            else -> awaitCancellation()
+        }
+    }
 }
 
 @Composable
@@ -251,7 +337,7 @@ fun AdditionalInfoCard(imageEntry: ImageEntry) {
 @Composable
 fun ActionButtons(
     navController: NavController,
-    viewModel: DetailImageViewModel,
+    viewModel: DetailViewModel,
     imageEntry: ImageEntry,
     modifier: Modifier
 ) {
@@ -259,8 +345,9 @@ fun ActionButtons(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
-            .padding(horizontal = dimensionResource(id = R.dimen.action_buttons_horizontal_space_size))
             .fillMaxWidth()
+            .padding(start = dimensionResource(id = R.dimen.action_buttons_start_space_size))
+            .padding(end = dimensionResource(id = R.dimen.action_buttons_end_space_size))
     ) {
         BackButton(navController = navController, modifier = Modifier)
         FavouriteButton(imageEntry = imageEntry, viewModel = viewModel)
@@ -268,37 +355,9 @@ fun ActionButtons(
 }
 
 @Composable
-fun BackButton(
-    navController: NavController,
-    modifier: Modifier
-) {
-    IconButton(
-        onClick = { navController.popBackStack() },
-        modifier = modifier.size(dimensionResource(id = R.dimen.detail_image_back_button_size))
-    ) {
-        Icon(
-            Icons.Default.KeyboardArrowLeft,
-            contentDescription = null,
-            modifier = Modifier
-                .size(dimensionResource(id = R.dimen.detail_image_back_button_icon_size))
-                .offset(x = 1.dp, y = 1.dp)
-                .alpha(0.4f)
-                .blur(dimensionResource(id = R.dimen.action_button_icon_blur)),
-            tint = Color(0xFF2E2E2E)
-        )
-        Icon(
-            imageVector = Icons.Default.KeyboardArrowLeft,
-            contentDescription = stringResource(id = R.string.back_button),
-            tint = Color.White,
-            modifier = Modifier.size(dimensionResource(id = R.dimen.detail_image_back_button_icon_size))
-        )
-    }
-}
-
-@Composable
 fun FavouriteButton(
     imageEntry: ImageEntry,
-    viewModel: DetailImageViewModel = hiltViewModel()
+    viewModel: DetailViewModel = hiltViewModel()
 ) {
     val isAdded by viewModel.isAddedToFavourites(imageEntry.nasaId).observeAsState()
 

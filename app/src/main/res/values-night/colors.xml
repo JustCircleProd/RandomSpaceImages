@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <color name="status_bar_color" tools:ignore="MissingDefaultResource">#000000</color>
+    <color name="status_bar_color" tools:ignore="MissingDefaultResource">#252525</color>
 
     <color name="card_background_color">#373737</color>
 
