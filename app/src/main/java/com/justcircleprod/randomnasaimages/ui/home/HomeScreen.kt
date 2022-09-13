@@ -28,6 +28,7 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.justcircleprod.randomnasaimages.R
+import com.justcircleprod.randomnasaimages.ui.common.Ad
 import com.justcircleprod.randomnasaimages.ui.common.ImageItem
 import com.justcircleprod.randomnasaimages.ui.common.ProgressIndicator
 import com.justcircleprod.randomnasaimages.ui.theme.ErrorCardBackground
@@ -84,11 +85,16 @@ fun ImageList(
                     if (it >= images.size - 1 && !endReached && !isLoading) {
                         viewModel.loadImages()
                     }
-                    ImageItem(
-                        imageEntry = images[it],
-                        navController = navController,
-                        viewModel = viewModel
-                    )
+
+                    if (images[it] != null) {
+                        ImageItem(
+                            imageEntry = images[it]!!,
+                            navController = navController,
+                            viewModel = viewModel
+                        )
+                    } else {
+                        Ad()
+                    }
                 }
 
                 if (isLoading && images.isNotEmpty()) {

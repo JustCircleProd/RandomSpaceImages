@@ -21,9 +21,11 @@ class FavouritesViewModel @Inject constructor(roomRepository: DefaultRoomReposit
     fun setFavourites(refresh: Boolean = false) {
         viewModelScope.launch(Dispatchers.IO) {
             isRefreshing.value = refresh
+
             favourites.postValue(
                 roomRepository.getAllFavourites()
             )
+
             isRefreshing.value = false
         }
     }

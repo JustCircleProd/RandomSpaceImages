@@ -28,7 +28,7 @@ class HomeViewModel @Inject constructor(
     private val yearsToPagesCount: MutableMap<Int, Int> = mutableMapOf()
     private val yearsToPages: MutableMap<Int, MutableList<Int>?> = mutableMapOf()
 
-    val images = MutableStateFlow<List<ImageEntry>>(listOf())
+    val images = MutableStateFlow<MutableList<ImageEntry?>>(mutableListOf())
 
     val isLoading = MutableStateFlow(true)
     val loadError = MutableStateFlow(false)
@@ -65,7 +65,7 @@ class HomeViewModel @Inject constructor(
 
             when (result) {
                 is Resource.Success -> {
-                    val images = result.data!!.collection.items.map {
+                    val newImages = result.data!!.collection.items.map {
                         ImageEntry(
                             nasaId = it.data.first().nasa_id,
                             title = it.data.first().title,
@@ -80,9 +80,21 @@ class HomeViewModel @Inject constructor(
                     }
 
                     if (isRefreshing.value) {
-                        this@HomeViewModel.images.value = images
+                        images.value = newImages.toMutableList()
                     } else {
-                        this@HomeViewModel.images.value += images
+                        images.value += newImages
+                    }
+
+                    val itemsCountBetweenAds = 50
+
+                    // add null (ad) every itemsCountBetweenAds items
+                    for (i in 1..images.value.size / itemsCountBetweenAds) {
+                        if (
+                            i * itemsCountBetweenAds <= images.value.size - 1 &&
+                            images.value[i * itemsCountBetweenAds] != null
+                        ) {
+                            images.value.add(i * itemsCountBetweenAds, null)
+                        }
                     }
 
                     loadError.value = false

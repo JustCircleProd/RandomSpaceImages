@@ -20,4 +20,7 @@
     <string name="favourite_button">Favourite button</string>
 
     <string name="no_favourites">No favourites</string>
+
+    <string name="feedback_button">Feedback Button</string>
+    <string name="ad">Ad</string>
 </resources>

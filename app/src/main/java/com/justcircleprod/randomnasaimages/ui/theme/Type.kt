@@ -6,7 +6,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import com.justcircleprod.randomnasaimages.R
 
-// Set of Material typography styles to start with
 val Typography = Typography(
     defaultFontFamily = FontFamily(
         Font(R.font.lato_regular),

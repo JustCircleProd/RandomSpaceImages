@@ -84,7 +84,7 @@ fun DetailImageScreen(navController: NavHostController, imageEntry: ImageEntry?)
                 AdditionalInfoCard(imageEntry = imageEntry)
             }
 
-            Spacer(Modifier.height(dimensionResource(id = R.dimen.bottom_space)))
+            Spacer(Modifier.height(dimensionResource(id = R.dimen.elements_space_size)))
         }
 
         ActionButtons(

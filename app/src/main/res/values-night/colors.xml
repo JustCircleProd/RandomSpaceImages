@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <color name="status_bar_color" tools:ignore="MissingDefaultResource">#252525</color>
-
+<resources>
     <color name="card_background_color">#373737</color>
 
     <color name="bottom_navigation_background_color">#4A4A4A</color>

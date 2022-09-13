@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="blue_light">#60CBFF</color>
+    <color name="blue_dark">#3664F4</color>
+    <color name="red">#E85353</color>
+
     <color name="card_background_color">#ffffff</color>
 
     <color name="bottom_navigation_background_color">#DDDDDD</color>
