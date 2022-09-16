@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -36,6 +37,7 @@ import com.justcircleprod.randomnasaimages.ui.detailImage.DetailImageScreen
 import com.justcircleprod.randomnasaimages.ui.favourites.FavouritesScreen
 import com.justcircleprod.randomnasaimages.ui.home.HomeScreen
 import com.justcircleprod.randomnasaimages.ui.screen.Screen
+import com.justcircleprod.randomnasaimages.ui.search.SearchScreen
 import com.justcircleprod.randomnasaimages.ui.theme.RandomNASAImagesTheme
 import com.yandex.mobile.ads.common.MobileAds
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,7 +57,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     val navController = rememberNavController()
-                    val bottomNavigationState = remember { (MutableTransitionState(true)) }
+                    val bottomNavigationState = remember { MutableTransitionState(true) }
 
                     ConstraintLayout(modifier = Modifier.padding()) {
                         NavHost(
@@ -96,6 +98,10 @@ class MainActivity : ComponentActivity() {
                 HomeScreen(
                     navController = navController
                 )
+            }
+            composable(Screen.Search.route) {
+                bottomNavigationState.targetState = true
+                SearchScreen(navController = navController)
             }
             composable(Screen.Favourites.route) {
                 bottomNavigationState.targetState = true
@@ -142,6 +148,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val bottomNavigationItem = listOf(
                         BottomNavItem.Home(MaterialTheme.colors.primary),
+                        BottomNavItem.Search(MaterialTheme.colors.primary),
                         BottomNavItem.Favourites(MaterialTheme.colors.secondary),
                     )
 
@@ -152,7 +159,7 @@ class MainActivity : ComponentActivity() {
                         BottomNavigationItem(
                             icon = {
                                 Icon(
-                                    bottomNavItem.icon,
+                                    painter = painterResource(id = bottomNavItem.iconResId),
                                     contentDescription = stringResource(id = bottomNavItem.titleResId),
                                     modifier = Modifier
                                         .size(dimensionResource(id = R.dimen.bottom_navigation_icon_size))

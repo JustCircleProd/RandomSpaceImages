@@ -4,14 +4,13 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -27,7 +26,7 @@ fun BackButton(
         modifier = modifier.size(dimensionResource(id = R.dimen.detail_image_back_button_size))
     ) {
         Icon(
-            Icons.Default.KeyboardArrowLeft,
+            painter = painterResource(id = R.drawable.icon_back_arrow),
             contentDescription = null,
             modifier = Modifier
                 .size(dimensionResource(id = R.dimen.detail_image_back_button_icon_size))
@@ -37,7 +36,7 @@ fun BackButton(
             tint = Color(0xFF2E2E2E)
         )
         Icon(
-            imageVector = Icons.Default.KeyboardArrowLeft,
+            painter = painterResource(id = R.drawable.icon_back_arrow),
             contentDescription = stringResource(id = R.string.back_button),
             tint = Color.White,
             modifier = Modifier.size(dimensionResource(id = R.dimen.detail_image_back_button_icon_size))

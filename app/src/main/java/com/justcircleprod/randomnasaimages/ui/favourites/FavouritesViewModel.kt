@@ -16,17 +16,27 @@ class FavouritesViewModel @Inject constructor(roomRepository: DefaultRoomReposit
     BaseViewModel(roomRepository) {
 
     val favourites = MutableLiveData<List<ImageEntry>>()
+
+    val isLoading = MutableStateFlow(true)
     val isRefreshing = MutableStateFlow(false)
 
     fun setFavourites(refresh: Boolean = false) {
         viewModelScope.launch(Dispatchers.IO) {
-            isRefreshing.value = refresh
+            setLoadingOrRefreshing(refresh, true)
 
             favourites.postValue(
                 roomRepository.getAllFavourites()
             )
 
-            isRefreshing.value = false
+            setLoadingOrRefreshing(refresh, false)
+        }
+    }
+
+    private fun setLoadingOrRefreshing(refresh: Boolean, value: Boolean) {
+        if (refresh) {
+            isRefreshing.value = value
+        } else {
+            isLoading.value = value
         }
     }
 }

@@ -9,10 +9,11 @@ import javax.inject.Inject
 @ViewModelScoped
 class DefaultNASALibraryRepository @Inject constructor(private val nasaLibraryAPI: NASALibraryAPI) :
     NASALibraryRepository {
+
     override suspend fun getImages(
-        page: Int,
         yearStart: Int,
-        yearEnd: Int
+        yearEnd: Int,
+        page: Int
     ): Resource<NASAImagesList> {
         return try {
             Resource.Success(
@@ -20,6 +21,22 @@ class DefaultNASALibraryRepository @Inject constructor(private val nasaLibraryAP
                     page = page,
                     yearStart = yearStart,
                     yearEnd = yearEnd
+                )
+            )
+        } catch (e: Exception) {
+            Resource.Error(true)
+        }
+    }
+
+    override suspend fun searchImages(
+        q: String,
+        page: Int,
+    ): Resource<NASAImagesList> {
+        return try {
+            Resource.Success(
+                nasaLibraryAPI.searchImages(
+                    q = q,
+                    page = page
                 )
             )
         } catch (e: Exception) {

@@ -12,4 +12,11 @@ interface NASALibraryAPI {
         @Query("year_end") yearEnd: Int,
         @Query("page") page: Int
     ): NASAImagesList
+
+    @GET("search")
+    suspend fun searchImages(
+        @Query("media_type") mediaType: String = "image",
+        @Query("q") q: String,
+        @Query("page") page: Int
+    ): NASAImagesList
 }

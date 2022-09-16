@@ -8,4 +8,9 @@
 
     <color name="bottom_navigation_background_color">#DDDDDD</color>
     <color name="bottom_navigation_unselected_content_color">#585858</color>
+
+    <color name="search_bar_background_color">#DDDDDD</color>
+    <color name="search_bar_placeholder_color">#585858</color>
+    <color name="search_bar_trailing_icon_tint">#656565</color>
+    <color name="search_bar_text_color">#1d1d1d</color>
 </resources>

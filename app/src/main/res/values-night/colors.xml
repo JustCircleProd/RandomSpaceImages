@@ -4,4 +4,9 @@
 
     <color name="bottom_navigation_background_color">#4A4A4A</color>
     <color name="bottom_navigation_unselected_content_color">#bdbfbe</color>
+
+    <color name="search_bar_background_color">#4A4A4A</color>
+    <color name="search_bar_placeholder_color">#b7b7b7</color>
+    <color name="search_bar_trailing_icon_tint">#acacac</color>
+    <color name="search_bar_text_color">#e8e8e8</color>
 </resources>

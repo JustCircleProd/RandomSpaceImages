@@ -7,6 +7,8 @@ sealed class Screen(
 
     object Favourites : Screen("favourites")
 
+    object Search : Screen("search")
+
     class Detail(imageEntry: String = "{$IMAGE_ENTRY_ARGUMENT_NAME}") :
         Screen("detail/$imageEntry") {
         companion object {

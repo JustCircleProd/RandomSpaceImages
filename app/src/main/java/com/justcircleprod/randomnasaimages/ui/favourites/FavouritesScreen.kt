@@ -7,8 +7,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Rocket
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -18,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
@@ -28,6 +27,7 @@ import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.justcircleprod.randomnasaimages.R
 import com.justcircleprod.randomnasaimages.ui.common.ImageItem
+import com.justcircleprod.randomnasaimages.ui.common.ProgressIndicator
 
 @Composable
 fun FavouritesScreen(navController: NavHostController) {
@@ -45,12 +45,10 @@ fun ImageList(
     navController: NavHostController,
     viewModel: FavouritesViewModel
 ) {
-    val images by viewModel.favourites.observeAsState()
-    val isRefreshing by viewModel.isRefreshing.collectAsState()
+    val favourites by viewModel.favourites.observeAsState()
 
-    if (images == null || images!!.isEmpty()) {
-        NoFavourites()
-    }
+    val isLoading by viewModel.isLoading.collectAsState()
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
 
     SwipeRefresh(
         state = rememberSwipeRefreshState(isRefreshing),
@@ -63,22 +61,33 @@ fun ImageList(
                 backgroundColor = colorResource(id = R.color.card_background_color),
                 contentColor = MaterialTheme.colors.primary
             )
-        }
+        },
+        modifier = Modifier.fillMaxSize()
     ) {
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(dimensionResource(id = R.dimen.min_grid_cell_size)),
-            modifier = Modifier.fillMaxSize()
-        ) {
-            if (images != null) {
-                items(images!!.size) {
-                    ImageItem(
-                        imageEntry = images!![it],
-                        navController = navController,
-                        viewModel = viewModel
-                    )
-                }
-                item(span = { GridItemSpan(maxLineSpan) }) {
-                    Spacer(Modifier.height(dimensionResource(id = R.dimen.bottom_space)))
+        Box {
+            if (favourites == null || favourites!!.isEmpty() && !isLoading) {
+                NoFavourites()
+            }
+
+            if (isLoading) {
+                ProgressIndicator()
+            }
+
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(dimensionResource(id = R.dimen.min_grid_cell_size)),
+                modifier = Modifier.fillMaxSize()
+            ) {
+                if (favourites != null) {
+                    items(favourites!!.size) {
+                        ImageItem(
+                            imageEntry = favourites!![it],
+                            navController = navController,
+                            viewModel = viewModel
+                        )
+                    }
+                    item(span = { GridItemSpan(maxLineSpan) }) {
+                        Spacer(Modifier.height(dimensionResource(id = R.dimen.bottom_space)))
+                    }
                 }
             }
         }
@@ -100,7 +109,7 @@ fun NoFavourites() {
 
         Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.rocket_icon_space_size)))
         Icon(
-            imageVector = Icons.Default.Rocket,
+            painter = painterResource(id = R.drawable.icon_rocket),
             contentDescription = null,
             modifier = Modifier.size(dimensionResource(id = R.dimen.info_icon_size))
         )

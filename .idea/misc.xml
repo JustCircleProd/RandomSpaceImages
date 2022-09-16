@@ -3,7 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Vadim/Desktop/Programs/AndroidStud/RandomNASAImages/app/src/main/res/drawable/ic_baseline_keyboard_arrow_left_24.xml" value="0.2145" />
+        <entry key="..\:/Users/Vadim/Desktop/Programs/AndroidStud/RandomNASAImages/app/src/main/res/drawable/icon_back_arrow.xml" value="0.2145" />
+        <entry key="..\:/Users/Vadim/Desktop/Programs/AndroidStud/RandomNASAImages/app/src/main/res/drawable/icon_favorite.xml" value="0.2145" />
+        <entry key="..\:/Users/Vadim/Desktop/Programs/AndroidStud/RandomNASAImages/app/src/main/res/drawable/icon_favorite_border.xml" value="0.2145" />
+        <entry key="..\:/Users/Vadim/Desktop/Programs/AndroidStud/RandomNASAImages/app/src/main/res/drawable/icon_home.xml" value="0.2145" />
+        <entry key="..\:/Users/Vadim/Desktop/Programs/AndroidStud/RandomNASAImages/app/src/main/res/drawable/icon_rocket.xml" value="0.2145" />
+        <entry key="..\:/Users/Vadim/Desktop/Programs/AndroidStud/RandomNASAImages/app/src/main/res/drawable/icon_rocket_launch.xml" value="0.2145" />
+        <entry key="..\:/Users/Vadim/Desktop/Programs/AndroidStud/RandomNASAImages/app/src/main/res/drawable/icon_search.xml" value="0.241" />
         <entry key="..\:/Users/Vadim/Desktop/Programs/AndroidStud/RandomNASAImages/app/src/main/res/drawable/rounded_corners.xml" value="0.241" />
+        <entry key="..\:/Users/Vadim/Desktop/Programs/AndroidStud/RandomNASAImages/app/src/main/res/drawable/search-48px.xml" value="0.241" />
         <entry key="..\:/Users/Vadim/Desktop/Programs/AndroidStud/RandomNASAImages/app/src/main/res/layout/native_ad.xml" value="0.4" />
         <entry key="..\:/Users/Vadim/Desktop/Programs/AndroidStud/RandomNASAImages/app/src/main/res/layout/native_ad_test.xml" value="0.25" />
       </map>

@@ -45,7 +45,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.Default) {
             setLoadingOrRefreshing(refresh = refresh, value = true)
 
-            setEndReach()
+            setEndReached()
             if (endReached.value) {
                 setLoadingOrRefreshing(refresh = refresh, value = false)
                 return@launch
@@ -54,18 +54,23 @@ class HomeViewModel @Inject constructor(
             // if calculations in setYearAndPage went wrong
             // then loadError will be set in that method
             setYearAndPage()
+
             if (loadError.value) {
                 setLoadingOrRefreshing(refresh = refresh, value = false)
                 return@launch
             }
 
             val result = withContext(Dispatchers.IO) {
-                nasaLibraryRepository.getImages(page.value, year.value, year.value)
+                nasaLibraryRepository.getImages(
+                    yearStart = year.value,
+                    yearEnd = year.value,
+                    page = page.value
+                )
             }
 
-            when (result) {
-                is Resource.Success -> {
-                    val newImages = result.data!!.collection.items.map {
+            when {
+                result is Resource.Success && result.data!!.collection.items.isNotEmpty() -> {
+                    val newImages = result.data.collection.items.map {
                         ImageEntry(
                             nasaId = it.data.first().nasa_id,
                             title = it.data.first().title,
@@ -99,9 +104,8 @@ class HomeViewModel @Inject constructor(
 
                     loadError.value = false
                 }
-                is Resource.Error -> {
+                result is Resource.Error -> {
                     loadError.value = true
-                    setLoadingOrRefreshing(refresh = refresh, value = false)
                 }
             }
 
@@ -109,7 +113,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun setEndReach() {
+    private fun setEndReached() {
         val yearsCount =
             (RemoteConstants.NASA_LIBRARY_DATE_START..RemoteConstants.NASA_LIBRARY_DATE_END).toList().size
 
@@ -189,7 +193,7 @@ class HomeViewModel @Inject constructor(
 
         // if this year has not been processed yet, then we get data on it
         val result = withContext(Dispatchers.IO) {
-            nasaLibraryRepository.getImages(1, year, year)
+            nasaLibraryRepository.getImages(yearStart = year, yearEnd = year, page = 1)
         }
 
         if (result is Resource.Error) {
