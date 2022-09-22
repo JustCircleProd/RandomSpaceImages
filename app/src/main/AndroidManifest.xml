@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.justcircleprod.randomnasaimages">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".RandomNASAImagesApplication"
+        android:name="com.justcircleprod.randomspaceimages.RandomSpaceImagesApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -14,13 +13,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.RandomNASAImages"
-        tools:targetApi="31">
+        android:theme="@style/Theme.RandomSpaceImages"
+        tools:targetApi="33">
         <activity
-            android:name=".ui.MainActivity"
+            android:name="com.justcircleprod.randomspaceimages.ui.MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.RandomNASAImages">
+            android:theme="@style/Theme.RandomSpaceImages">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.RandomNASAImages" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.RandomSpaceImages" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/blue_dark</item>
         <item name="colorPrimaryVariant">@color/blue_light</item>
         <item name="colorOnPrimary">@android:color/white</item>
