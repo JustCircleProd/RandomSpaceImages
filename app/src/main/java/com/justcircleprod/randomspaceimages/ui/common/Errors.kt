@@ -18,9 +18,12 @@ import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.ui.theme.ErrorCardBackground
 
 @Composable
-fun ErrorInfo(errorText: String = stringResource(id = R.string.error_info_text)) {
+fun ErrorInfo(
+    modifier: Modifier = Modifier,
+    errorText: String = stringResource(id = R.string.error_info_text)
+) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

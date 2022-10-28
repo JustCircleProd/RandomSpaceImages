@@ -1,115 +1,106 @@
 package com.justcircleprod.randomspaceimages.ui.home
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material.MaterialTheme
-import com.justcircleprod.randomspaceimages.R
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.dimensionResource
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import com.justcircleprod.randomspaceimages.ui.common.*
+import com.google.accompanist.pager.*
+import com.justcircleprod.randomspaceimages.R
+import com.justcircleprod.randomspaceimages.ui.home.favourites.FavouriteImageList
+import com.justcircleprod.randomspaceimages.ui.home.random.RandomImageList
+import com.justcircleprod.randomspaceimages.ui.home.tabs.TabItem
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun HomeScreen(
     navController: NavHostController
 ) {
-    val viewModel: HomeViewModel = hiltViewModel()
+    val pagerState = rememberPagerState()
 
-    ImageList(
-        navController = navController,
-        viewModel = viewModel
-    )
+    Column {
+        Tabs(pagerState)
+
+        HorizontalPager(count = TabItem.items.size, state = pagerState) { page ->
+            when (page) {
+                0 -> {
+                    RandomImageList(navController = navController)
+                }
+                1 -> {
+                    FavouriteImageList(navController = navController)
+                }
+            }
+        }
+    }
+
+
 }
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
-fun ImageList(
-    navController: NavHostController,
-    viewModel: HomeViewModel
-) {
-    val images by viewModel.images.collectAsState()
+fun Tabs(pagerState: PagerState) {
+    val scope = rememberCoroutineScope()
 
-    val isLoading by viewModel.isLoading.collectAsState()
-    val loadError by viewModel.loadError.collectAsState()
-
-    val isRefreshing by viewModel.isRefreshing.collectAsState()
-
-    val endReached by viewModel.endReached.collectAsState()
-
-
-    SwipeRefresh(
-        state = rememberSwipeRefreshState(isRefreshing),
-        onRefresh = { viewModel.loadImages(refresh = true) },
-        indicator = { state, trigger ->
-            SwipeRefreshIndicator(
-                state = state,
-                refreshTriggerDistance = trigger,
-                scale = true,
-                backgroundColor = colorResource(id = R.color.card_background_color),
-                contentColor = MaterialTheme.colors.primary
+    ScrollableTabRow(
+        selectedTabIndex = pagerState.currentPage,
+        backgroundColor = MaterialTheme.colors.background,
+        edgePadding = dimensionResource(id = R.dimen.tabs_edge_padding),
+        indicator = { tabPositions ->
+            TabRowDefaults.Indicator(
+                color = when (pagerState.currentPage) {
+                    0 -> {
+                        MaterialTheme.colors.primary
+                    }
+                    1 -> {
+                        MaterialTheme.colors.secondary
+                    }
+                    else -> {
+                        MaterialTheme.colors.primary
+                    }
+                },
+                height = dimensionResource(id = R.dimen.tabs_indicator_height),
+                modifier = Modifier
+                    .pagerTabIndicatorOffset(
+                        pagerState = pagerState,
+                        tabPositions = tabPositions,
+                    )
+                    .padding(horizontal = dimensionResource(id = R.dimen.tabs_indicator_horizontal_padding))
+                    .clip(RoundedCornerShape(dimensionResource(id = R.dimen.tabs_indicator_rounded_corner_radius)))
             )
         },
-        modifier = Modifier.fillMaxSize()
+        divider = {
+            Spacer(Modifier.height(0.dp))
+        },
+        modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.tabs_padding_bottom))
     ) {
-        Box {
-            if (loadError && images.isEmpty() && !isLoading) {
-                ErrorInfo()
-            }
-
-            if (isLoading && images.isEmpty()) {
-                ProgressIndicator()
-            }
-
-            Column(modifier = Modifier.fillMaxSize()) {
-                if (loadError && images.isNotEmpty()) {
-                    ErrorInfoCard()
-                }
-
-                LazyVerticalGrid(
-                    columns = GridCells.Adaptive(dimensionResource(id = R.dimen.min_grid_cell_size)),
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    items(images.size) {
-                        if (it >= images.size - 1 && !endReached && !isLoading) {
-                            viewModel.loadImages()
-                        }
-
-                        if (images[it] != null) {
-                            ImageItem(
-                                imageEntry = images[it]!!,
-                                navController = navController,
-                                viewModel = viewModel
-                            )
-                        } else {
-                            Ad()
-                        }
-                    }
-
-                    if (isLoading && images.isNotEmpty()) {
-                        item(span = { GridItemSpan(maxLineSpan) }) {
-                            ProgressIndicator()
-                        }
-                        item(span = { GridItemSpan(maxLineSpan) }) {
-                            Spacer(Modifier.height(dimensionResource(id = R.dimen.bottom_space)))
-                        }
-                    }
-
-                    if (endReached || loadError && images.isNotEmpty()) {
-                        item(span = { GridItemSpan(maxLineSpan) }) {
-                            Spacer(Modifier.height(dimensionResource(id = R.dimen.bottom_space)))
-                        }
+        TabItem.items.forEachIndexed { index, tabItem ->
+            Tab(
+                text = {
+                    Text(
+                        text = stringResource(id = tabItem.titleResId),
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 16.sp
+                    )
+                },
+                selected = pagerState.currentPage == index,
+                onClick = {
+                    scope.launch {
+                        pagerState.animateScrollToPage(index)
                     }
                 }
-            }
+            )
         }
     }
 }

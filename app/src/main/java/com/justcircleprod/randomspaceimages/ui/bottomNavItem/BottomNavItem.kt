@@ -4,7 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.Color
 import com.justcircleprod.randomspaceimages.R
-import com.justcircleprod.randomspaceimages.ui.screen.Screen
+import com.justcircleprod.randomspaceimages.ui.navigation.Screen
 
 sealed class BottomNavItem(
     val route: String,
@@ -20,14 +20,6 @@ sealed class BottomNavItem(
             Screen.Search.route,
             R.string.search,
             R.drawable.icon_search,
-            selectedContentColor
-        )
-
-    class Favourites(selectedContentColor: Color) :
-        BottomNavItem(
-            Screen.Favourites.route,
-            R.string.favourites,
-            R.drawable.icon_favorite,
             selectedContentColor
         )
 }

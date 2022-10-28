@@ -1,28 +1,26 @@
 package com.justcircleprod.randomspaceimages.ui.detailImage
 
-import androidx.compose.foundation.MutatePriority
-import androidx.compose.foundation.gestures.*
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -43,10 +41,6 @@ import com.justcircleprod.randomspaceimages.data.remote.RemoteConstants
 import com.justcircleprod.randomspaceimages.ui.common.BackButton
 import com.justcircleprod.randomspaceimages.ui.theme.IconButtonShadow
 import com.justcircleprod.randomspaceimages.ui.theme.Red
-import com.skydoves.landscapist.ShimmerParams
-import com.skydoves.landscapist.glide.GlideImage
-import kotlinx.coroutines.awaitCancellation
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -112,101 +106,6 @@ fun ImageCard(imageEntry: ImageEntry, scrollState: ScrollableState) {
         Column(Modifier.fillMaxWidth()) {
             ZoomableImage(imageEntry = imageEntry, scrollState = scrollState)
             CenterAndDateInfo(imageEntry = imageEntry)
-        }
-    }
-}
-
-@Composable
-fun ZoomableImage(imageEntry: ImageEntry, scrollState: ScrollableState) {
-    val coroutineScope = rememberCoroutineScope()
-
-    val localDensity = LocalDensity.current
-    var width by remember { mutableStateOf(0f) }
-    var height by remember { mutableStateOf(0f) }
-
-    var scale by remember { mutableStateOf(1f) }
-    var offsetX by remember { mutableStateOf(1f) }
-    var offsetY by remember { mutableStateOf(1f) }
-
-    GlideImage(
-        imageModel = imageEntry.imageHref,
-        contentDescription = imageEntry.title,
-        alignment = Alignment.TopCenter,
-        shimmerParams = ShimmerParams(
-            baseColor = MaterialTheme.colors.background,
-            highlightColor = if (isSystemInDarkTheme()) Color.DarkGray else Color.LightGray,
-            durationMillis = 1400,
-            dropOff = 0.65f,
-            tilt = 20f
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .onGloballyPositioned { coordinates ->
-                width = with(localDensity) { coordinates.size.width.toDp().value }
-                height = with(localDensity) { coordinates.size.height.toDp().value }
-            }
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onDoubleTap = {
-                        if (scale > 1f) {
-                            scale = 1f
-                            offsetX = 1f
-                            offsetY = 1f
-                        } else {
-                            scale = 3f
-                        }
-                    }
-                )
-            }
-            .pointerInput(Unit) {
-                forEachGesture {
-                    awaitPointerEventScope {
-                        awaitFirstDown()
-                        do {
-                            val event = awaitPointerEvent()
-                            scale = (scale * event.calculateZoom()).coerceIn(1f..3f)
-
-                            if (scale > 1) {
-                                coroutineScope.launch {
-                                    scrollState.setScrolling(false)
-                                }
-
-                                val offset = event.calculatePan()
-
-                                offsetX = (offsetX + offset.x)
-                                    .coerceIn(-(width * scale)..width * scale)
-
-                                offsetY = (offsetY + offset.y)
-                                    .coerceIn(-(height * scale)..height * scale)
-
-
-                                coroutineScope.launch {
-                                    scrollState.setScrolling(true)
-                                }
-                            } else {
-                                scale = 1f
-                                offsetX = 1f
-                                offsetY = 1f
-                            }
-                        } while (event.changes.any { it.pressed })
-                    }
-                }
-            }
-            .graphicsLayer {
-                scaleX = scale.coerceIn(1f..3f)
-                scaleY = scale.coerceIn(1f..3f)
-
-                translationX = offsetX
-                translationY = offsetY
-            }
-    )
-}
-
-private suspend fun ScrollableState.setScrolling(value: Boolean) {
-    scroll(scrollPriority = MutatePriority.PreventUserInput) {
-        when (value) {
-            true -> Unit
-            else -> awaitCancellation()
         }
     }
 }
@@ -349,7 +248,12 @@ fun ActionButtons(
             .padding(start = dimensionResource(id = R.dimen.action_buttons_start_space_size))
             .padding(end = dimensionResource(id = R.dimen.action_buttons_end_space_size))
     ) {
-        BackButton(navController = navController, modifier = Modifier)
+        val onBackButtonClick = {
+            navController.popBackStack()
+            Unit
+        }
+
+        BackButton(onBackButtonClick)
         FavouriteButton(imageEntry = imageEntry, viewModel = viewModel)
     }
 }

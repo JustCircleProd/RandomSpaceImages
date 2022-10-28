@@ -24,6 +24,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -34,13 +35,12 @@ import com.justcircleprod.randomspaceimages.data.models.ImageEntry
 import com.justcircleprod.randomspaceimages.data.models.ImageEntryParamType
 import com.justcircleprod.randomspaceimages.ui.bottomNavItem.BottomNavItem
 import com.justcircleprod.randomspaceimages.ui.detailImage.DetailImageScreen
-import com.justcircleprod.randomspaceimages.ui.favourites.FavouritesScreen
 import com.justcircleprod.randomspaceimages.ui.home.HomeScreen
-import com.justcircleprod.randomspaceimages.ui.screen.Screen
+import com.justcircleprod.randomspaceimages.ui.navigation.Screen
 import com.justcircleprod.randomspaceimages.ui.search.SearchScreen
-import com.justcircleprod.randomspaceimages.ui.theme.RandomNASAImagesTheme
+import com.justcircleprod.randomspaceimages.ui.search.searchResult.SearchResultScreen
+import com.justcircleprod.randomspaceimages.ui.theme.RandomSpaceImagesTheme
 import com.justcircleprod.randomspaceimages.util.parcelable
-import com.yandex.mobile.ads.common.MobileAds
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -49,10 +49,10 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        MobileAds.initialize(this) { }
+        /*MobileAds.initialize(this) { }*/
 
         setContent {
-            RandomNASAImagesTheme {
+            RandomSpaceImagesTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
@@ -100,14 +100,31 @@ class MainActivity : ComponentActivity() {
                     navController = navController
                 )
             }
+
             composable(Screen.Search.route) {
                 bottomNavigationState.targetState = true
                 SearchScreen(navController = navController)
             }
-            composable(Screen.Favourites.route) {
-                bottomNavigationState.targetState = true
-                FavouritesScreen(navController = navController)
+            composable(
+                Screen.SearchResult().route,
+                arguments = listOf(
+                    navArgument(Screen.SearchResult.YEAR_START_ARGUMENT_NAME) {
+                        type = NavType.IntType
+                    },
+                    navArgument(Screen.SearchResult.YEAR_END_ARGUMENT_NAME) {
+                        type = NavType.IntType
+                    },
+                    navArgument(Screen.SearchResult.Q_ARGUMENT_NAME) {
+                        type = NavType.StringType
+                        defaultValue = ""
+                    },
+                )
+            ) {
+                bottomNavigationState.targetState = false
+
+                SearchResultScreen(navController = navController)
             }
+
             composable(Screen.Detail().route,
                 arguments = listOf(
                     navArgument(Screen.Detail.IMAGE_ENTRY_ARGUMENT_NAME) {
@@ -149,8 +166,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val bottomNavigationItem = listOf(
                         BottomNavItem.Home(MaterialTheme.colors.primary),
-                        BottomNavItem.Search(MaterialTheme.colors.primary),
-                        BottomNavItem.Favourites(MaterialTheme.colors.secondary),
+                        BottomNavItem.Search(MaterialTheme.colors.primary)
                     )
 
                     val navBackStackEntry by navController.currentBackStackEntryAsState()

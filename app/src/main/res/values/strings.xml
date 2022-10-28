@@ -2,12 +2,14 @@
     <string name="app_name">Random Space Images</string>
 
     <string name="home">Home</string>
-    <string name="detail_image">Detail Image</string>
+    <string name="random">Random</string>
     <string name="favourites">Favourites</string>
 
     <string name="error_info_text">There is an error.\nSwipe down to Retry</string>
     <string name="error_info_card_text">There is an error. Scroll or Swipe down to Retry</string>
     <string name="retry">Retry</string>
+
+    <string name="detail_image">Detail Image</string>
 
     <string name="additional_information">Additional Information</string>
 
@@ -25,6 +27,21 @@
     <string name="ad">Ad</string>
 
     <string name="search">search</string>
-    <string name="search_bar_placeholder">Search by any field (title, year etc.)</string>
+    <string name="search_bar_placeholder">Search by any field (title, location etc.)</string>
+
+    <string name="year_range">Year range</string>
+
+    <string name="solar_system">Solar system</string>
+    <string name="sun">Sun</string>
+    <string name="mercury">Mercury</string>
+    <string name="venus">Venus</string>
+    <string name="earth">Earth</string>
+    <string name="moon">Moon</string>
+    <string name="mars">Mars</string>
+    <string name="jupiter">Jupiter</string>
+    <string name="saturn">Saturn</string>
+    <string name="uranus">Uranus</string>
+    <string name="neptune">Neptune</string>
+
     <string name="search_no_results">No results</string>
 </resources>

@@ -30,12 +30,16 @@ class DefaultNASALibraryRepository @Inject constructor(private val nasaLibraryAP
 
     override suspend fun searchImages(
         q: String,
+        yearStart: Int,
+        yearEnd: Int,
         page: Int,
     ): Resource<NASAImagesList> {
         return try {
             Resource.Success(
                 nasaLibraryAPI.searchImages(
                     q = q,
+                    yearStart = yearStart,
+                    yearEnd = yearEnd,
                     page = page
                 )
             )
