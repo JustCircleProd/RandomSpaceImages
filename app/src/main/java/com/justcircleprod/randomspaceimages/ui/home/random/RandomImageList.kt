@@ -9,9 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
@@ -21,11 +19,10 @@ import com.justcircleprod.randomspaceimages.ui.common.ErrorInfo
 import com.justcircleprod.randomspaceimages.ui.common.ErrorInfoCard
 import com.justcircleprod.randomspaceimages.ui.common.ImageEntryItem
 import com.justcircleprod.randomspaceimages.ui.common.ProgressIndicator
+import com.justcircleprod.randomspaceimages.ui.theme.customColors
 
 @Composable
-fun RandomImageList(navController: NavHostController) {
-    val viewModel: RandomImageListViewModel = hiltViewModel()
-
+fun RandomImageList(navController: NavHostController, viewModel: RandomImageListViewModel) {
     val images by viewModel.images.collectAsState()
 
     val isLoading by viewModel.isLoading.collectAsState()
@@ -43,7 +40,7 @@ fun RandomImageList(navController: NavHostController) {
                 state = state,
                 refreshTriggerDistance = trigger,
                 scale = true,
-                backgroundColor = colorResource(id = R.color.card_background_color),
+                backgroundColor = MaterialTheme.customColors.cardBackground,
                 contentColor = MaterialTheme.colors.primary
             )
         },

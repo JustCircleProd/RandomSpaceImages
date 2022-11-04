@@ -20,13 +20,17 @@
     <string name="back_button">Back button</string>
 
     <string name="favourite_button">Favourite button</string>
+    <string name="add_to_favourite_content_description">Add to favourites</string>
+    <string name="remove_from_favourite_content_description">Remove from favourites</string>
+
+    <string name="interaction_content_description">Enable or disable interaction with image</string>
 
     <string name="no_favourites">No favourites</string>
 
     <string name="feedback_button">Feedback Button</string>
     <string name="ad">Ad</string>
 
-    <string name="search">search</string>
+    <string name="search">Search</string>
     <string name="search_bar_placeholder">Search by any field (title, location etc.)</string>
 
     <string name="year_range">Year range</string>
@@ -44,4 +48,20 @@
     <string name="neptune">Neptune</string>
 
     <string name="search_no_results">No results</string>
+
+    <string name="more">More</string>
+
+    <string name="app_theme">App theme</string>
+    <string name="system_default_theme">System default</string>
+    <string name="light_theme">Light</string>
+    <string name="dark_theme">Dark</string>
+
+    <string name="app_theme_warning">Be careful! Changing the theme of the application will reset scroll positions, search parameters and card expand.</string>
+
+    <string name="developers">Developers</string>
+
+    <string name="open_source_licenses">Open Source Licenses</string>
+
+    <string name="where_are_the_images_from">Where are the images from?</string>
+    <string name="where_are_the_images_from_answer">All images are taken from the NASA Image and Video Library using the API images.nasa.gov.</string>
 </resources>

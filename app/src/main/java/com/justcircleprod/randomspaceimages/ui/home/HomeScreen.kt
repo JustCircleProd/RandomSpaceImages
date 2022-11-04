@@ -19,14 +19,19 @@ import androidx.navigation.NavHostController
 import com.google.accompanist.pager.*
 import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.ui.home.favourites.FavouriteImageList
+import com.justcircleprod.randomspaceimages.ui.home.favourites.FavouriteImageListViewModel
 import com.justcircleprod.randomspaceimages.ui.home.random.RandomImageList
+import com.justcircleprod.randomspaceimages.ui.home.random.RandomImageListViewModel
 import com.justcircleprod.randomspaceimages.ui.home.tabs.TabItem
+import com.justcircleprod.randomspaceimages.ui.theme.customColors
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun HomeScreen(
-    navController: NavHostController
+    navController: NavHostController,
+    randomImageListViewModel: RandomImageListViewModel,
+    favouriteImageListViewModel: FavouriteImageListViewModel
 ) {
     val pagerState = rememberPagerState()
 
@@ -36,10 +41,16 @@ fun HomeScreen(
         HorizontalPager(count = TabItem.items.size, state = pagerState) { page ->
             when (page) {
                 0 -> {
-                    RandomImageList(navController = navController)
+                    RandomImageList(
+                        navController = navController,
+                        viewModel = randomImageListViewModel
+                    )
                 }
                 1 -> {
-                    FavouriteImageList(navController = navController)
+                    FavouriteImageList(
+                        navController = navController,
+                        viewModel = favouriteImageListViewModel
+                    )
                 }
             }
         }
@@ -90,6 +101,7 @@ fun Tabs(pagerState: PagerState) {
                 text = {
                     Text(
                         text = stringResource(id = tabItem.titleResId),
+                        color = MaterialTheme.customColors.text,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 16.sp
                     )

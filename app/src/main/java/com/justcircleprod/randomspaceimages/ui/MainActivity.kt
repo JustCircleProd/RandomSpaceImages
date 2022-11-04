@@ -3,24 +3,26 @@ package com.justcircleprod.randomspaceimages.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -30,57 +32,105 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.justcircleprod.randomspaceimages.R
+import com.justcircleprod.randomspaceimages.data.dataStore.DataStoreConstants
 import com.justcircleprod.randomspaceimages.data.models.ImageEntry
 import com.justcircleprod.randomspaceimages.data.models.ImageEntryParamType
 import com.justcircleprod.randomspaceimages.ui.bottomNavItem.BottomNavItem
 import com.justcircleprod.randomspaceimages.ui.detailImage.DetailImageScreen
+import com.justcircleprod.randomspaceimages.ui.detailImage.DetailViewModel
 import com.justcircleprod.randomspaceimages.ui.home.HomeScreen
+import com.justcircleprod.randomspaceimages.ui.home.favourites.FavouriteImageListViewModel
+import com.justcircleprod.randomspaceimages.ui.home.random.RandomImageListViewModel
+import com.justcircleprod.randomspaceimages.ui.more.MoreScreen
+import com.justcircleprod.randomspaceimages.ui.more.MoreViewModel
 import com.justcircleprod.randomspaceimages.ui.navigation.Screen
 import com.justcircleprod.randomspaceimages.ui.search.SearchScreen
 import com.justcircleprod.randomspaceimages.ui.search.searchResult.SearchResultScreen
-import com.justcircleprod.randomspaceimages.ui.theme.RandomSpaceImagesTheme
+import com.justcircleprod.randomspaceimages.ui.search.searchResult.SearchResultViewModel
+import com.justcircleprod.randomspaceimages.ui.theme.*
 import com.justcircleprod.randomspaceimages.util.parcelable
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    val viewModel: MainViewModel by viewModels()
+
+    private var isFirstStart = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         /*MobileAds.initialize(this) { }*/
 
-        setContent {
-            RandomSpaceImagesTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    val navController = rememberNavController()
-                    val bottomNavigationState = remember { MutableTransitionState(true) }
+        val initJob = lifecycleScope.launch {
+            setContent {
+                val themeValue =
+                    viewModel.themeValue.collectAsState(initial = "not_initialized")
 
-                    ConstraintLayout(modifier = Modifier.padding()) {
-                        NavHost(
-                            navController = navController,
-                            bottomNavigationState = bottomNavigationState
-                        )
+                if (themeValue.value != "not_initialized") {
+                    isFirstStart = false
+                }
 
-                        val bottomNavigation = createRef()
+                val darkTheme = when (themeValue.value) {
+                    DataStoreConstants.LIGHT_THEME -> false
+                    DataStoreConstants.DARK_THEME -> true
+                    else -> isSystemInDarkTheme()
+                }
 
-                        BottomNavigation(
-                            navController = navController,
-                            bottomNavigationState = bottomNavigationState,
-                            modifier = Modifier
-                                .constrainAs(bottomNavigation) {
-                                    start.linkTo(parent.start)
-                                    end.linkTo(parent.end)
-                                    bottom.linkTo(parent.bottom, margin = 10.dp)
-                                }
-                        )
+                val systemUiController = rememberSystemUiController()
+
+                DisposableEffect(systemUiController, !darkTheme) {
+                    systemUiController.setStatusBarColor(
+                        color = if (!darkTheme) LightBackground else DarkBackground,
+                        darkIcons = !darkTheme
+                    )
+                    systemUiController.setNavigationBarColor(
+                        color = if (!darkTheme) LightNavigationBar else DarkNavigationBar,
+                        darkIcons = !darkTheme
+                    )
+
+                    onDispose {}
+                }
+
+                val navController = rememberNavController()
+                val bottomNavigationState = remember { MutableTransitionState(true) }
+
+                RandomSpaceImagesTheme(darkTheme = darkTheme) {
+                    CustomColorsProvider(darkTheme = darkTheme) {
+                        Surface(
+                            modifier = Modifier.fillMaxSize(),
+                            color = MaterialTheme.colors.background
+                        ) {
+                            ConstraintLayout(modifier = Modifier.padding()) {
+                                NavHost(
+                                    navController = navController,
+                                    bottomNavigationState = bottomNavigationState
+                                )
+
+                                val bottomNavigation = createRef()
+
+                                BottomNavigation(
+                                    navController = navController,
+                                    bottomNavigationState = bottomNavigationState,
+                                    modifier = Modifier
+                                        .constrainAs(bottomNavigation) {
+                                            start.linkTo(parent.start)
+                                            end.linkTo(parent.end)
+                                            bottom.linkTo(parent.bottom, margin = 10.dp)
+                                        }
+                                )
+                            }
+                        }
                     }
                 }
             }
+        }
+
+        installSplashScreen().setKeepOnScreenCondition {
+            !(initJob.isCompleted && !isFirstStart)
         }
     }
 
@@ -89,20 +139,27 @@ class MainActivity : ComponentActivity() {
         navController: NavHostController,
         bottomNavigationState: MutableTransitionState<Boolean>
     ) {
+        val randomImageListViewModel: RandomImageListViewModel = hiltViewModel()
+        val favouriteImageListViewModel: FavouriteImageListViewModel = hiltViewModel()
+
         NavHost(
             navController = navController,
-            startDestination = Screen.Home.route,
+            startDestination = navController.currentDestination?.route ?: Screen.Home.route,
             modifier = Modifier.fillMaxSize()
         ) {
             composable(Screen.Home.route) {
                 bottomNavigationState.targetState = true
+
                 HomeScreen(
-                    navController = navController
+                    navController = navController,
+                    randomImageListViewModel = randomImageListViewModel,
+                    favouriteImageListViewModel = favouriteImageListViewModel
                 )
             }
 
             composable(Screen.Search.route) {
                 bottomNavigationState.targetState = true
+
                 SearchScreen(navController = navController)
             }
             composable(
@@ -122,7 +179,8 @@ class MainActivity : ComponentActivity() {
             ) {
                 bottomNavigationState.targetState = false
 
-                SearchResultScreen(navController = navController)
+                val searchResultViewModel: SearchResultViewModel = hiltViewModel()
+                SearchResultScreen(navController = navController, viewModel = searchResultViewModel)
             }
 
             composable(Screen.Detail().route,
@@ -136,10 +194,21 @@ class MainActivity : ComponentActivity() {
                 val imageEntry = it.arguments?.parcelable<ImageEntry>(
                     Screen.Detail.IMAGE_ENTRY_ARGUMENT_NAME
                 )
+                val detailViewModel: DetailViewModel = hiltViewModel()
+
                 DetailImageScreen(
                     navController = navController,
-                    imageEntry = imageEntry
+                    imageEntry = imageEntry,
+                    viewModel = detailViewModel
                 )
+            }
+
+            composable(Screen.More.route) {
+                bottomNavigationState.targetState = true
+
+                val moreViewModel: MoreViewModel = hiltViewModel()
+
+                MoreScreen(viewModel = moreViewModel)
             }
         }
     }
@@ -160,13 +229,12 @@ class MainActivity : ComponentActivity() {
                 .clip(RoundedCornerShape(dimensionResource(id = R.dimen.bottom_navigation_rounded_radius))),
             content = {
                 BottomNavigation(
-                    backgroundColor = colorResource(
-                        id = R.color.bottom_navigation_background_color
-                    )
+                    backgroundColor = MaterialTheme.customColors.bottomNavigationBackground
                 ) {
                     val bottomNavigationItem = listOf(
                         BottomNavItem.Home(MaterialTheme.colors.primary),
-                        BottomNavItem.Search(MaterialTheme.colors.primary)
+                        BottomNavItem.Search(MaterialTheme.colors.primary),
+                        BottomNavItem.More(MaterialTheme.colors.primary)
                     )
 
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -183,7 +251,7 @@ class MainActivity : ComponentActivity() {
                                 )
                             },
                             selectedContentColor = bottomNavItem.selectedContentColor,
-                            unselectedContentColor = colorResource(id = R.color.bottom_navigation_unselected_content_color),
+                            unselectedContentColor = MaterialTheme.customColors.bottomNavigationUnselected,
                             selected = currentDestination?.hierarchy?.any {
                                 it.route == bottomNavItem.route
                             } == true,

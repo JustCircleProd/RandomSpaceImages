@@ -53,15 +53,16 @@ fun SuggestionCard(
                 painter = painterResource(id = SuggestionImageRes),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                colorFilter = ColorFilter.tint(Color.Black.copy(0.4f), BlendMode.Darken)
+                colorFilter = ColorFilter.tint(Color.Black.copy(0.4f), BlendMode.Darken),
+                modifier = Modifier.fillMaxSize()
             )
 
             Text(
                 text = stringResource(id = suggestionStringRes),
+                color = Color.White,
                 maxLines = 1,
                 fontSize = 15.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = Color.White,
                 textAlign = TextAlign.Center
             )
         }

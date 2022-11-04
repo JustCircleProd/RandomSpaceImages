@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -54,6 +55,8 @@ fun SearchScreen(navController: NavHostController) {
         )
     }
 
+    val solarSystemSuggestions = remember { solarSystem }
+
     LazyVerticalGrid(
         columns = GridCells.Adaptive(dimensionResource(id = R.dimen.image_list_min_grid_cell_size)),
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.search_screen_arrangement)),
@@ -79,10 +82,11 @@ fun SearchScreen(navController: NavHostController) {
         item(span = { GridItemSpan(maxLineSpan) }) {
             SearchCardTitle(titleText = stringResource(id = R.string.solar_system))
         }
-        items(solarSystem.size) {
+
+        items(solarSystemSuggestions.size) {
             SuggestionCard(
-                suggestionStringRes = solarSystem[it].first,
-                SuggestionImageRes = solarSystem[it].second,
+                suggestionStringRes = solarSystemSuggestions[it].first,
+                SuggestionImageRes = solarSystemSuggestions[it].second,
                 onClick = onSuggestionCardClick
             )
         }

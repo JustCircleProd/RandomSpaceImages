@@ -12,7 +12,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -20,18 +19,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.ui.common.*
+import com.justcircleprod.randomspaceimages.ui.theme.customColors
 
 @Composable
-fun SearchResultScreen(navController: NavHostController) {
-    val viewModel: SearchResultViewModel = hiltViewModel()
-
+fun SearchResultScreen(navController: NavHostController, viewModel: SearchResultViewModel) {
     ConstraintLayout {
         val (imageList, backButton) = createRefs()
         SearchImageList(
@@ -83,7 +80,7 @@ fun SearchImageList(
                 state = state,
                 refreshTriggerDistance = trigger,
                 scale = true,
-                backgroundColor = colorResource(id = R.color.card_background_color),
+                backgroundColor = MaterialTheme.customColors.cardBackground,
                 contentColor = MaterialTheme.colors.primary
             )
         },
@@ -179,6 +176,7 @@ fun NoResults(modifier: Modifier = Modifier) {
     ) {
         Text(
             text = stringResource(id = R.string.search_no_results),
+            color = MaterialTheme.customColors.text,
             textAlign = TextAlign.Center,
             fontSize = 18.sp
         )

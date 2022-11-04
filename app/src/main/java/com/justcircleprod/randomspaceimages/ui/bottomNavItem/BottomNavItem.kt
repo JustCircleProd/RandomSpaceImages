@@ -22,4 +22,7 @@ sealed class BottomNavItem(
             R.drawable.icon_search,
             selectedContentColor
         )
+
+    class More(selectedContentColor: Color) :
+        BottomNavItem(Screen.More.route, R.string.more, R.drawable.icon_more, selectedContentColor)
 }

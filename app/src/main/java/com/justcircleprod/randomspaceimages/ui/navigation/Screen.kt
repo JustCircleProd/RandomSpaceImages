@@ -25,4 +25,6 @@ sealed class Screen(
             const val IMAGE_ENTRY_ARGUMENT_NAME = "image_entry"
         }
     }
+
+    object More : Screen("more")
 }

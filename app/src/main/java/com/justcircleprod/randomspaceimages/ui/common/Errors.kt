@@ -3,6 +3,7 @@ package com.justcircleprod.randomspaceimages.ui.common
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,7 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.justcircleprod.randomspaceimages.R
-import com.justcircleprod.randomspaceimages.ui.theme.ErrorCardBackground
+import com.justcircleprod.randomspaceimages.ui.theme.customColors
 
 @Composable
 fun ErrorInfo(
@@ -29,6 +30,7 @@ fun ErrorInfo(
     ) {
         Text(
             text = errorText,
+            color = MaterialTheme.customColors.text,
             textAlign = TextAlign.Center,
             fontSize = 18.sp
         )
@@ -44,7 +46,7 @@ fun ErrorInfo(
 @Composable
 fun ErrorInfoCard(errorText: String = stringResource(id = R.string.error_info_card_text)) {
     Card(
-        backgroundColor = ErrorCardBackground,
+        backgroundColor = MaterialTheme.customColors.errorCardBackground,
         shape = RectangleShape,
         elevation = dimensionResource(id = R.dimen.card_elevation),
         modifier = Modifier.fillMaxWidth()
@@ -59,9 +61,9 @@ fun ErrorInfoCard(errorText: String = stringResource(id = R.string.error_info_ca
 
             Text(
                 text = errorText,
+                color = Color.Black,
                 textAlign = TextAlign.Center,
-                fontSize = 13.sp,
-                color = Color.Black
+                fontSize = 13.sp
             )
 
             Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.rocket_launch_icon_space_size)))

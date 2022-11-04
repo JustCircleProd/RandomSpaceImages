@@ -2,21 +2,21 @@ package com.justcircleprod.randomspaceimages.ui.common
 
 import android.net.Uri
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -25,6 +25,8 @@ import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.data.models.ImageEntry
 import com.justcircleprod.randomspaceimages.ui.baseViewModel.BaseViewModel
 import com.justcircleprod.randomspaceimages.ui.navigation.Screen
+import com.justcircleprod.randomspaceimages.ui.theme.Red
+import com.justcircleprod.randomspaceimages.ui.theme.customColors
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.components.rememberImageComponent
 import com.skydoves.landscapist.glide.GlideImage
@@ -83,14 +85,14 @@ fun Image(
         component = rememberImageComponent {
             +ShimmerPlugin(
                 baseColor = MaterialTheme.colors.background,
-                highlightColor = if (isSystemInDarkTheme()) Color.DarkGray else Color.LightGray,
+                highlightColor = MaterialTheme.customColors.shimmerHighlight,
                 durationMillis = 1400,
                 dropOff = 0.65f,
                 tilt = 20f
             )
         },
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .aspectRatio(1f)
             .clip(RoundedCornerShape(dimensionResource(id = R.dimen.main_rounded_corner_radius)))
     )
@@ -118,11 +120,45 @@ fun ImageExtra(imageEntry: ImageEntry, viewModel: BaseViewModel) {
 fun ImageTitle(imageTitle: String, modifier: Modifier) {
     Text(
         text = imageTitle,
+        color = MaterialTheme.customColors.text,
         maxLines = 1,
         fontSize = 14.sp,
         overflow = TextOverflow.Ellipsis,
         modifier = modifier.padding(start = dimensionResource(id = R.dimen.image_list_title_padding_start))
     )
+}
+
+@Composable
+fun FavouriteButton(
+    imageEntry: ImageEntry,
+    viewModel: BaseViewModel
+) {
+    val isAdded by viewModel.isAddedToFavourites(imageEntry.nasaId).observeAsState()
+
+    IconButton(
+        onClick = {
+            if (isAdded == true) {
+                viewModel.removeFromFavourites(imageEntry)
+            } else {
+                viewModel.addToFavourites(imageEntry)
+            }
+        },
+        modifier = Modifier.size(dimensionResource(id = R.dimen.image_list_favourite_button_size))
+    ) {
+        Icon(
+            painter = painterResource(id = if (isAdded == true) R.drawable.icon_favorite else R.drawable.icon_favorite_border),
+            contentDescription = if (isAdded == true) {
+                stringResource(id = R.string.remove_from_favourite_content_description)
+            } else {
+                stringResource(id = R.string.add_to_favourite_content_description)
+            },
+            tint = when (isAdded) {
+                true -> Red
+                else -> MaterialTheme.customColors.favouriteListButtonNeutral
+            },
+            modifier = Modifier.size(dimensionResource(id = R.dimen.image_list_favourite_icon_size))
+        )
+    }
 }
 
 // yandex ad

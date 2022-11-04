@@ -2,6 +2,7 @@ package com.justcircleprod.randomspaceimages.ui.search.searchCards
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -10,11 +11,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.justcircleprod.randomspaceimages.R
+import com.justcircleprod.randomspaceimages.ui.theme.customColors
 
 @Composable
 fun SearchCardTitle(titleText: String) {
     Text(
         text = titleText,
+        color = MaterialTheme.customColors.text,
         fontSize = 18.sp,
         fontWeight = FontWeight.Bold,
         textAlign = TextAlign.Center,

@@ -38,7 +38,8 @@ fun YearRangeCard(
                 painter = painterResource(id = R.drawable.year_sliders_card_background),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                colorFilter = ColorFilter.tint(Color.Black.copy(0.4f), BlendMode.Darken)
+                colorFilter = ColorFilter.tint(Color.Black.copy(0.4f), BlendMode.Darken),
+                modifier = Modifier.fillMaxSize()
             )
 
             Row(
@@ -50,6 +51,10 @@ fun YearRangeCard(
                     range = RemoteConstants.NASA_LIBRARY_YEAR_START..RemoteConstants.NASA_LIBRARY_YEAR_END,
                     onValueChange = {
                         yearStart.value = it
+
+                        if (yearStart.value > yearEnd.value) {
+                            yearEnd.value = yearStart.value
+                        }
                     },
                     textStyle = TextStyle(
                         color = Color.White,
@@ -60,10 +65,10 @@ fun YearRangeCard(
 
                 Text(
                     text = "${yearStart.value} — ${yearEnd.value}",
+                    color = Color.White,
                     maxLines = 1,
                     fontSize = 17.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White
+                    fontWeight = FontWeight.Bold
                 )
 
                 NumberPicker(
@@ -71,6 +76,10 @@ fun YearRangeCard(
                     range = yearStart.value..RemoteConstants.NASA_LIBRARY_YEAR_END,
                     onValueChange = {
                         yearEnd.value = it
+
+                        if (yearEnd.value < yearStart.value) {
+                            yearStart.value = yearEnd.value
+                        }
                     },
                     textStyle = TextStyle(
                         color = Color.White,

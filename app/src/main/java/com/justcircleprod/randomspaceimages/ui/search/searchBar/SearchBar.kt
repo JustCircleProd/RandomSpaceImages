@@ -17,7 +17,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -29,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.ui.theme.DefaultFontFamily
+import com.justcircleprod.randomspaceimages.ui.theme.customColors
 
 @Composable
 fun SearchBar(
@@ -80,8 +80,8 @@ fun SearchField(
         maxLines = 1,
         textStyle = TextStyle(
             fontFamily = DefaultFontFamily,
-            fontSize = 15.sp,
-            color = colorResource(id = R.color.search_bar_text_color)
+            color = MaterialTheme.customColors.searchBarText,
+            fontSize = 15.sp
         ),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
         keyboardActions = KeyboardActions(
@@ -94,11 +94,7 @@ fun SearchField(
         },
         modifier = modifier
             .clip(RoundedCornerShape(dimensionResource(id = R.dimen.search_bar_rounded_corner_radius)))
-            .background(
-                colorResource(
-                    id = R.color.search_bar_background_color
-                )
-            )
+            .background(MaterialTheme.customColors.searchBarBackground)
             .width(searchBarWidth)
             .padding(vertical = dimensionResource(id = R.dimen.search_bar_vertical_padding))
             .padding(
@@ -112,8 +108,8 @@ fun SearchField(
 
             Text(
                 text = stringResource(id = R.string.search_bar_placeholder),
+                color = MaterialTheme.customColors.searchBarPlaceholder,
                 fontSize = 15.sp,
-                color = colorResource(id = R.color.search_bar_placeholder_color),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.alpha(if (searchText.value.isEmpty()) 1f else 0f)
@@ -137,8 +133,8 @@ fun SearchButton(
     ) {
         Icon(
             painter = painterResource(id = R.drawable.icon_search),
-            contentDescription = null,
-            tint = colorResource(id = R.color.search_bar_trailing_icon_tint),
+            contentDescription = stringResource(id = R.string.search),
+            tint = MaterialTheme.customColors.searchBarIcon,
             modifier = Modifier.size(dimensionResource(id = R.dimen.search_bar_icon_size))
         )
     }
