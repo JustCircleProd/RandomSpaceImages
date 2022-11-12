@@ -7,7 +7,6 @@ import com.justcircleprod.randomspaceimages.data.remote.RemoteConstants
 import com.justcircleprod.randomspaceimages.data.repositories.nasaLibraryRepository.DefaultNASALibraryRepository
 import com.justcircleprod.randomspaceimages.data.repositories.roomRepository.DefaultRoomRepository
 import com.justcircleprod.randomspaceimages.ui.baseViewModel.BaseViewModel
-import com.justcircleprod.randomspaceimages.ui.navigation.Screen
 import com.justcircleprod.randomspaceimages.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -26,10 +25,10 @@ class SearchResultViewModel @Inject constructor(
 
     // q comes from api
     // means "Free text search terms to compare to all indexed metadata."
-    private var q = savedStateHandle.get<String>(Screen.SearchResult.Q_ARGUMENT_NAME) ?: ""
-    private var yearStart = savedStateHandle.get<Int>(Screen.SearchResult.YEAR_START_ARGUMENT_NAME)
+    private var q = savedStateHandle.get<String>(SearchResultFragment.Q_ARGUMENT_NAME) ?: ""
+    private var yearStart = savedStateHandle.get<Int>(SearchResultFragment.YEAR_START_ARGUMENT_NAME)
         ?: RemoteConstants.NASA_LIBRARY_YEAR_START
-    private var yearEnd = savedStateHandle.get<Int>(Screen.SearchResult.YEAR_END_ARGUMENT_NAME)
+    private var yearEnd = savedStateHandle.get<Int>(SearchResultFragment.YEAR_END_ARGUMENT_NAME)
         ?: RemoteConstants.NASA_LIBRARY_YEAR_END
 
 
@@ -151,7 +150,7 @@ class SearchResultViewModel @Inject constructor(
         }
     }
 
-    private fun addAds() {
+    /*private fun addAds() {
         val itemsCountBetweenAds = 50
 
         // add null (ad) every itemsCountBetweenAds items
@@ -163,5 +162,5 @@ class SearchResultViewModel @Inject constructor(
                 images.value.add(i * itemsCountBetweenAds, null)
             }
         }
-    }
+    }*/
 }

@@ -1,6 +1,9 @@
 package com.justcircleprod.randomspaceimages.ui.search
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -12,11 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavHostController
 import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.data.remote.RemoteConstants.NASA_LIBRARY_YEAR_END
 import com.justcircleprod.randomspaceimages.data.remote.RemoteConstants.NASA_LIBRARY_YEAR_START
-import com.justcircleprod.randomspaceimages.ui.navigation.Screen
 import com.justcircleprod.randomspaceimages.ui.search.searchBar.SearchBar
 import com.justcircleprod.randomspaceimages.ui.search.searchCards.SearchCardTitle
 import com.justcircleprod.randomspaceimages.ui.search.searchCards.SuggestionCard
@@ -24,7 +25,7 @@ import com.justcircleprod.randomspaceimages.ui.search.searchCards.YearRangeCard
 import com.justcircleprod.randomspaceimages.ui.search.searchCards.suggestions.solarSystem
 
 @Composable
-fun SearchScreen(navController: NavHostController) {
+fun SearchFragmentContent(onSearchCallback: (q: String, yearStart: Int, yearEnd: Int) -> Unit) {
     val searchText = rememberSaveable { mutableStateOf("") }
     val yearStart = rememberSaveable { mutableStateOf(NASA_LIBRARY_YEAR_START) }
     val yearEnd = rememberSaveable { mutableStateOf(NASA_LIBRARY_YEAR_END) }
@@ -34,24 +35,21 @@ fun SearchScreen(navController: NavHostController) {
     val onSearch = {
         focusManager.clearFocus()
 
-        navController.navigate(
-            Screen.SearchResult(
-                yearStart.value,
-                yearEnd.value,
-                searchText.value
-            ).route
+        onSearchCallback(
+            searchText.value,
+            yearStart.value,
+            yearEnd.value
         )
     }
 
     val onSuggestionCardClick: (String) -> Unit = { suggestionText ->
+        searchText.value = suggestionText
         focusManager.clearFocus()
 
-        navController.navigate(
-            Screen.SearchResult(
-                yearStart.value,
-                yearEnd.value,
-                suggestionText
-            ).route
+        onSearchCallback(
+            searchText.value,
+            yearStart.value,
+            yearEnd.value
         )
     }
 
@@ -61,6 +59,7 @@ fun SearchScreen(navController: NavHostController) {
         columns = GridCells.Adaptive(dimensionResource(id = R.dimen.image_list_min_grid_cell_size)),
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.search_screen_arrangement)),
         horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.search_screen_arrangement)),
+        contentPadding = PaddingValues(bottom = dimensionResource(id = R.dimen.search_screen_bottom_space_size)),
         modifier = Modifier
             .padding(horizontal = dimensionResource(id = R.dimen.search_screen_horizontal_space_size))
             .fillMaxSize()
@@ -89,10 +88,6 @@ fun SearchScreen(navController: NavHostController) {
                 SuggestionImageRes = solarSystemSuggestions[it].second,
                 onClick = onSuggestionCardClick
             )
-        }
-
-        item(span = { GridItemSpan(maxLineSpan) }) {
-            Spacer(Modifier.height(dimensionResource(id = R.dimen.search_screen_bottom_space_size)))
         }
     }
 }

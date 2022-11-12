@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -21,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import com.chargemap.compose.numberpicker.NumberPicker
 import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.data.remote.RemoteConstants
+import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
 
 @Composable
 fun YearRangeCard(
@@ -58,14 +60,17 @@ fun YearRangeCard(
                     },
                     textStyle = TextStyle(
                         color = Color.White,
+                        fontFamily = LatoFontFamily,
                         fontSize = 15.sp,
                         fontWeight = FontWeight.SemiBold
-                    )
+                    ),
+                    dividersColor = colorResource(id = R.color.primary)
                 )
 
                 Text(
                     text = "${yearStart.value} — ${yearEnd.value}",
                     color = Color.White,
+                    fontFamily = LatoFontFamily,
                     maxLines = 1,
                     fontSize = 17.sp,
                     fontWeight = FontWeight.Bold
@@ -83,8 +88,11 @@ fun YearRangeCard(
                     },
                     textStyle = TextStyle(
                         color = Color.White,
+                        fontFamily = LatoFontFamily,
+                        fontSize = 15.sp,
                         fontWeight = FontWeight.SemiBold
-                    )
+                    ),
+                    dividersColor = colorResource(id = R.color.primary)
                 )
             }
         }

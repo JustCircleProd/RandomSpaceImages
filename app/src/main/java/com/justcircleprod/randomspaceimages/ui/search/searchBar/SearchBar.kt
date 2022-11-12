@@ -8,7 +8,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -17,6 +16,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -27,8 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.justcircleprod.randomspaceimages.R
-import com.justcircleprod.randomspaceimages.ui.theme.DefaultFontFamily
-import com.justcircleprod.randomspaceimages.ui.theme.customColors
+import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
 
 @Composable
 fun SearchBar(
@@ -76,11 +75,11 @@ fun SearchField(
     BasicTextField(
         value = searchText.value,
         singleLine = true,
-        cursorBrush = SolidColor(MaterialTheme.colors.primary),
+        cursorBrush = SolidColor(colorResource(id = R.color.primary)),
         maxLines = 1,
         textStyle = TextStyle(
-            fontFamily = DefaultFontFamily,
-            color = MaterialTheme.customColors.searchBarText,
+            color = colorResource(id = R.color.search_bar_text),
+            fontFamily = LatoFontFamily,
             fontSize = 15.sp
         ),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
@@ -94,7 +93,7 @@ fun SearchField(
         },
         modifier = modifier
             .clip(RoundedCornerShape(dimensionResource(id = R.dimen.search_bar_rounded_corner_radius)))
-            .background(MaterialTheme.customColors.searchBarBackground)
+            .background(colorResource(id = R.color.search_bar_background))
             .width(searchBarWidth)
             .padding(vertical = dimensionResource(id = R.dimen.search_bar_vertical_padding))
             .padding(
@@ -108,7 +107,8 @@ fun SearchField(
 
             Text(
                 text = stringResource(id = R.string.search_bar_placeholder),
-                color = MaterialTheme.customColors.searchBarPlaceholder,
+                color = colorResource(id = R.color.search_bar_placeholder),
+                fontFamily = LatoFontFamily,
                 fontSize = 15.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -134,7 +134,7 @@ fun SearchButton(
         Icon(
             painter = painterResource(id = R.drawable.icon_search),
             contentDescription = stringResource(id = R.string.search),
-            tint = MaterialTheme.customColors.searchBarIcon,
+            tint = colorResource(id = R.color.search_bar_icon),
             modifier = Modifier.size(dimensionResource(id = R.dimen.search_bar_icon_size))
         )
     }

@@ -1,7 +1,17 @@
-package com.justcircleprod.randomspaceimages.ui.more
+package com.justcircleprod.randomspaceimages.ui.more.licenses
 
 val Licenses: List<Map<String, Any>> =
     listOf(
+        mapOf(
+            "licenseName" to "Open Font License",
+            "licenseLink" to "https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL",
+            "projects" to listOf(
+                mapOf(
+                    "projectNameVersion" to "Lato Font",
+                    "projectInfo" to "Designed by Łukasz Dziedzic"
+                )
+            )
+        ),
         mapOf(
             "licenseName" to "The Apache Software License, Version 2.0",
             "licenseLink" to "http://www.apache.org/licenses/LICENSE-2.0.txt",

@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.justcircleprod.randomspaceimages.R
+import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
 
 @Composable
 fun SuggestionCard(
@@ -60,6 +61,7 @@ fun SuggestionCard(
             Text(
                 text = stringResource(id = suggestionStringRes),
                 color = Color.White,
+                fontFamily = LatoFontFamily,
                 maxLines = 1,
                 fontSize = 15.sp,
                 fontWeight = FontWeight.SemiBold,

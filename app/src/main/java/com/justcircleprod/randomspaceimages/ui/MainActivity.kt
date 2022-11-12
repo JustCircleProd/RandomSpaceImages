@@ -1,272 +1,112 @@
 package com.justcircleprod.randomspaceimages.ui
 
+import android.content.res.Configuration
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
-import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.data.dataStore.DataStoreConstants
-import com.justcircleprod.randomspaceimages.data.models.ImageEntry
-import com.justcircleprod.randomspaceimages.data.models.ImageEntryParamType
-import com.justcircleprod.randomspaceimages.ui.bottomNavItem.BottomNavItem
-import com.justcircleprod.randomspaceimages.ui.detailImage.DetailImageScreen
-import com.justcircleprod.randomspaceimages.ui.detailImage.DetailViewModel
-import com.justcircleprod.randomspaceimages.ui.home.HomeScreen
-import com.justcircleprod.randomspaceimages.ui.home.favourites.FavouriteImageListViewModel
-import com.justcircleprod.randomspaceimages.ui.home.random.RandomImageListViewModel
-import com.justcircleprod.randomspaceimages.ui.more.MoreScreen
-import com.justcircleprod.randomspaceimages.ui.more.MoreViewModel
-import com.justcircleprod.randomspaceimages.ui.navigation.Screen
-import com.justcircleprod.randomspaceimages.ui.search.SearchScreen
-import com.justcircleprod.randomspaceimages.ui.search.searchResult.SearchResultScreen
-import com.justcircleprod.randomspaceimages.ui.search.searchResult.SearchResultViewModel
-import com.justcircleprod.randomspaceimages.ui.theme.*
-import com.justcircleprod.randomspaceimages.util.parcelable
+import com.justcircleprod.randomspaceimages.databinding.ActivityMainBinding
+import com.justcircleprod.randomspaceimages.ui.bottomNavigation.BottomNavigation
+import com.justcircleprod.randomspaceimages.ui.themeState.ThemeState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
     val viewModel: MainViewModel by viewModels()
 
-    private var isFirstStart = true
+    private lateinit var navHostFragment: NavHostFragment
+    private val navController: NavController get() = navHostFragment.navController
+
+    private lateinit var initJob: Job
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        /*MobileAds.initialize(this) { }*/
 
-        val initJob = lifecycleScope.launch {
-            setContent {
-                val themeValue =
-                    viewModel.themeValue.collectAsState(initial = "not_initialized")
-
-                if (themeValue.value != "not_initialized") {
-                    isFirstStart = false
-                }
-
-                val darkTheme = when (themeValue.value) {
-                    DataStoreConstants.LIGHT_THEME -> false
-                    DataStoreConstants.DARK_THEME -> true
-                    else -> isSystemInDarkTheme()
-                }
-
-                val systemUiController = rememberSystemUiController()
-
-                DisposableEffect(systemUiController, !darkTheme) {
-                    systemUiController.setStatusBarColor(
-                        color = if (!darkTheme) LightBackground else DarkBackground,
-                        darkIcons = !darkTheme
-                    )
-                    systemUiController.setNavigationBarColor(
-                        color = if (!darkTheme) LightNavigationBar else DarkNavigationBar,
-                        darkIcons = !darkTheme
-                    )
-
-                    onDispose {}
-                }
-
-                val navController = rememberNavController()
-                val bottomNavigationState = remember { MutableTransitionState(true) }
-
-                RandomSpaceImagesTheme(darkTheme = darkTheme) {
-                    CustomColorsProvider(darkTheme = darkTheme) {
-                        Surface(
-                            modifier = Modifier.fillMaxSize(),
-                            color = MaterialTheme.colors.background
-                        ) {
-                            ConstraintLayout(modifier = Modifier.padding()) {
-                                NavHost(
-                                    navController = navController,
-                                    bottomNavigationState = bottomNavigationState
-                                )
-
-                                val bottomNavigation = createRef()
-
-                                BottomNavigation(
-                                    navController = navController,
-                                    bottomNavigationState = bottomNavigationState,
-                                    modifier = Modifier
-                                        .constrainAs(bottomNavigation) {
-                                            start.linkTo(parent.start)
-                                            end.linkTo(parent.end)
-                                            bottom.linkTo(parent.bottom, margin = 10.dp)
-                                        }
-                                )
-                            }
-                        }
-                    }
-                }
-            }
+        // if the activity is recreated due to a change of theme, then set the themeState to APPLIED
+        if (viewModel.themeState == ThemeState.APPLYING) {
+            viewModel.themeState = ThemeState.APPLIED
         }
+
+        setThemeObserver()
 
         installSplashScreen().setKeepOnScreenCondition {
-            !(initJob.isCompleted && !isFirstStart)
+            if (::initJob.isInitialized) {
+                !(initJob.isCompleted && viewModel.themeState == ThemeState.APPLIED)
+            } else {
+                true
+            }
+        }
+
+        initJob = lifecycleScope.launch {
+            binding = ActivityMainBinding.inflate(layoutInflater)
+
+            setContentView(binding.root)
+
+            setupNavController()
+
+            binding.bottomNavigationComposeView.apply {
+                setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+
+                setContent {
+                    BottomNavigation(navController)
+                }
+            }
         }
     }
 
-    @Composable
-    fun NavHost(
-        navController: NavHostController,
-        bottomNavigationState: MutableTransitionState<Boolean>
-    ) {
-        val randomImageListViewModel: RandomImageListViewModel = hiltViewModel()
-        val favouriteImageListViewModel: FavouriteImageListViewModel = hiltViewModel()
+    private fun setThemeObserver() {
+        viewModel.themeValue.observe(this) { themeValue ->
+            val isSystemInDarkTheme = resources.configuration.uiMode and
+                    Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
-        NavHost(
-            navController = navController,
-            startDestination = navController.currentDestination?.route ?: Screen.Home.route,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            composable(Screen.Home.route) {
-                bottomNavigationState.targetState = true
-
-                HomeScreen(
-                    navController = navController,
-                    randomImageListViewModel = randomImageListViewModel,
-                    favouriteImageListViewModel = favouriteImageListViewModel
-                )
-            }
-
-            composable(Screen.Search.route) {
-                bottomNavigationState.targetState = true
-
-                SearchScreen(navController = navController)
-            }
-            composable(
-                Screen.SearchResult().route,
-                arguments = listOf(
-                    navArgument(Screen.SearchResult.YEAR_START_ARGUMENT_NAME) {
-                        type = NavType.IntType
-                    },
-                    navArgument(Screen.SearchResult.YEAR_END_ARGUMENT_NAME) {
-                        type = NavType.IntType
-                    },
-                    navArgument(Screen.SearchResult.Q_ARGUMENT_NAME) {
-                        type = NavType.StringType
-                        defaultValue = ""
-                    },
-                )
-            ) {
-                bottomNavigationState.targetState = false
-
-                val searchResultViewModel: SearchResultViewModel = hiltViewModel()
-                SearchResultScreen(navController = navController, viewModel = searchResultViewModel)
-            }
-
-            composable(Screen.Detail().route,
-                arguments = listOf(
-                    navArgument(Screen.Detail.IMAGE_ENTRY_ARGUMENT_NAME) {
-                        type = ImageEntryParamType()
+            // if the application theme is equal to the system theme, then set the themeState to APPLIED.
+            // Otherwise, the activity will be recreated, so the themeState is set to APPLIED
+            // (when creating an activity, the themeState will be set to APPLIED in the onCreate).
+            if (viewModel.themeState == ThemeState.NOT_APPLIED) {
+                when {
+                    !isSystemInDarkTheme && themeValue == DataStoreConstants.LIGHT_THEME ||
+                            isSystemInDarkTheme && themeValue == DataStoreConstants.DARK_THEME ||
+                            themeValue == DataStoreConstants.SYSTEM_THEME ||
+                            themeValue == null -> {
+                        viewModel.themeState = ThemeState.APPLIED
                     }
-                )) {
-                bottomNavigationState.targetState = false
-
-                val imageEntry = it.arguments?.parcelable<ImageEntry>(
-                    Screen.Detail.IMAGE_ENTRY_ARGUMENT_NAME
-                )
-                val detailViewModel: DetailViewModel = hiltViewModel()
-
-                DetailImageScreen(
-                    navController = navController,
-                    imageEntry = imageEntry,
-                    viewModel = detailViewModel
-                )
-            }
-
-            composable(Screen.More.route) {
-                bottomNavigationState.targetState = true
-
-                val moreViewModel: MoreViewModel = hiltViewModel()
-
-                MoreScreen(viewModel = moreViewModel)
-            }
-        }
-    }
-
-    @Composable
-    fun BottomNavigation(
-        navController: NavHostController,
-        bottomNavigationState: MutableTransitionState<Boolean>,
-        modifier: Modifier
-    ) {
-        AnimatedVisibility(
-            visibleState = bottomNavigationState,
-            enter = slideInVertically(initialOffsetY = { it }),
-            exit = slideOutVertically(targetOffsetY = { it }),
-            modifier = modifier
-                .width(dimensionResource(id = R.dimen.bottom_navigation_width))
-                .height(dimensionResource(id = R.dimen.bottom_navigation_height))
-                .clip(RoundedCornerShape(dimensionResource(id = R.dimen.bottom_navigation_rounded_radius))),
-            content = {
-                BottomNavigation(
-                    backgroundColor = MaterialTheme.customColors.bottomNavigationBackground
-                ) {
-                    val bottomNavigationItem = listOf(
-                        BottomNavItem.Home(MaterialTheme.colors.primary),
-                        BottomNavItem.Search(MaterialTheme.colors.primary),
-                        BottomNavItem.More(MaterialTheme.colors.primary)
-                    )
-
-                    val navBackStackEntry by navController.currentBackStackEntryAsState()
-                    val currentDestination = navBackStackEntry?.destination
-
-                    bottomNavigationItem.forEach { bottomNavItem ->
-                        BottomNavigationItem(
-                            icon = {
-                                Icon(
-                                    painter = painterResource(id = bottomNavItem.iconResId),
-                                    contentDescription = stringResource(id = bottomNavItem.titleResId),
-                                    modifier = Modifier
-                                        .size(dimensionResource(id = R.dimen.bottom_navigation_icon_size))
-                                )
-                            },
-                            selectedContentColor = bottomNavItem.selectedContentColor,
-                            unselectedContentColor = MaterialTheme.customColors.bottomNavigationUnselected,
-                            selected = currentDestination?.hierarchy?.any {
-                                it.route == bottomNavItem.route
-                            } == true,
-                            onClick = {
-                                navController.navigate(bottomNavItem.route) {
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
-                                    }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
-                            }
-                        )
+                    else -> {
+                        viewModel.themeState = ThemeState.APPLYING
                     }
                 }
-            })
+            }
+
+            when (themeValue) {
+                DataStoreConstants.LIGHT_THEME -> {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                }
+                DataStoreConstants.DARK_THEME -> {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                }
+                else -> {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+                }
+            }
+        }
+    }
+
+    private fun setupNavController() {
+        navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
+
+        val graph = navController.navInflater.inflate(R.navigation.nav_graph)
+
+        navHostFragment.navController.setGraph(graph, null)
     }
 }

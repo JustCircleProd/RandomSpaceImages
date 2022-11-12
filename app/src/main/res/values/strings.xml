@@ -56,11 +56,9 @@
     <string name="light_theme">Light</string>
     <string name="dark_theme">Dark</string>
 
-    <string name="app_theme_warning">Be careful! Changing the theme of the application will reset scroll positions, search parameters and card expand.</string>
-
     <string name="developers">Developers</string>
 
-    <string name="open_source_licenses">Open Source Licenses</string>
+    <string name="licenses">Licenses</string>
 
     <string name="where_are_the_images_from">Where are the images from?</string>
     <string name="where_are_the_images_from_answer">All images are taken from the NASA Image and Video Library using the API images.nasa.gov.</string>

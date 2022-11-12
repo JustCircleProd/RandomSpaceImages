@@ -1,15 +1,20 @@
-package com.justcircleprod.randomspaceimages.ui.detailImage
+package com.justcircleprod.randomspaceimages.ui.detail
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -18,6 +23,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -30,30 +36,29 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import com.bumptech.glide.Glide
 import com.github.chrisbanes.photoview.PhotoView
 import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.data.models.ImageEntry
 import com.justcircleprod.randomspaceimages.data.remote.RemoteConstants
 import com.justcircleprod.randomspaceimages.ui.common.BackButton
-import com.justcircleprod.randomspaceimages.ui.theme.IconButtonShadow
-import com.justcircleprod.randomspaceimages.ui.theme.customColors
+import com.justcircleprod.randomspaceimages.ui.common.bounceClick
+import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
 import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
-fun DetailImageScreen(
-    navController: NavHostController,
-    imageEntry: ImageEntry?,
-    viewModel: DetailViewModel
+fun DetailFragmentContent(
+    viewModel: DetailViewModel,
+    imageEntry: ImageEntry,
+    onBackButtonClick: () -> Unit
 ) {
     ConstraintLayout {
         val (contentColumn, actionButtons) = createRefs()
 
         LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.elements_space_size)),
+            contentPadding = PaddingValues(bottom = dimensionResource(id = R.dimen.detail_screen_bottom_space)),
             modifier = Modifier
                 .constrainAs(contentColumn) {
                     top.linkTo(parent.top)
@@ -64,36 +69,30 @@ fun DetailImageScreen(
                 .fillMaxSize()
         ) {
             item {
-                ImageCard(imageEntry = imageEntry!!)
+                ImageCard(imageEntry = imageEntry)
             }
 
-            item {
-                if (imageEntry!!.title != null || imageEntry.description != null) {
-                    Spacer(Modifier.height(dimensionResource(id = R.dimen.elements_space_size)))
+
+            if (imageEntry.title != null || imageEntry.description != null) {
+                item {
                     DescriptionCard(imageEntry = imageEntry)
                 }
             }
 
-            item {
-
-                if (imageEntry!!.location != null ||
-                    imageEntry.secondaryCreator != null ||
-                    imageEntry.photographer != null
-                ) {
-                    Spacer(Modifier.height(dimensionResource(id = R.dimen.elements_space_size)))
+            if (imageEntry.location != null ||
+                imageEntry.secondaryCreator != null ||
+                imageEntry.photographer != null
+            ) {
+                item {
                     AdditionalInfoCard(imageEntry = imageEntry)
                 }
-            }
-
-            item {
-                Spacer(Modifier.height(dimensionResource(id = R.dimen.elements_space_size)))
             }
         }
 
         ActionButtons(
-            navController = navController,
             viewModel = viewModel,
-            imageEntry = imageEntry!!,
+            imageEntry = imageEntry,
+            onBackButtonClick = onBackButtonClick,
             modifier = Modifier
                 .constrainAs(actionButtons) {
                     top.linkTo(parent.top, margin = 6.dp)
@@ -110,7 +109,7 @@ fun ImageCard(imageEntry: ImageEntry) {
             bottomStart = dimensionResource(id = R.dimen.main_rounded_corner_radius),
             bottomEnd = dimensionResource(id = R.dimen.main_rounded_corner_radius)
         ),
-        backgroundColor = MaterialTheme.customColors.cardBackground,
+        backgroundColor = colorResource(id = R.color.card_background),
         elevation = dimensionResource(id = R.dimen.card_elevation)
     ) {
         ConstraintLayout(Modifier.fillMaxWidth()) {
@@ -138,18 +137,27 @@ fun ImageCard(imageEntry: ImageEntry) {
                 }
             )
 
-            IconButton(
-                onClick = { isImageInteractionEnabled = !isImageInteractionEnabled },
+            Box(
+                contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .clip(CircleShape)
                     .background(
                         if (!isImageInteractionEnabled) {
                             Color.Black.copy(0.45f)
                         } else {
-                            MaterialTheme.colors.secondary.copy(0.45f)
+                            colorResource(id = R.color.red).copy(0.45f)
                         }
                     )
                     .size(dimensionResource(id = R.dimen.interaction_icon_button_size))
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = rememberRipple(
+                            bounded = true,
+                            color = colorResource(id = R.color.ripple)
+                        ),
+                    ) {
+                        isImageInteractionEnabled = !isImageInteractionEnabled
+                    }
                     .constrainAs(enableImageInteractionButton) {
                         bottom.linkTo(imageView.bottom, margin = 10.dp)
                         end.linkTo(imageView.end, margin = 10.dp)
@@ -189,7 +197,8 @@ fun CenterAndDateInfo(imageEntry: ImageEntry, modifier: Modifier) {
         if (imageEntry.center != null) {
             Text(
                 text = imageEntry.center,
-                color = MaterialTheme.customColors.text,
+                color = colorResource(id = R.color.text),
+                fontFamily = LatoFontFamily,
                 fontSize = 15.sp,
                 modifier = Modifier.weight(1f)
             )
@@ -203,7 +212,8 @@ fun CenterAndDateInfo(imageEntry: ImageEntry, modifier: Modifier) {
                 SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(date)
             Text(
                 text = strDate,
-                color = MaterialTheme.customColors.text,
+                color = colorResource(id = R.color.text),
+                fontFamily = LatoFontFamily,
                 fontSize = 15.sp,
                 maxLines = 1
             )
@@ -215,7 +225,7 @@ fun CenterAndDateInfo(imageEntry: ImageEntry, modifier: Modifier) {
 fun DescriptionCard(imageEntry: ImageEntry) {
     Card(
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.main_rounded_corner_radius)),
-        backgroundColor = MaterialTheme.customColors.cardBackground,
+        backgroundColor = colorResource(id = R.color.card_background),
         elevation = dimensionResource(id = R.dimen.card_elevation)
     ) {
         SelectionContainer {
@@ -225,11 +235,11 @@ fun DescriptionCard(imageEntry: ImageEntry) {
                     .padding(horizontal = dimensionResource(id = R.dimen.card_content_horizontal_space))
                     .padding(vertical = dimensionResource(id = R.dimen.detail_card_content_vertical_space))
             ) {
-
                 if (imageEntry.title != null) {
                     Text(
                         text = imageEntry.title,
-                        color = MaterialTheme.customColors.text,
+                        color = colorResource(id = R.color.text),
+                        fontFamily = LatoFontFamily,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -238,7 +248,8 @@ fun DescriptionCard(imageEntry: ImageEntry) {
                     Spacer(Modifier.height(dimensionResource(id = R.dimen.description_top_space_size)))
                     Text(
                         text = imageEntry.description,
-                        color = MaterialTheme.customColors.text,
+                        color = colorResource(id = R.color.text),
+                        fontFamily = LatoFontFamily,
                         fontSize = 16.sp
                     )
                 }
@@ -251,7 +262,7 @@ fun DescriptionCard(imageEntry: ImageEntry) {
 fun AdditionalInfoCard(imageEntry: ImageEntry) {
     Card(
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.main_rounded_corner_radius)),
-        backgroundColor = MaterialTheme.customColors.cardBackground,
+        backgroundColor = colorResource(id = R.color.card_background),
         elevation = dimensionResource(id = R.dimen.card_elevation)
     ) {
         SelectionContainer {
@@ -263,7 +274,8 @@ fun AdditionalInfoCard(imageEntry: ImageEntry) {
             ) {
                 Text(
                     text = stringResource(id = R.string.additional_information),
-                    color = MaterialTheme.customColors.text,
+                    color = colorResource(id = R.color.text),
+                    fontFamily = LatoFontFamily,
                     fontWeight = FontWeight.Bold,
                     fontSize = 17.sp,
                     textAlign = TextAlign.Center,
@@ -281,7 +293,8 @@ fun AdditionalInfoCard(imageEntry: ImageEntry) {
                             append(" ")
                             append(imageEntry.location)
                         },
-                        color = MaterialTheme.customColors.text,
+                        color = colorResource(id = R.color.text),
+                        fontFamily = LatoFontFamily,
                         fontSize = 15.sp
                     )
                 }
@@ -295,7 +308,8 @@ fun AdditionalInfoCard(imageEntry: ImageEntry) {
                             append(" ")
                             append(imageEntry.secondaryCreator)
                         },
-                        color = MaterialTheme.customColors.text,
+                        color = colorResource(id = R.color.text),
+                        fontFamily = LatoFontFamily,
                         fontSize = 15.sp
                     )
                 }
@@ -309,7 +323,8 @@ fun AdditionalInfoCard(imageEntry: ImageEntry) {
                             append(" ")
                             append(imageEntry.photographer)
                         },
-                        color = MaterialTheme.customColors.text,
+                        color = colorResource(id = R.color.text),
+                        fontFamily = LatoFontFamily,
                         fontSize = 15.sp
                     )
                 }
@@ -320,9 +335,9 @@ fun AdditionalInfoCard(imageEntry: ImageEntry) {
 
 @Composable
 fun ActionButtons(
-    navController: NavController,
     viewModel: DetailViewModel,
     imageEntry: ImageEntry,
+    onBackButtonClick: () -> Unit,
     modifier: Modifier
 ) {
     Row(
@@ -333,11 +348,6 @@ fun ActionButtons(
             .padding(start = dimensionResource(id = R.dimen.action_buttons_start_space_size))
             .padding(end = dimensionResource(id = R.dimen.action_buttons_end_space_size))
     ) {
-        val onBackButtonClick = {
-            navController.popBackStack()
-            Unit
-        }
-
         BackButton(onBackButtonClick)
         FavouriteButton(imageEntry = imageEntry, viewModel = viewModel)
     }
@@ -346,20 +356,10 @@ fun ActionButtons(
 @Composable
 fun FavouriteButton(
     imageEntry: ImageEntry,
-    viewModel: DetailViewModel = hiltViewModel()
+    viewModel: DetailViewModel
 ) {
     val isAdded by viewModel.isAddedToFavourites(imageEntry.nasaId).observeAsState()
-
-    IconButton(
-        onClick = {
-            if (isAdded == true) {
-                viewModel.removeFromFavourites(imageEntry)
-            } else {
-                viewModel.addToFavourites(imageEntry)
-            }
-        },
-        modifier = Modifier.size(dimensionResource(id = R.dimen.detail_image_favourite_button_size))
-    ) {
+    Box {
         Icon(
             imageVector = if (isAdded == true) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
             contentDescription = null,
@@ -368,7 +368,7 @@ fun FavouriteButton(
                 .offset(x = 1.dp, y = 1.dp)
                 .alpha(0.4f)
                 .blur(dimensionResource(id = R.dimen.action_button_icon_blur)),
-            tint = IconButtonShadow
+            tint = colorResource(id = R.color.icon_button_shadow)
         )
         Icon(
             imageVector = if (isAdded == true) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
@@ -377,8 +377,16 @@ fun FavouriteButton(
             } else {
                 stringResource(id = R.string.add_to_favourite_content_description)
             },
-            tint = if (isAdded == true) MaterialTheme.colors.secondary else Color.White,
-            modifier = Modifier.size(dimensionResource(id = R.dimen.detail_image_favourite_button_icon_size))
+            tint = if (isAdded == true) colorResource(id = R.color.red) else Color.White,
+            modifier = Modifier
+                .size(dimensionResource(id = R.dimen.detail_image_favourite_button_icon_size))
+                .bounceClick {
+                    if (isAdded == true) {
+                        viewModel.removeFromFavourites(imageEntry)
+                    } else {
+                        viewModel.addToFavourites(imageEntry)
+                    }
+                }
         )
     }
 }

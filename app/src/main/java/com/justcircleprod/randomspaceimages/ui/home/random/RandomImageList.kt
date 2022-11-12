@@ -4,25 +4,27 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
-import androidx.navigation.NavHostController
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.justcircleprod.randomspaceimages.R
+import com.justcircleprod.randomspaceimages.data.models.ImageEntry
 import com.justcircleprod.randomspaceimages.ui.common.ErrorInfo
 import com.justcircleprod.randomspaceimages.ui.common.ErrorInfoCard
 import com.justcircleprod.randomspaceimages.ui.common.ImageEntryItem
 import com.justcircleprod.randomspaceimages.ui.common.ProgressIndicator
-import com.justcircleprod.randomspaceimages.ui.theme.customColors
 
 @Composable
-fun RandomImageList(navController: NavHostController, viewModel: RandomImageListViewModel) {
+fun RandomImageList(
+    viewModel: RandomImageListViewModel,
+    onImageEntryClick: (imageEntry: ImageEntry) -> Unit
+) {
     val images by viewModel.images.collectAsState()
 
     val isLoading by viewModel.isLoading.collectAsState()
@@ -40,8 +42,8 @@ fun RandomImageList(navController: NavHostController, viewModel: RandomImageList
                 state = state,
                 refreshTriggerDistance = trigger,
                 scale = true,
-                backgroundColor = MaterialTheme.customColors.cardBackground,
-                contentColor = MaterialTheme.colors.primary
+                backgroundColor = colorResource(id = R.color.card_background),
+                contentColor = colorResource(id = R.color.primary)
             )
         },
         modifier = Modifier.fillMaxSize()
@@ -76,8 +78,8 @@ fun RandomImageList(navController: NavHostController, viewModel: RandomImageList
 
                         ImageEntryItem(
                             imageEntry = images[it]!!,
-                            navController = navController,
-                            viewModel = viewModel
+                            viewModel = viewModel,
+                            onImageEntryClick = onImageEntryClick
                         )
 
                         /*if (images[it] != null) {

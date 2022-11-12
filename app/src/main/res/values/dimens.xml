@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="main_rounded_corner_radius">12dp</dimen>
     <dimen name="elements_space_size">6dp</dimen>
+
 
     <dimen name="bottom_navigation_width">200dp</dimen>
     <dimen name="bottom_navigation_height">60dp</dimen>
     <dimen name="bottom_navigation_rounded_radius">40dp</dimen>
+    <dimen name="bottom_navigation_icon_size">24dp</dimen>
 
-    <dimen name="main_rounded_corner_radius">12dp</dimen>
 
     <dimen name="tabs_edge_padding">6dp</dimen>
     <dimen name="tabs_padding_bottom">6dp</dimen>
     <dimen name="tabs_indicator_height">4dp</dimen>
     <dimen name="tabs_indicator_horizontal_padding">17dp</dimen>
     <dimen name="tabs_indicator_rounded_corner_radius">6dp</dimen>
+
 
     <dimen name="image_list_min_grid_cell_size">160dp</dimen>
     <dimen name="image_list_vertical_arrangement">10dp</dimen>
@@ -24,20 +27,19 @@
     <dimen name="image_list_favourite_button_size">24dp</dimen>
     <dimen name="image_list_favourite_icon_size">20dp</dimen>
 
+
     <dimen name="card_content_horizontal_space">20dp</dimen>
     <dimen name="card_elevation">2dp</dimen>
+
 
     <dimen name="progress_card_padding">10dp</dimen>
     <dimen name="progress_card_elevation">4dp</dimen>
     <dimen name="progress_indicator_stroke_width">3dp</dimen>
     <dimen name="progress_indicator_size">22dp</dimen>
 
-    <dimen name="bottom_navigation_icon_size">24dp</dimen>
-
-    <dimen name="center_and_date_info_padding_top">6dp</dimen>
-    <dimen name="center_and_date_info_padding_bottom">4dp</dimen>
 
     <dimen name="detail_card_content_vertical_space">12dp</dimen>
+    <dimen name="detail_screen_bottom_space">20dp</dimen>
     <dimen name="description_top_space_size">4dp</dimen>
 
     <dimen name="action_buttons_start_space_size">8dp</dimen>
@@ -46,13 +48,20 @@
     <dimen name="action_icon_button_size">40dp</dimen>
     <dimen name="action_icon_button_icon_size">18dp</dimen>
 
+    <dimen name="action_button_icon_blur">1dp</dimen>
+
     <dimen name="detail_image_favourite_button_size">26dp</dimen>
     <dimen name="detail_image_favourite_button_icon_size">26dp</dimen>
 
     <dimen name="interaction_icon_button_size">36dp</dimen>
     <dimen name="interaction_icon_size">22dp</dimen>
 
-    <dimen name="action_button_icon_blur">1dp</dimen>
+    <dimen name="open_in_browser_icon_size">20dp</dimen>
+    <dimen name="open_in_browser_icon_start_space_size">3dp</dimen>
+
+    <dimen name="center_and_date_info_padding_top">6dp</dimen>
+    <dimen name="center_and_date_info_padding_bottom">4dp</dimen>
+
 
     <dimen name="rocket_icon_space_size">2dp</dimen>
     <dimen name="rocket_launch_icon_space_size">4dp</dimen>
@@ -63,10 +72,11 @@
     <dimen name="error_info_card_vertical_space_size">8dp</dimen>
     <dimen name="error_info_card_icon_size">18dp</dimen>
 
+
     <dimen name="search_screen_min_grid_cell_size">160dp</dimen>
     <dimen name="search_screen_horizontal_space_size">6dp</dimen>
     <dimen name="search_screen_arrangement">4dp</dimen>
-    <dimen name="search_screen_bottom_space_size">76dp</dimen>
+    <dimen name="search_screen_bottom_space_size">80dp</dimen>
 
     <dimen name="search_bar_top_space_size">10dp</dimen>
     <dimen name="search_bar_rounded_corner_radius">20dp</dimen>
@@ -86,9 +96,10 @@
 
     <dimen name="suggestion_card_height">100dp</dimen>
 
+
     <dimen name="more_screen_top_space_size">4dp</dimen>
     <dimen name="more_screen_horizontal_space_size">6dp</dimen>
-    <dimen name="more_screen_bottom_space_size">74dp</dimen>
+    <dimen name="more_screen_bottom_space_size">80dp</dimen>
     <dimen name="more_screen_cards_vertical_arrangement">6dp</dimen>
 
     <dimen name="more_card_rounded_corner_radius">12dp</dimen>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="blue_light">#60cbff</color>
+    <color name="blue_dark">#3664f4</color>
+
+    <color name="red">#e85353</color>
+
+    <color name="white">#fff</color>
+    <color name="black">#000</color>
+
+    <color name="error_card_background">#efced5</color>
+    <color name="icon_button_shadow">#2e2e2e</color>
+
+    <color name="primary">@color/blue_dark</color>
+    <color name="secondary">@color/red</color>
+
+    <color name="background">#ebeff2</color>
+
+    <color name="system_navigation_bar">#dce1e4</color>
+
+    <color name="bottom_navigation_background">#dddddd</color>
+    <color name="bottom_navigation_unselected">#585858</color>
+
+    <color name="text">#313131</color>
+
+    <color name="card_background">#ffffff</color>
+
+    <color name="favourite_list_button_neutral">#444444</color>
+
+    <color name="shimmer_highlights">#cccccc</color>
+
+    <color name="ripple">#444444</color>
+
+    <color name="icon_tint">#000000</color>
+
+    <color name="search_bar_background">#dddddd</color>
+    <color name="search_bar_placeholder">#585858</color>
+    <color name="search_bar_text">#1d1d1d</color>
+    <color name="search_bar_icon">#656565</color>
+
+    <color name="unselected_radio_button">#666666</color>
+</resources>

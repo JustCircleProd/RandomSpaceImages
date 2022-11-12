@@ -1,20 +1,23 @@
 package com.justcircleprod.randomspaceimages.ui.more.licenses
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
 import com.justcircleprod.randomspaceimages.R
+import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
 
 @Composable
 @Suppress("UNCHECKED_CAST")
@@ -50,14 +53,20 @@ private fun LicenseTitle(
 
     Text(
         text = licenseName,
-        style = TextStyle(
-            fontSize = 16.sp,
-            color = MaterialTheme.colors.primary,
-            textDecoration = TextDecoration.Underline
-        ),
-        modifier = Modifier.clickable {
+        color = colorResource(id = R.color.primary),
+        fontSize = 16.sp,
+        textDecoration = TextDecoration.Underline,
+        fontFamily = LatoFontFamily,
+        modifier = Modifier.clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = rememberRipple(
+                bounded = true,
+                color = colorResource(id = R.color.ripple)
+            )
+        ) {
             uriHandler.openUri(licenseLink)
-        })
+        }
+    )
 }
 
 @Composable
@@ -70,10 +79,14 @@ private fun ProjectInfo(
     ) {
         Text(
             text = projectNameVersion,
+            color = colorResource(id = R.color.text),
+            fontFamily = LatoFontFamily,
             fontSize = 15.sp
         )
         Text(
             text = projectInfo,
+            color = colorResource(id = R.color.text),
+            fontFamily = LatoFontFamily,
             fontSize = 14.sp
         )
     }

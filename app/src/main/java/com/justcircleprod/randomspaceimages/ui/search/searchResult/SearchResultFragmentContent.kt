@@ -5,13 +5,13 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -19,32 +19,31 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.navigation.NavHostController
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.justcircleprod.randomspaceimages.R
+import com.justcircleprod.randomspaceimages.data.models.ImageEntry
 import com.justcircleprod.randomspaceimages.ui.common.*
-import com.justcircleprod.randomspaceimages.ui.theme.customColors
+import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
 
 @Composable
-fun SearchResultScreen(navController: NavHostController, viewModel: SearchResultViewModel) {
+fun SearchResultScreen(
+    viewModel: SearchResultViewModel,
+    onImageEntryClick: (imageEntry: ImageEntry) -> Unit,
+    onBackButtonClick: () -> Unit
+) {
     ConstraintLayout {
         val (imageList, backButton) = createRefs()
         SearchImageList(
-            navController = navController,
             viewModel = viewModel,
+            onImageEntryClicked = onImageEntryClick,
             modifier = Modifier.constrainAs(imageList) {
                 top.linkTo(parent.top)
                 start.linkTo(parent.start)
                 bottom.linkTo(parent.bottom)
                 end.linkTo(parent.end)
             })
-
-        val onBackButtonClick = {
-            navController.popBackStack()
-            Unit
-        }
 
         BackButton(onBackButtonClick, modifier = Modifier
             .constrainAs(backButton) {
@@ -57,8 +56,8 @@ fun SearchResultScreen(navController: NavHostController, viewModel: SearchResult
 
 @Composable
 fun SearchImageList(
-    navController: NavHostController,
     viewModel: SearchResultViewModel,
+    onImageEntryClicked: (imageEntry: ImageEntry) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val images by viewModel.images.collectAsState()
@@ -80,8 +79,8 @@ fun SearchImageList(
                 state = state,
                 refreshTriggerDistance = trigger,
                 scale = true,
-                backgroundColor = MaterialTheme.customColors.cardBackground,
-                contentColor = MaterialTheme.colors.primary
+                backgroundColor = colorResource(id = R.color.card_background),
+                contentColor = colorResource(id = R.color.primary)
             )
         },
         modifier = modifier.fillMaxSize()
@@ -126,8 +125,8 @@ fun SearchImageList(
 
                         ImageEntryItem(
                             imageEntry = images[it]!!,
-                            navController = navController,
-                            viewModel = viewModel
+                            viewModel = viewModel,
+                            onImageEntryClick = onImageEntryClicked
                         )
 
                         /*if (images[it] != null) {
@@ -176,7 +175,8 @@ fun NoResults(modifier: Modifier = Modifier) {
     ) {
         Text(
             text = stringResource(id = R.string.search_no_results),
-            color = MaterialTheme.customColors.text,
+            color = colorResource(id = R.color.text),
+            fontFamily = LatoFontFamily,
             textAlign = TextAlign.Center,
             fontSize = 18.sp
         )
