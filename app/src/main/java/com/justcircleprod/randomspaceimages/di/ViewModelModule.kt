@@ -17,14 +17,9 @@ object ViewModelModule {
     @Provides
     @ViewModelScoped
     fun provideNASALibraryAPI(): NASALibraryAPI {
-        /*val interceptor = HttpLoggingInterceptor()
-        interceptor.level = HttpLoggingInterceptor.Level.HEADERS
-        val client: OkHttpClient = OkHttpClient.Builder().addInterceptor(interceptor).build()*/
-
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(RemoteConstants.NASA_LIBRARY_BASE_URL)
-            /*.client(client)*/
             .build()
             .create(NASALibraryAPI::class.java)
     }

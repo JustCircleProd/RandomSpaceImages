@@ -9,10 +9,8 @@ import com.justcircleprod.randomspaceimages.data.repositories.roomRepository.Def
 import com.justcircleprod.randomspaceimages.ui.baseViewModel.BaseViewModel
 import com.justcircleprod.randomspaceimages.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import kotlin.math.ceil
 
@@ -51,7 +49,7 @@ class SearchResultViewModel @Inject constructor(
 
     // fun to search for a new query
     fun searchImages(refresh: Boolean = false) {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch {
             setLoadingOrRefreshing(refresh = refresh, value = true)
             noResults.value = false
             page = 1
@@ -65,7 +63,7 @@ class SearchResultViewModel @Inject constructor(
 
     // fun to load images by old query on scroll
     fun loadImages() {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch {
             isLoading.value = true
             setEndReached()
             page++
@@ -82,9 +80,8 @@ class SearchResultViewModel @Inject constructor(
     }
 
     private suspend fun setImages() {
-        val result = withContext(Dispatchers.IO) {
+        val result =
             nasaLibraryRepository.searchImages(q = q, yearStart, yearEnd, page = page)
-        }
 
         when (result) {
             is Resource.Success -> {

@@ -8,10 +8,8 @@ import com.justcircleprod.randomspaceimages.data.repositories.roomRepository.Def
 import com.justcircleprod.randomspaceimages.ui.baseViewModel.BaseViewModel
 import com.justcircleprod.randomspaceimages.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import kotlin.math.ceil
 
@@ -42,7 +40,7 @@ class RandomImageListViewModel @Inject constructor(
     }
 
     fun loadImages(refresh: Boolean = false) {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch {
             setLoadingOrRefreshing(refresh = refresh, value = true)
 
             setEndReached()
@@ -60,13 +58,11 @@ class RandomImageListViewModel @Inject constructor(
                 return@launch
             }
 
-            val result = withContext(Dispatchers.IO) {
-                nasaLibraryRepository.getImages(
-                    yearStart = year.value,
-                    yearEnd = year.value,
-                    page = page.value
-                )
-            }
+            val result = nasaLibraryRepository.getImages(
+                yearStart = year.value,
+                yearEnd = year.value,
+                page = page.value
+            )
 
             when {
                 result is Resource.Success && result.data!!.collection.items.isNotEmpty() -> {
@@ -182,9 +178,9 @@ class RandomImageListViewModel @Inject constructor(
         }
 
         // if this year has not been processed yet, then we get data on it
-        val result = withContext(Dispatchers.IO) {
+        val result =
             nasaLibraryRepository.getImages(yearStart = year, yearEnd = year, page = 1)
-        }
+
 
         if (result is Resource.Error) {
             loadError.value = true
