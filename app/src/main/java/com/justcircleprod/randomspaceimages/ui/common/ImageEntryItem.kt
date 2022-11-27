@@ -136,9 +136,9 @@ fun FavouriteButton(
     Icon(
         painter = painterResource(id = if (isAdded == true) R.drawable.icon_favorite else R.drawable.icon_favorite_border),
         contentDescription = if (isAdded == true) {
-            stringResource(id = R.string.remove_from_favourite_content_description)
+            stringResource(id = R.string.remove_from_favourite)
         } else {
-            stringResource(id = R.string.add_to_favourite_content_description)
+            stringResource(id = R.string.add_to_favourite)
         },
         tint = when (isAdded) {
             true -> colorResource(id = R.color.red)

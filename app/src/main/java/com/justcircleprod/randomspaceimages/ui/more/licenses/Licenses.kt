@@ -7,10 +7,10 @@ val Licenses: List<Map<String, Any>> =
             "licenseLink" to "https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL",
             "projects" to listOf(
                 mapOf(
-                    "projectNameVersion" to "Lato Font",
+                    "projectNameVersion" to "Lato",
                     "projectInfo" to "Designed by Łukasz Dziedzic"
-                )
-            )
+                ),
+            ),
         ),
         mapOf(
             "licenseName" to "The Apache Software License, Version 2.0",
@@ -41,6 +41,10 @@ val Licenses: List<Map<String, Any>> =
                     "projectInfo" to "Copyright © 20xx Kotlin Team"
                 ),
                 mapOf(
+                    "projectNameVersion" to "Baseflow/PhotoView 2.3.0",
+                    "projectInfo" to "Copyright © 2012 Baseflow"
+                ),
+                mapOf(
                     "projectNameVersion" to "Dagger 2.42",
                     "projectInfo" to "Copyright © 20xx "
                 ),
@@ -61,19 +65,23 @@ val Licenses: List<Map<String, Any>> =
                     "projectInfo" to "Copyright © 20xx "
                 ),
                 mapOf(
-                    "projectNameVersion" to "Accompanist Pager Indicators 0.27.0",
+                    "projectNameVersion" to "OkHttp 3.14.9",
+                    "projectInfo" to "Copyright © 20xx "
+                ),
+                mapOf(
+                    "projectNameVersion" to "Okio 1.17.2",
+                    "projectInfo" to "Copyright © 20xx "
+                ),
+                mapOf(
+                    "projectNameVersion" to "Accompanist Pager Indicators 0.27.1",
                     "projectInfo" to "Copyright © 20xx Google"
                 ),
                 mapOf(
-                    "projectNameVersion" to "Accompanist Pager layouts 0.27.0",
+                    "projectNameVersion" to "Accompanist Pager layouts 0.27.1",
                     "projectInfo" to "Copyright © 20xx Google"
                 ),
                 mapOf(
-                    "projectNameVersion" to "Accompanist SwipeRefresh library 0.25.1",
-                    "projectInfo" to "Copyright © 20xx Google"
-                ),
-                mapOf(
-                    "projectNameVersion" to "Accompanist System UI Controller library 0.27.0",
+                    "projectNameVersion" to "Accompanist SwipeRefresh library 0.27.0",
                     "projectInfo" to "Copyright © 20xx Google"
                 ),
                 mapOf(
@@ -81,7 +89,7 @@ val Licenses: List<Map<String, Any>> =
                     "projectInfo" to "Copyright © 2018 The Android Open Source Project"
                 ),
                 mapOf(
-                    "projectNameVersion" to "Activity Compose 1.5.1",
+                    "projectNameVersion" to "Activity Compose 1.3.1",
                     "projectInfo" to "Copyright © 2020 The Android Open Source Project"
                 ),
                 mapOf(
@@ -133,11 +141,15 @@ val Licenses: List<Map<String, Any>> =
                     "projectInfo" to "Copyright © 2017 The Android Open Source Project"
                 ),
                 mapOf(
+                    "projectNameVersion" to "Android Lifecycle Extensions 2.2.0",
+                    "projectInfo" to "Copyright © 2017 The Android Open Source Project"
+                ),
+                mapOf(
                     "projectNameVersion" to "Android Lifecycle Kotlin Extensions 2.5.1",
                     "projectInfo" to "Copyright © 2019 The Android Open Source Project"
                 ),
                 mapOf(
-                    "projectNameVersion" to "Android Lifecycle LiveData 2.2.0",
+                    "projectNameVersion" to "Android Lifecycle LiveData 2.5.1",
                     "projectInfo" to "Copyright © 2017 The Android Open Source Project"
                 ),
                 mapOf(
@@ -151,6 +163,10 @@ val Licenses: List<Map<String, Any>> =
                 mapOf(
                     "projectNameVersion" to "Android Lifecycle Runtime 2.5.1",
                     "projectInfo" to "Copyright © 2017 The Android Open Source Project"
+                ),
+                mapOf(
+                    "projectNameVersion" to "Android Lifecycle Service 2.2.0",
+                    "projectInfo" to "Copyright © 2018 The Android Open Source Project"
                 ),
                 mapOf(
                     "projectNameVersion" to "Android Lifecycle ViewModel 2.5.1",
@@ -181,6 +197,14 @@ val Licenses: List<Map<String, Any>> =
                     "projectInfo" to "Copyright © 2018 The Android Open Source Project"
                 ),
                 mapOf(
+                    "projectNameVersion" to "Android Navigation Fragment 2.5.3",
+                    "projectInfo" to "Copyright © 2017 The Android Open Source Project"
+                ),
+                mapOf(
+                    "projectNameVersion" to "Android Navigation Fragment Kotlin Extensions 2.5.3",
+                    "projectInfo" to "Copyright © 2018 The Android Open Source Project"
+                ),
+                mapOf(
                     "projectNameVersion" to "Android Navigation Hilt Extension 1.0.0",
                     "projectInfo" to "Copyright © 2021 The Android Open Source Project"
                 ),
@@ -190,6 +214,14 @@ val Licenses: List<Map<String, Any>> =
                 ),
                 mapOf(
                     "projectNameVersion" to "Android Navigation Runtime Kotlin Extensions 2.5.3",
+                    "projectInfo" to "Copyright © 2018 The Android Open Source Project"
+                ),
+                mapOf(
+                    "projectNameVersion" to "Android Navigation UI 2.5.3",
+                    "projectInfo" to "Copyright © 2018 The Android Open Source Project"
+                ),
+                mapOf(
+                    "projectNameVersion" to "Android Navigation UI Kotlin Extensions 2.5.3",
                     "projectInfo" to "Copyright © 2018 The Android Open Source Project"
                 ),
                 mapOf(
@@ -273,7 +305,7 @@ val Licenses: List<Map<String, Any>> =
                     "projectInfo" to "Copyright © 2018 The Android Open Source Project"
                 ),
                 mapOf(
-                    "projectNameVersion" to "Android Support Library fragment 1.3.6",
+                    "projectNameVersion" to "Android Support Library fragment 1.5.4",
                     "projectInfo" to "Copyright © 2011 The Android Open Source Project"
                 ),
                 mapOf(
@@ -290,6 +322,10 @@ val Licenses: List<Map<String, Any>> =
                 ),
                 mapOf(
                     "projectNameVersion" to "Android Support Library Print 1.0.0",
+                    "projectInfo" to "Copyright © 2018 The Android Open Source Project"
+                ),
+                mapOf(
+                    "projectNameVersion" to "Android Support Library Sliding Pane Layout 1.2.0",
                     "projectInfo" to "Copyright © 2018 The Android Open Source Project"
                 ),
                 mapOf(
@@ -313,7 +349,7 @@ val Licenses: List<Map<String, Any>> =
                     "projectInfo" to "Copyright © 2020 The Android Open Source Project"
                 ),
                 mapOf(
-                    "projectNameVersion" to "Android Transition Support Library 1.2.0",
+                    "projectNameVersion" to "Android Transition Support Library 1.4.1",
                     "projectInfo" to "Copyright © 2016 The Android Open Source Project"
                 ),
                 mapOf(
@@ -341,91 +377,87 @@ val Licenses: List<Map<String, Any>> =
                     "projectInfo" to "Copyright © 2018 The Android Open Source Project"
                 ),
                 mapOf(
-                    "projectNameVersion" to "Compose Animation 1.3.0",
+                    "projectNameVersion" to "Compose Animation 1.3.1",
                     "projectInfo" to "Copyright © 2019 The Android Open Source Project"
                 ),
                 mapOf(
-                    "projectNameVersion" to "Compose Animation Core 1.3.0",
+                    "projectNameVersion" to "Compose Animation Core 1.3.1",
                     "projectInfo" to "Copyright © 2019 The Android Open Source Project"
                 ),
                 mapOf(
-                    "projectNameVersion" to "Compose Foundation 1.3.0",
+                    "projectNameVersion" to "Compose Foundation 1.3.1",
                     "projectInfo" to "Copyright © 2018 The Android Open Source Project"
                 ),
                 mapOf(
-                    "projectNameVersion" to "Compose Geometry 1.3.0",
+                    "projectNameVersion" to "Compose Geometry 1.3.1",
                     "projectInfo" to "Copyright © 2020 The Android Open Source Project"
                 ),
                 mapOf(
-                    "projectNameVersion" to "Compose Graphics 1.3.0",
+                    "projectNameVersion" to "Compose Graphics 1.3.1",
                     "projectInfo" to "Copyright © 2020 The Android Open Source Project"
                 ),
                 mapOf(
-                    "projectNameVersion" to "Compose Layouts 1.3.0",
+                    "projectNameVersion" to "Compose Layouts 1.3.1",
                     "projectInfo" to "Copyright © 2019 The Android Open Source Project"
                 ),
                 mapOf(
-                    "projectNameVersion" to "Compose LiveData integration 1.2.1",
+                    "projectNameVersion" to "Compose LiveData integration 1.3.1",
                     "projectInfo" to "Copyright © 2020 The Android Open Source Project"
                 ),
                 mapOf(
-                    "projectNameVersion" to "Compose Material Components 1.3.0",
+                    "projectNameVersion" to "Compose Material Components 1.3.1",
                     "projectInfo" to "Copyright © 2018 The Android Open Source Project"
                 ),
                 mapOf(
-                    "projectNameVersion" to "Compose Material Icons Core 1.3.0",
+                    "projectNameVersion" to "Compose Material Icons Core 1.3.1",
                     "projectInfo" to "Copyright © 2020 The Android Open Source Project"
                 ),
                 mapOf(
-                    "projectNameVersion" to "Compose Material Ripple 1.3.0",
+                    "projectNameVersion" to "Compose Material Ripple 1.3.1",
                     "projectInfo" to "Copyright © 2020 The Android Open Source Project"
                 ),
                 mapOf(
-                    "projectNameVersion" to "Compose Navigation 2.5.3",
+                    "projectNameVersion" to "Compose Navigation 2.4.0",
                     "projectInfo" to "Copyright © 2020 The Android Open Source Project"
                 ),
                 mapOf(
-                    "projectNameVersion" to "Compose Runtime 1.3.0",
+                    "projectNameVersion" to "Compose Runtime 1.3.1",
                     "projectInfo" to "Copyright © 2019 The Android Open Source Project"
                 ),
                 mapOf(
-                    "projectNameVersion" to "Compose Saveable 1.3.0",
+                    "projectNameVersion" to "Compose Saveable 1.3.1",
                     "projectInfo" to "Copyright © 2020 The Android Open Source Project"
                 ),
                 mapOf(
-                    "projectNameVersion" to "Compose Testing manifest dependency 1.3.0",
+                    "projectNameVersion" to "Compose Testing manifest dependency 1.3.1",
                     "projectInfo" to "Copyright © 2021 The Android Open Source Project"
                 ),
                 mapOf(
-                    "projectNameVersion" to "Compose Tooling 1.3.0",
+                    "projectNameVersion" to "Compose Tooling 1.3.1",
                     "projectInfo" to "Copyright © 2019 The Android Open Source Project"
                 ),
                 mapOf(
-                    "projectNameVersion" to "Compose Tooling API 1.3.0",
+                    "projectNameVersion" to "Compose Tooling API 1.3.1",
                     "projectInfo" to "Copyright © 2021 The Android Open Source Project"
                 ),
                 mapOf(
-                    "projectNameVersion" to "Compose Tooling Data 1.3.0",
+                    "projectNameVersion" to "Compose Tooling Data 1.3.1",
                     "projectInfo" to "Copyright © 2021 The Android Open Source Project"
                 ),
                 mapOf(
-                    "projectNameVersion" to "Compose UI primitives 1.3.0",
+                    "projectNameVersion" to "Compose UI primitives 1.3.1",
                     "projectInfo" to "Copyright © 2019 The Android Open Source Project"
                 ),
                 mapOf(
-                    "projectNameVersion" to "Compose UI Text 1.3.0",
+                    "projectNameVersion" to "Compose UI Text 1.3.1",
                     "projectInfo" to "Copyright © 2019 The Android Open Source Project"
                 ),
                 mapOf(
-                    "projectNameVersion" to "Compose Unit 1.3.0",
+                    "projectNameVersion" to "Compose Unit 1.3.1",
                     "projectInfo" to "Copyright © 2020 The Android Open Source Project"
                 ),
                 mapOf(
-                    "projectNameVersion" to "Compose Util 1.3.0",
-                    "projectInfo" to "Copyright © 2020 The Android Open Source Project"
-                ),
-                mapOf(
-                    "projectNameVersion" to "Compose ViewBinding 1.3.0",
+                    "projectNameVersion" to "Compose Util 1.3.1",
                     "projectInfo" to "Copyright © 2020 The Android Open Source Project"
                 ),
                 mapOf(
@@ -449,7 +481,7 @@ val Licenses: List<Map<String, Any>> =
                     "projectInfo" to "Copyright © 20xx "
                 ),
                 mapOf(
-                    "projectNameVersion" to "Fragment Kotlin Extensions 1.3.2",
+                    "projectNameVersion" to "Fragment Kotlin Extensions 1.5.4",
                     "projectInfo" to "Copyright © 2018 The Android Open Source Project"
                 ),
                 mapOf(
@@ -463,6 +495,10 @@ val Licenses: List<Map<String, Any>> =
                 mapOf(
                     "projectNameVersion" to "javax.inject 1",
                     "projectInfo" to "Copyright © 20xx "
+                ),
+                mapOf(
+                    "projectNameVersion" to "Jetpack WindowManager Library 1.0.0",
+                    "projectInfo" to "Copyright © 2020 The Android Open Source Project"
                 ),
                 mapOf(
                     "projectNameVersion" to "kotlinx-coroutines-android 1.6.4",
@@ -485,11 +521,15 @@ val Licenses: List<Map<String, Any>> =
                     "projectInfo" to "Copyright © 20xx Jaewoong Eum"
                 ),
                 mapOf(
-                    "projectNameVersion" to "Lifecycle ViewModel Compose 2.5.1",
+                    "projectNameVersion" to "Lifecycle ViewModel Compose 2.4.0",
                     "projectInfo" to "Copyright © 2021 The Android Open Source Project"
                 ),
                 mapOf(
-                    "projectNameVersion" to "LiveData Core Kotlin Extensions 2.3.1",
+                    "projectNameVersion" to "LiveData Core Kotlin Extensions 2.5.1",
+                    "projectInfo" to "Copyright © 2018 The Android Open Source Project"
+                ),
+                mapOf(
+                    "projectNameVersion" to "LiveData Kotlin Extensions 2.5.1",
                     "projectInfo" to "Copyright © 2018 The Android Open Source Project"
                 ),
                 mapOf(
@@ -511,18 +551,6 @@ val Licenses: List<Map<String, Any>> =
                 mapOf(
                     "projectNameVersion" to "numberpicker 1.0.3",
                     "projectInfo" to "Copyright © 2022 ChargemapMobile"
-                ),
-                mapOf(
-                    "projectNameVersion" to "okhttp 4.9.0",
-                    "projectInfo" to "Copyright © 20xx Square, Inc."
-                ),
-                mapOf(
-                    "projectNameVersion" to "okhttp-logging-interceptor 4.9.0",
-                    "projectInfo" to "Copyright © 20xx Square, Inc."
-                ),
-                mapOf(
-                    "projectNameVersion" to "Okio 2.8.0",
-                    "projectInfo" to "Copyright © 20xx Square, Inc."
                 ),
                 mapOf(
                     "projectNameVersion" to "Retrofit 2.9.0",
@@ -549,10 +577,10 @@ val Licenses: List<Map<String, Any>> =
                     "projectInfo" to "Copyright © 2018 The Android Open Source Project"
                 ),
                 mapOf(
-                    "projectNameVersion" to "viewbinding 7.3.0",
+                    "projectNameVersion" to "viewbinding 7.3.1",
                     "projectInfo" to "Copyright © 20xx "
-                )
-            )
+                ),
+            ),
         ),
         mapOf(
             "licenseName" to "Simplified BSD License",
@@ -573,7 +601,7 @@ val Licenses: List<Map<String, Any>> =
                 mapOf(
                     "projectNameVersion" to "Glide GIF Decoder Library 4.14.2",
                     "projectInfo" to "Copyright © 20xx Sam Judd"
-                )
-            )
-        )
+                ),
+            ),
+        ),
     )

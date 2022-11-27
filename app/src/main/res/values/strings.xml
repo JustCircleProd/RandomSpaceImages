@@ -19,11 +19,23 @@
 
     <string name="back_button">Back button</string>
 
-    <string name="favourite_button">Favourite button</string>
-    <string name="add_to_favourite_content_description">Add to favourites</string>
-    <string name="remove_from_favourite_content_description">Remove from favourites</string>
+    <string name="open_action_menu">Open action menu</string>
+    <string name="close_action_menu">Close action menu</string>
 
-    <string name="interaction_content_description">Enable or disable interaction with image</string>
+    <string name="favourite_button">Favourite button</string>
+    <string name="add_to_favourite">Add to favourites</string>
+    <string name="remove_from_favourite">Remove from favourites</string>
+
+    <string name="permission_is_required">Permission is required to save to gallery</string>
+    <string name="grant_permission">Please grant permission in app settings</string>
+
+    <string name="save_to_gallery">Save to gallery</string>
+    <string name="saved_to_gallery">Saved to gallery</string>
+
+    <string name="already_saved_to_gallery">Already saved to gallery</string>
+
+    <string name="enable_image_interaction">Enable image interaction</string>
+    <string name="disable_image_interaction">Disable image interaction</string>
 
     <string name="no_favourites">No favourites</string>
 
@@ -62,4 +74,7 @@
 
     <string name="where_are_the_images_from">Where are the images from?</string>
     <string name="where_are_the_images_from_answer">All images are taken from the NASA Image and Video Library using the API images.nasa.gov.</string>
+
+    <string name="request_limits">Request limits</string>
+    <string name="request_limits_text">The NASA API has a limit on the number of requests for a certain period of time.\nIf you are sure that there are no errors on your part, but you still see an error message, we recommend waiting for some time before making the next request.</string>
 </resources>

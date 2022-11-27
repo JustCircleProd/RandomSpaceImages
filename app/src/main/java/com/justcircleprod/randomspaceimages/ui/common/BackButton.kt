@@ -45,7 +45,7 @@ fun BackButton(
             painter = painterResource(id = R.drawable.icon_back_arrow),
             contentDescription = stringResource(id = R.string.back_button),
             tint = Color.White,
-            modifier = Modifier.size(dimensionResource(id = R.dimen.action_icon_button_icon_size))
+            modifier = Modifier.size(dimensionResource(id = R.dimen.back_button_icon_size))
         )
     }
 }

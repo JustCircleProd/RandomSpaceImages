@@ -1,6 +1,9 @@
 package com.justcircleprod.randomspaceimages.ui.common
 
+import android.content.Context
+import android.content.ContextWrapper
 import androidx.annotation.IdRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 
@@ -12,4 +15,10 @@ fun NavController.navigateSafety(
     if (this.currentDestination?.id == destinationId) {
         this.navigate(direction)
     }
+}
+
+fun Context.getActivity(): AppCompatActivity? = when (this) {
+    is AppCompatActivity -> this
+    is ContextWrapper -> baseContext.getActivity()
+    else -> null
 }

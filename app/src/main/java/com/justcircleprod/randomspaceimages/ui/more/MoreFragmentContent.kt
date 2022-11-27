@@ -1,15 +1,18 @@
 package com.justcircleprod.randomspaceimages.ui.more
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.RadioButton
 import androidx.compose.material.RadioButtonDefaults
 import androidx.compose.material.Text
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -18,7 +21,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.sp
 import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.data.dataStore.DataStoreConstants
@@ -45,6 +47,9 @@ fun MoreFragmentContent(viewModel: MoreViewModel) {
         }
         item {
             WhereAreTheImagesFromCard()
+        }
+        item {
+            RequestLimitsCard()
         }
         item {
             DevelopersCard()
@@ -92,11 +97,15 @@ fun ThemeCard(viewModel: MoreViewModel) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .selectable(
-                            selected = isSelected(index),
-                            onClick = { onClick(index) },
-                            role = Role.RadioButton
-                        )
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = rememberRipple(
+                                bounded = true,
+                                color = colorResource(id = R.color.ripple)
+                            )
+                        ) {
+                            onClick(index)
+                        }
                         .padding(vertical = dimensionResource(id = R.dimen.theme_item_vertical_space_size))
                         .padding(horizontal = dimensionResource(id = R.dimen.more_card_horizontal_space_size))
                         .fillMaxWidth()
@@ -127,6 +136,19 @@ fun WhereAreTheImagesFromCard() {
     ExpandableCard(cardTitle = stringResource(id = R.string.where_are_the_images_from)) { contentModifier ->
         Text(
             text = stringResource(id = R.string.where_are_the_images_from_answer),
+            color = colorResource(id = R.color.text),
+            fontFamily = LatoFontFamily,
+            fontSize = 16.sp,
+            modifier = contentModifier.padding(horizontal = dimensionResource(id = R.dimen.more_card_horizontal_space_size))
+        )
+    }
+}
+
+@Composable
+fun RequestLimitsCard() {
+    ExpandableCard(cardTitle = stringResource(id = R.string.request_limits)) { contentModifier ->
+        Text(
+            text = stringResource(id = R.string.request_limits_text),
             color = colorResource(id = R.color.text),
             fontFamily = LatoFontFamily,
             fontSize = 16.sp,

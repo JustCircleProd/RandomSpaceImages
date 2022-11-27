@@ -3,6 +3,8 @@
     <dimen name="main_rounded_corner_radius">12dp</dimen>
     <dimen name="elements_space_size">6dp</dimen>
 
+    <dimen name="snackbar_elevation">4dp</dimen>
+
 
     <dimen name="bottom_navigation_width">200dp</dimen>
     <dimen name="bottom_navigation_height">60dp</dimen>
@@ -45,19 +47,14 @@
     <dimen name="action_buttons_start_space_size">8dp</dimen>
     <dimen name="action_buttons_end_space_size">14dp</dimen>
 
-    <dimen name="action_icon_button_size">40dp</dimen>
-    <dimen name="action_icon_button_icon_size">18dp</dimen>
+    <dimen name="action_icon_button_size">42dp</dimen>
 
-    <dimen name="action_button_icon_blur">1dp</dimen>
+    <dimen name="back_button_icon_size">20dp</dimen>
 
-    <dimen name="detail_image_favourite_button_size">26dp</dimen>
-    <dimen name="detail_image_favourite_button_icon_size">26dp</dimen>
+    <dimen name="detail_image_action_button_icon_size">25dp</dimen>
 
-    <dimen name="interaction_icon_button_size">36dp</dimen>
-    <dimen name="interaction_icon_size">22dp</dimen>
-
-    <dimen name="open_in_browser_icon_size">20dp</dimen>
-    <dimen name="open_in_browser_icon_start_space_size">3dp</dimen>
+    <dimen name="interaction_icon_button_size">38dp</dimen>
+    <dimen name="interaction_icon_size">23dp</dimen>
 
     <dimen name="center_and_date_info_padding_top">6dp</dimen>
     <dimen name="center_and_date_info_padding_bottom">4dp</dimen>

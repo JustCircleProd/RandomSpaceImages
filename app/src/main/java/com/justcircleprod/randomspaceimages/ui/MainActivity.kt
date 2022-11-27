@@ -14,7 +14,7 @@ import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.data.dataStore.DataStoreConstants
 import com.justcircleprod.randomspaceimages.databinding.ActivityMainBinding
 import com.justcircleprod.randomspaceimages.ui.bottomNavigation.BottomNavigation
-import com.justcircleprod.randomspaceimages.ui.themeState.ThemeState
+import com.justcircleprod.randomspaceimages.ui.theme.ThemeState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch

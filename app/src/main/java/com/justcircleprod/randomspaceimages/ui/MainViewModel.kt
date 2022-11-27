@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.justcircleprod.randomspaceimages.data.dataStore.DataStoreConstants
 import com.justcircleprod.randomspaceimages.data.repositories.dataStoreRepository.DefaultDataStoreRepository
-import com.justcircleprod.randomspaceimages.ui.themeState.ThemeState
+import com.justcircleprod.randomspaceimages.ui.theme.ThemeState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
