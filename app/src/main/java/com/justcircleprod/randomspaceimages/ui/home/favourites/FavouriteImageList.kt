@@ -87,10 +87,10 @@ fun FavouriteImageList(
 
 @Composable
 fun NoFavourites() {
-    Row(
+    Column(
         modifier = Modifier.fillMaxSize(),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = stringResource(id = R.string.no_favourites),
@@ -99,9 +99,7 @@ fun NoFavourites() {
             textAlign = TextAlign.Center,
             fontSize = 18.sp
         )
-
-        Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.rocket_icon_space_size)))
-
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.rocket_icon_space_size)))
         Icon(
             painter = painterResource(id = R.drawable.icon_rocket),
             contentDescription = null,

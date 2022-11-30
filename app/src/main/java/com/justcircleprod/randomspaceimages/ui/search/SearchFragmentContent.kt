@@ -43,11 +43,10 @@ fun SearchFragmentContent(onSearchCallback: (q: String, yearStart: Int, yearEnd:
     }
 
     val onSuggestionCardClick: (String) -> Unit = { suggestionText ->
-        searchText.value = suggestionText
         focusManager.clearFocus()
 
         onSearchCallback(
-            searchText.value,
+            suggestionText,
             yearStart.value,
             yearEnd.value
         )

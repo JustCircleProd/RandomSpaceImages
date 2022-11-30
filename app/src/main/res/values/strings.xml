@@ -37,7 +37,7 @@
     <string name="enable_image_interaction">Enable image interaction</string>
     <string name="disable_image_interaction">Disable image interaction</string>
 
-    <string name="no_favourites">No favourites</string>
+    <string name="no_favourites">No favourites.\nSwipe down to Refresh</string>
 
     <string name="feedback_button">Feedback Button</string>
     <string name="ad">Ad</string>
