@@ -82,8 +82,7 @@
     <dimen name="search_bar_end_padding">6dp</dimen>
 
     <dimen name="search_icon_button_summary_width">66dp</dimen>
-    <dimen name="search_icon_button_width">24dp</dimen>
-    <dimen name="search_icon_button_height">24dp</dimen>
+    <dimen name="search_icon_button_size">46dp</dimen>
     <dimen name="search_bar_icon_size">22dp</dimen>
 
     <dimen name="search_card_top_space_size">20dp</dimen>
