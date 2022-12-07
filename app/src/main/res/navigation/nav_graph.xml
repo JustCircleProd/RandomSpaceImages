@@ -3,25 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/navigation_home">
+    tools:ignore="InvalidNavigation">
 
     <action
-        android:id="@+id/to_home"
-        app:destination="@id/navigation_home" />
+        android:id="@+id/to_random"
+        app:destination="@id/navigation_random" />
 
     <action
-        android:id="@+id/to_search"
-        app:destination="@id/navigation_search" />
+        android:id="@+id/to_apod"
+        app:destination="@id/navigation_apod" />
 
     <action
         android:id="@+id/to_more"
         app:destination="@id/navigation_more" />
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.justcircleprod.randomspaceimages.ui.home.HomeFragment"
-        android:label="Home"
-        tools:layout="@layout/fragment_home">
+        android:id="@+id/navigation_random"
+        android:name="com.justcircleprod.randomspaceimages.ui.random.RandomFragment"
+        android:label="Random"
+        tools:layout="@layout/fragment_random">
+
+        <action
+            android:id="@+id/to_search"
+            app:destination="@id/navigation_search"
+            app:enterAnim="@anim/enter_right_to_left"
+            app:exitAnim="@anim/exit_right_to_left"
+            app:popEnterAnim="@anim/enter_left_to_right"
+            app:popExitAnim="@anim/exit_left_to_right" />
 
         <action
             android:id="@+id/to_detail"
@@ -35,7 +43,7 @@
 
     <fragment
         android:id="@+id/navigation_search"
-        android:name="com.justcircleprod.randomspaceimages.ui.search.SearchFragment"
+        android:name="com.justcircleprod.randomspaceimages.ui.random.search.SearchFragment"
         android:label="Search"
         tools:layout="@layout/fragment_search">
 
@@ -51,7 +59,7 @@
 
     <fragment
         android:id="@+id/navigation_search_result"
-        android:name="com.justcircleprod.randomspaceimages.ui.search.searchResult.SearchResultFragment"
+        android:name="com.justcircleprod.randomspaceimages.ui.random.search.searchResult.SearchResultFragment"
         android:label="SearchResult"
         tools:layout="@layout/fragment_search_result">
 
@@ -78,21 +86,27 @@
     </fragment>
 
     <fragment
+        android:id="@+id/navigation_detail"
+        android:name="com.justcircleprod.randomspaceimages.ui.random.detail.DetailFragment"
+        android:label="Detail"
+        tools:layout="@layout/fragment_detail">
+
+        <argument
+            android:name="nasaLibraryImageEntry"
+            app:argType="com.justcircleprod.randomspaceimages.data.models.NASALibraryImageEntry" />
+
+    </fragment>
+
+    <fragment
         android:id="@+id/navigation_more"
         android:name="com.justcircleprod.randomspaceimages.ui.more.MoreFragment"
         android:label="More"
         tools:layout="@layout/fragment_more" />
 
     <fragment
-        android:id="@+id/navigation_detail"
-        android:name="com.justcircleprod.randomspaceimages.ui.detail.DetailFragment"
-        android:label="Detail"
-        tools:layout="@layout/fragment_detail">
-
-        <argument
-            android:name="imageEntry"
-            app:argType="com.justcircleprod.randomspaceimages.data.models.ImageEntry" />
-
-    </fragment>
+        android:id="@+id/navigation_apod"
+        android:name="com.justcircleprod.randomspaceimages.ui.apod.APODFragment"
+        android:label="APOD"
+        tools:layout="@layout/fragment_apod" />
 
 </navigation>

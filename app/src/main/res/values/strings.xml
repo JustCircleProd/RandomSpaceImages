@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Random Space Images</string>
 
-    <string name="home">Home</string>
     <string name="random">Random</string>
+    <string name="apod">APOD</string>
     <string name="favourites">Favourites</string>
 
     <string name="error_info_text">There is an error.\nSwipe down to Retry</string>
@@ -67,6 +67,8 @@
     <string name="system_default_theme">System default</string>
     <string name="light_theme">Light</string>
     <string name="dark_theme">Dark</string>
+
+    <string name="start_screen">Start screen</string>
 
     <string name="developers">Developers</string>
 

@@ -27,12 +27,12 @@ import androidx.navigation.navOptions
 import com.justcircleprod.randomspaceimages.R
 
 @Composable
-fun BottomNavigation(navController: NavController) {
+fun BottomNavigation(navController: NavController, items: List<BottomNavItem>) {
     val bottomNavigationState = remember { MutableTransitionState(true) }
 
     navController.addOnDestinationChangedListener { _, destination, _ ->
         bottomNavigationState.targetState = when (destination.id) {
-            R.id.navigation_home, R.id.navigation_search, R.id.navigation_more -> true
+            R.id.navigation_random, R.id.navigation_more, R.id.navigation_apod -> true
             else -> false
         }
     }
@@ -52,7 +52,7 @@ fun BottomNavigation(navController: NavController) {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination
 
-                BottomNavItem.items.forEach { bottomNavItem ->
+                items.forEach { bottomNavItem ->
                     BottomNavigationItem(
                         icon = {
                             Icon(

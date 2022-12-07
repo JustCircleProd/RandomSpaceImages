@@ -46,6 +46,9 @@ fun MoreFragmentContent(viewModel: MoreViewModel) {
             ThemeCard(viewModel = viewModel)
         }
         item {
+            StartScreenCard(viewModel = viewModel)
+        }
+        item {
             WhereAreTheImagesFromCard()
         }
         item {
@@ -90,6 +93,74 @@ fun ThemeCard(viewModel: MoreViewModel) {
             }
 
             viewModel.saveThemeValue(selectedThemeValue)
+        }
+
+        Column(modifier = contentModifier) {
+            radioButtonItems.forEachIndexed { index, item ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = rememberRipple(
+                                bounded = true,
+                                color = colorResource(id = R.color.ripple)
+                            )
+                        ) {
+                            onClick(index)
+                        }
+                        .padding(vertical = dimensionResource(id = R.dimen.theme_item_vertical_space_size))
+                        .padding(horizontal = dimensionResource(id = R.dimen.more_card_horizontal_space_size))
+                        .fillMaxWidth()
+                ) {
+                    RadioButton(
+                        selected = isSelected(index),
+                        onClick = null,
+                        colors = RadioButtonDefaults.colors(
+                            unselectedColor = colorResource(id = R.color.unselected_radio_button),
+                            selectedColor = colorResource(id = R.color.primary)
+                        )
+                    )
+                    Text(
+                        text = item,
+                        color = colorResource(id = R.color.text),
+                        fontFamily = LatoFontFamily,
+                        fontSize = 16.sp,
+                        modifier = Modifier.padding(start = dimensionResource(id = R.dimen.theme_item_text_start_space_size))
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun StartScreenCard(viewModel: MoreViewModel) {
+    val startScreen =
+        viewModel.startScreenValue.collectAsState(initial = "not_initialized")
+
+    ExpandableCard(cardTitle = stringResource(id = R.string.start_screen)) { contentModifier ->
+        val radioButtonItems = listOf(
+            stringResource(id = R.string.random),
+            stringResource(id = R.string.apod)
+        )
+
+        val isSelected: (Int) -> Boolean = { index ->
+            when {
+                index == 0 && (startScreen.value == DataStoreConstants.RANDOM_SCREEN || startScreen.value == null) -> true
+                index == 1 && startScreen.value == DataStoreConstants.APOD_SCREEN -> true
+                else -> false
+            }
+        }
+
+        val onClick: (Int) -> Unit = { index ->
+            val selectedThemeValue = when (index) {
+                0 -> DataStoreConstants.RANDOM_SCREEN
+                1 -> DataStoreConstants.APOD_SCREEN
+                else -> DataStoreConstants.RANDOM_SCREEN
+            }
+
+            viewModel.saveStartScreenValue(selectedThemeValue)
         }
 
         Column(modifier = contentModifier) {

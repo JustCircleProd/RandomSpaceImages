@@ -4,6 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import com.justcircleprod.randomspaceimages.R
+import com.justcircleprod.randomspaceimages.data.dataStore.DataStoreConstants
 
 sealed class BottomNavItem(
     @IdRes val navigationId: Int,
@@ -11,20 +12,30 @@ sealed class BottomNavItem(
     @StringRes val titleResId: Int,
     @DrawableRes val iconResId: Int
 ) {
-    object Home :
-        BottomNavItem(R.id.navigation_home, R.id.to_home, R.string.home, R.drawable.icon_home)
+    object Random :
+        BottomNavItem(
+            R.id.navigation_random,
+            R.id.to_random,
+            R.string.random,
+            R.drawable.icon_random
+        )
 
-    object Search : BottomNavItem(
-        R.id.navigation_search,
-        R.id.to_search,
-        R.string.search,
-        R.drawable.icon_search
+    object APOD : BottomNavItem(
+        R.id.navigation_apod,
+        R.id.to_apod,
+        R.string.apod,
+        R.drawable.icon_apod
     )
 
     object More :
         BottomNavItem(R.id.navigation_more, R.id.to_more, R.string.more, R.drawable.icon_more)
 
     companion object {
-        val items get() = listOf(Home, Search, More)
+        fun getItems(startScreen: String?) =
+            if (startScreen == DataStoreConstants.RANDOM_SCREEN) {
+                listOf(Random, APOD, More)
+            } else {
+                listOf(APOD, Random, More)
+            }
     }
 }

@@ -35,7 +35,9 @@ fun ErrorInfo(
             textAlign = TextAlign.Center,
             fontSize = 18.sp
         )
+
         Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.rocket_icon_space_size)))
+
         Icon(
             painter = painterResource(id = R.drawable.icon_rocket_launch),
             tint = colorResource(id = R.color.icon_tint),
@@ -60,7 +62,6 @@ fun ErrorInfoCard(errorText: String = stringResource(id = R.string.error_info_ca
                 .padding(horizontal = dimensionResource(id = R.dimen.error_info_card_horizontal_space_size))
                 .padding(vertical = dimensionResource(id = R.dimen.error_info_card_vertical_space_size)),
         ) {
-
             Text(
                 text = errorText,
                 color = Color.Black,

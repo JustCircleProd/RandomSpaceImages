@@ -13,4 +13,6 @@ class MainViewModel @Inject constructor(dataStoreRepository: DefaultDataStoreRep
     ViewModel() {
     val themeValue = dataStoreRepository.readSetting(DataStoreConstants.THEME_KEY).asLiveData()
     var themeState = ThemeState.NOT_APPLIED
+
+    val startScreen = dataStoreRepository.readSetting(DataStoreConstants.START_SCREEN)
 }

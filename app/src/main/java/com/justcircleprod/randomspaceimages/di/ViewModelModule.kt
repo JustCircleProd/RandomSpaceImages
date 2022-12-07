@@ -1,7 +1,7 @@
 package com.justcircleprod.randomspaceimages.di
 
-import com.justcircleprod.randomspaceimages.data.remote.NASALibraryAPI
-import com.justcircleprod.randomspaceimages.data.remote.RemoteConstants
+import com.justcircleprod.randomspaceimages.data.remote.nasaLibrary.NASALibraryAPI
+import com.justcircleprod.randomspaceimages.data.remote.nasaLibrary.NASALibraryConstants
 import com.justcircleprod.randomspaceimages.data.repositories.nasaLibraryRepository.DefaultNASALibraryRepository
 import dagger.Module
 import dagger.Provides
@@ -19,7 +19,7 @@ object ViewModelModule {
     fun provideNASALibraryAPI(): NASALibraryAPI {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(RemoteConstants.NASA_LIBRARY_BASE_URL)
+            .baseUrl(NASALibraryConstants.BASE_URL)
             .build()
             .create(NASALibraryAPI::class.java)
     }

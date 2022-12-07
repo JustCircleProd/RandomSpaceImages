@@ -7,16 +7,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.data.dataStore.DataStoreConstants
 import com.justcircleprod.randomspaceimages.databinding.ActivityMainBinding
+import com.justcircleprod.randomspaceimages.ui.bottomNavigation.BottomNavItem
 import com.justcircleprod.randomspaceimages.ui.bottomNavigation.BottomNavigation
 import com.justcircleprod.randomspaceimages.ui.theme.ThemeState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 
@@ -53,13 +56,20 @@ class MainActivity : AppCompatActivity() {
 
             setContentView(binding.root)
 
-            setupNavController()
+            setupNavController(viewModel.startScreen.first())
 
             binding.bottomNavigationComposeView.apply {
                 setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
 
-                setContent {
-                    BottomNavigation(navController)
+                viewModel.startScreen.asLiveData().observe(this@MainActivity) { startScreen ->
+                    val bottomNavItems = BottomNavItem.getItems(startScreen)
+
+                    setContent {
+                        BottomNavigation(
+                            navController = navController,
+                            items = bottomNavItems
+                        )
+                    }
                 }
             }
         }
@@ -101,11 +111,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupNavController() {
+    private fun setupNavController(startScreen: String?) {
         navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
 
         val graph = navController.navInflater.inflate(R.navigation.nav_graph)
+
+        val startDestinationId = when (startScreen) {
+            DataStoreConstants.RANDOM_SCREEN -> R.id.navigation_random
+            DataStoreConstants.APOD_SCREEN -> R.id.navigation_apod
+            else -> R.id.navigation_random
+        }
+        graph.setStartDestination(startDestinationId)
 
         navHostFragment.navController.setGraph(graph, null)
     }

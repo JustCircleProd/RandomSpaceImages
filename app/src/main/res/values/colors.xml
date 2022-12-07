@@ -38,10 +38,9 @@
     <color name="snackbar_background">#ffffff</color>
     <color name="snackbar_text">@color/black</color>
 
-    <color name="search_bar_background">#dddddd</color>
-    <color name="search_bar_placeholder">#585858</color>
-    <color name="search_bar_text">#1d1d1d</color>
-    <color name="search_bar_icon">#656565</color>
+    <color name="search_field_background">#dddddd</color>
+    <color name="search_field_placeholder">#585858</color>
+    <color name="search_field_text">#1d1d1d</color>
 
     <color name="unselected_radio_button">#666666</color>
 </resources>
