@@ -1,4 +1,4 @@
-package com.justcircleprod.randomspaceimages.ui.random.randomImageList
+package com.justcircleprod.randomspaceimages.ui.random.randomPage
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -21,8 +21,8 @@ import com.justcircleprod.randomspaceimages.ui.common.ProgressIndicator
 import com.justcircleprod.randomspaceimages.ui.random.imageEntryItem.NASALibraryImageEntryItem
 
 @Composable
-fun RandomImageList(
-    viewModel: RandomImageListViewModel,
+fun RandomPage(
+    viewModel: RandomPageViewModel,
     onImageEntryClick: (nasaLibraryImageEntry: NASALibraryImageEntry) -> Unit
 ) {
     val images by viewModel.images.collectAsState()

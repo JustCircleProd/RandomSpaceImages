@@ -1,5 +1,5 @@
 package com.justcircleprod.randomspaceimages.data.remote.nasaLibrary.responses
 
-data class NASALibraryImagesList(
+data class NASALibraryImageList(
     val collection: Collection
 )

@@ -13,16 +13,16 @@ import androidx.navigation.fragment.findNavController
 import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.databinding.FragmentRandomBinding
 import com.justcircleprod.randomspaceimages.ui.common.navigateSafety
-import com.justcircleprod.randomspaceimages.ui.random.favouriteImageList.FavouriteImageListViewModel
-import com.justcircleprod.randomspaceimages.ui.random.randomImageList.RandomImageListViewModel
+import com.justcircleprod.randomspaceimages.ui.random.randomFavouritesPage.RandomFavouritesPageViewModel
+import com.justcircleprod.randomspaceimages.ui.random.randomPage.RandomPageViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class RandomFragment : Fragment() {
     private lateinit var binding: FragmentRandomBinding
 
-    private val randomImageListViewModel: RandomImageListViewModel by viewModels()
-    private val favouriteImageListViewModel: FavouriteImageListViewModel by viewModels()
+    private val randomPageViewModel: RandomPageViewModel by viewModels()
+    private val randomFavouritesPageViewModel: RandomFavouritesPageViewModel by viewModels()
 
     private val navController: NavController get() = findNavController()
 
@@ -40,8 +40,8 @@ class RandomFragment : Fragment() {
 
             setContent {
                 RandomFragmentContent(
-                    randomImageListViewModel = randomImageListViewModel,
-                    favouriteImageListViewModel = favouriteImageListViewModel,
+                    randomViewModel = randomPageViewModel,
+                    favouriteViewModel = randomFavouritesPageViewModel,
                     onSearchClick = {
                         val direction = RandomFragmentDirections.toSearch()
                         navController.navigateSafety(destinationId, direction)

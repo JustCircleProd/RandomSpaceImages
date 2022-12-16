@@ -1,6 +1,6 @@
 package com.justcircleprod.randomspaceimages.data.remote.nasaLibrary
 
-import com.justcircleprod.randomspaceimages.data.remote.nasaLibrary.responses.NASALibraryImagesList
+import com.justcircleprod.randomspaceimages.data.remote.nasaLibrary.responses.NASALibraryImageList
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -11,7 +11,7 @@ interface NASALibraryAPI {
         @Query("year_start") yearStart: Int,
         @Query("year_end") yearEnd: Int,
         @Query("page") page: Int
-    ): NASALibraryImagesList
+    ): NASALibraryImageList
 
     @GET("search")
     suspend fun searchImages(
@@ -20,5 +20,5 @@ interface NASALibraryAPI {
         @Query("year_start") yearStart: Int,
         @Query("year_end") yearEnd: Int,
         @Query("page") page: Int
-    ): NASALibraryImagesList
+    ): NASALibraryImageList
 }

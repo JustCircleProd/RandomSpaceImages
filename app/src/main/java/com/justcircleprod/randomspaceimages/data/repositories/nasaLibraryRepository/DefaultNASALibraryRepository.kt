@@ -1,7 +1,7 @@
 package com.justcircleprod.randomspaceimages.data.repositories.nasaLibraryRepository
 
 import com.justcircleprod.randomspaceimages.data.remote.nasaLibrary.NASALibraryAPI
-import com.justcircleprod.randomspaceimages.data.remote.nasaLibrary.responses.NASALibraryImagesList
+import com.justcircleprod.randomspaceimages.data.remote.nasaLibrary.responses.NASALibraryImageList
 import com.justcircleprod.randomspaceimages.util.Resource
 import dagger.hilt.android.scopes.ViewModelScoped
 import javax.inject.Inject
@@ -14,7 +14,7 @@ class DefaultNASALibraryRepository @Inject constructor(private val nasaLibraryAP
         yearStart: Int,
         yearEnd: Int,
         page: Int
-    ): Resource<NASALibraryImagesList> {
+    ): Resource<NASALibraryImageList> {
         return try {
             Resource.Success(
                 nasaLibraryAPI.getImages(
@@ -33,7 +33,7 @@ class DefaultNASALibraryRepository @Inject constructor(private val nasaLibraryAP
         yearStart: Int,
         yearEnd: Int,
         page: Int,
-    ): Resource<NASALibraryImagesList> {
+    ): Resource<NASALibraryImageList> {
         return try {
             Resource.Success(
                 nasaLibraryAPI.searchImages(

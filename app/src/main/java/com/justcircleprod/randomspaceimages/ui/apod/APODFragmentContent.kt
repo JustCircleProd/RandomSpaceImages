@@ -1,4 +1,4 @@
-package com.justcircleprod.randomspaceimages.ui.random
+package com.justcircleprod.randomspaceimages.ui.apod
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,24 +22,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.*
 import com.justcircleprod.randomspaceimages.R
-import com.justcircleprod.randomspaceimages.data.models.NASALibraryImageEntry
-import com.justcircleprod.randomspaceimages.ui.common.SearchButton
-import com.justcircleprod.randomspaceimages.ui.random.randomFavouritesPage.RandomFavouritesPage
-import com.justcircleprod.randomspaceimages.ui.random.randomFavouritesPage.RandomFavouritesPageViewModel
-import com.justcircleprod.randomspaceimages.ui.random.randomPage.RandomPage
-import com.justcircleprod.randomspaceimages.ui.random.randomPage.RandomPageViewModel
-import com.justcircleprod.randomspaceimages.ui.random.randomtTabs.RandomTabItem
+import com.justcircleprod.randomspaceimages.ui.apod.apodFavourites.APODFavouritesPage
+import com.justcircleprod.randomspaceimages.ui.apod.apodPage.APODPage
+import com.justcircleprod.randomspaceimages.ui.apod.apodPage.APODPageViewModel
+import com.justcircleprod.randomspaceimages.ui.apod.apodTabs.APODTabItem
 import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
 import com.justcircleprod.randomspaceimages.ui.theme.NoRippleTheme
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun RandomFragmentContent(
-    randomViewModel: RandomPageViewModel,
-    favouriteViewModel: RandomFavouritesPageViewModel,
-    onImageEntryClick: (nasaLibraryImageEntry: NASALibraryImageEntry) -> Unit,
-    onSearchClick: () -> Unit
+fun APODFragmentContent(
+    viewModel: APODPageViewModel
 ) {
     val pagerState = rememberPagerState()
 
@@ -50,25 +44,18 @@ fun RandomFragmentContent(
             modifier = Modifier.fillMaxWidth()
         ) {
             Tabs(pagerState)
-
-            SearchButton(
-                onClick = { onSearchClick() },
-                modifier = Modifier.padding(end = 6.dp)
-            )
         }
 
-        HorizontalPager(count = RandomTabItem.items.size, state = pagerState) { page ->
+        HorizontalPager(count = APODTabItem.items.size, state = pagerState) { page ->
             when (page) {
                 0 -> {
-                    RandomPage(
-                        viewModel = randomViewModel,
-                        onImageEntryClick = onImageEntryClick
+                    APODPage(
+                        viewModel = viewModel
                     )
                 }
                 1 -> {
-                    RandomFavouritesPage(
-                        viewModel = favouriteViewModel,
-                        onImageEntryClick = onImageEntryClick
+                    APODFavouritesPage(
+
                     )
                 }
             }
@@ -83,7 +70,7 @@ fun Tabs(pagerState: PagerState) {
 
     CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
         val scrollableTabRowWidth =
-            LocalConfiguration.current.screenWidthDp.dp - dimensionResource(id = R.dimen.search_button_summary_width)
+            LocalConfiguration.current.screenWidthDp.dp
 
         ScrollableTabRow(
             selectedTabIndex = pagerState.currentPage,
@@ -119,7 +106,7 @@ fun Tabs(pagerState: PagerState) {
                 .width(scrollableTabRowWidth)
                 .padding(bottom = dimensionResource(id = R.dimen.tabs_padding_bottom))
         ) {
-            RandomTabItem.items.forEachIndexed { index, tabItem ->
+            APODTabItem.items.forEachIndexed { index, tabItem ->
                 Tab(
                     text = {
                         Text(

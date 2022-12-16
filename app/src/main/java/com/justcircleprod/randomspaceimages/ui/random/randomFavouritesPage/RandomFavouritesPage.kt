@@ -1,4 +1,4 @@
-package com.justcircleprod.randomspaceimages.ui.random.favouriteImageList
+package com.justcircleprod.randomspaceimages.ui.random.randomFavouritesPage
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -28,8 +28,8 @@ import com.justcircleprod.randomspaceimages.ui.random.imageEntryItem.NASALibrary
 import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
 
 @Composable
-fun FavouriteImageList(
-    viewModel: FavouriteImageListViewModel,
+fun RandomFavouritesPage(
+    viewModel: RandomFavouritesPageViewModel,
     onImageEntryClick: (nasaLibraryImageEntry: NASALibraryImageEntry) -> Unit
 ) {
     val favourites by viewModel.favourites.observeAsState()

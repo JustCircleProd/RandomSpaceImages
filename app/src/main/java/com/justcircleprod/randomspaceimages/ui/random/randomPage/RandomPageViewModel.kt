@@ -1,4 +1,4 @@
-package com.justcircleprod.randomspaceimages.ui.random.randomImageList
+package com.justcircleprod.randomspaceimages.ui.random.randomPage
 
 import androidx.lifecycle.viewModelScope
 import com.justcircleprod.randomspaceimages.data.models.NASALibraryImageEntry
@@ -14,7 +14,7 @@ import javax.inject.Inject
 import kotlin.math.ceil
 
 @HiltViewModel
-class RandomImageListViewModel @Inject constructor(
+class RandomPageViewModel @Inject constructor(
     private val nasaLibraryRepository: DefaultNASALibraryRepository,
     roomRepository: DefaultRoomRepository
 ) : NASALibraryBaseViewModel(roomRepository = roomRepository) {

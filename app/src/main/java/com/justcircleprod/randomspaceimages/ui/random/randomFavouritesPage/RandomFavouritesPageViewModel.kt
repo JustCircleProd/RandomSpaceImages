@@ -1,4 +1,4 @@
-package com.justcircleprod.randomspaceimages.ui.random.favouriteImageList
+package com.justcircleprod.randomspaceimages.ui.random.randomFavouritesPage
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FavouriteImageListViewModel @Inject constructor(roomRepository: DefaultRoomRepository) :
+class RandomFavouritesPageViewModel @Inject constructor(roomRepository: DefaultRoomRepository) :
     NASALibraryBaseViewModel(roomRepository) {
 
     val favourites = MutableLiveData<List<NASALibraryImageEntry>>()
