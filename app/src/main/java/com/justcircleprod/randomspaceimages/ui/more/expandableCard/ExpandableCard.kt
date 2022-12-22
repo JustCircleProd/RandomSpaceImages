@@ -31,7 +31,7 @@ import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
 @Composable
 fun ExpandableCard(
     cardTitle: String,
-    cardContent: @Composable (contentModifier: Modifier) -> Unit
+    CardContent: @Composable (contentModifier: Modifier) -> Unit
 ) {
     val isCardExpanded = rememberSaveable { mutableStateOf(false) }
     val angle by animateFloatAsState(if (isCardExpanded.value) 180f else 0f)
@@ -85,7 +85,7 @@ fun ExpandableCard(
 
             AnimatedVisibility(visible = isCardExpanded.value)
             {
-                cardContent(contentModifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.more_card_vertical_space_size)))
+                CardContent(contentModifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.more_card_vertical_space_size)))
             }
         }
     }

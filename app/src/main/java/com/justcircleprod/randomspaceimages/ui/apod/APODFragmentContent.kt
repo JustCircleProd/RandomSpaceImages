@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.*
 import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.ui.apod.apodFavourites.APODFavouritesPage
+import com.justcircleprod.randomspaceimages.ui.apod.apodFavourites.APODFavouritesPageViewModel
 import com.justcircleprod.randomspaceimages.ui.apod.apodPage.APODPage
 import com.justcircleprod.randomspaceimages.ui.apod.apodPage.APODPageViewModel
 import com.justcircleprod.randomspaceimages.ui.apod.apodTabs.APODTabItem
@@ -33,7 +34,9 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun APODFragmentContent(
-    viewModel: APODPageViewModel
+    apodPageViewModel: APODPageViewModel,
+    apodFavouritesPageViewModel: APODFavouritesPageViewModel,
+    onAPODEntryImageClick: (imageUrl: String) -> Unit
 ) {
     val pagerState = rememberPagerState()
 
@@ -50,12 +53,14 @@ fun APODFragmentContent(
             when (page) {
                 0 -> {
                     APODPage(
-                        viewModel = viewModel
+                        viewModel = apodPageViewModel,
+                        onAPODEntryImageClick = onAPODEntryImageClick
                     )
                 }
                 1 -> {
                     APODFavouritesPage(
-
+                        viewModel = apodFavouritesPageViewModel,
+                        onAPODEntryImageClick = onAPODEntryImageClick
                     )
                 }
             }

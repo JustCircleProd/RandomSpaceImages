@@ -28,7 +28,7 @@ import com.justcircleprod.randomspaceimages.ui.random.randomFavouritesPage.Rando
 import com.justcircleprod.randomspaceimages.ui.random.randomFavouritesPage.RandomFavouritesPageViewModel
 import com.justcircleprod.randomspaceimages.ui.random.randomPage.RandomPage
 import com.justcircleprod.randomspaceimages.ui.random.randomPage.RandomPageViewModel
-import com.justcircleprod.randomspaceimages.ui.random.randomtTabs.RandomTabItem
+import com.justcircleprod.randomspaceimages.ui.random.randomTabs.RandomTabItem
 import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
 import com.justcircleprod.randomspaceimages.ui.theme.NoRippleTheme
 import kotlinx.coroutines.launch

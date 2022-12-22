@@ -48,7 +48,7 @@ fun SearchBar(
     ) {
         val (backButton, searchField, searchButton) = createRefs()
 
-        BackButton(
+        SearchBarBackButton(
             onClick = onBackButtonClick,
             modifier = Modifier
                 .constrainAs(backButton) {
@@ -80,7 +80,7 @@ fun SearchBar(
 }
 
 @Composable
-fun BackButton(
+fun SearchBarBackButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {

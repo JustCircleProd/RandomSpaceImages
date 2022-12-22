@@ -95,6 +95,26 @@
             android:name="nasaLibraryImageEntry"
             app:argType="com.justcircleprod.randomspaceimages.data.models.NASALibraryImageEntry" />
 
+        <action
+            android:id="@+id/to_detail_image"
+            app:destination="@id/navigation_detail_image"
+            app:enterAnim="@anim/enter_right_to_left"
+            app:exitAnim="@anim/exit_right_to_left"
+            app:popEnterAnim="@anim/enter_left_to_right"
+            app:popExitAnim="@anim/exit_left_to_right" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_detail_image"
+        android:name="com.justcircleprod.randomspaceimages.ui.detailImage.DetailImageFragment"
+        android:label="Detail Image"
+        tools:layout="@layout/fragment_detail_image">
+
+        <argument
+            android:name="imageUrl"
+            app:argType="string" />
+
     </fragment>
 
     <fragment
@@ -107,6 +127,16 @@
         android:id="@+id/navigation_apod"
         android:name="com.justcircleprod.randomspaceimages.ui.apod.APODFragment"
         android:label="APOD"
-        tools:layout="@layout/fragment_apod" />
+        tools:layout="@layout/fragment_apod">
+
+        <action
+            android:id="@+id/to_detail_image"
+            app:destination="@id/navigation_detail_image"
+            app:enterAnim="@anim/enter_right_to_left"
+            app:exitAnim="@anim/exit_right_to_left"
+            app:popEnterAnim="@anim/enter_left_to_right"
+            app:popExitAnim="@anim/exit_left_to_right" />
+
+    </fragment>
 
 </navigation>

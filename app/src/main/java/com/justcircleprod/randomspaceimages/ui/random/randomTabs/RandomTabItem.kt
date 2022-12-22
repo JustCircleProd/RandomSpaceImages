@@ -1,4 +1,4 @@
-package com.justcircleprod.randomspaceimages.ui.random.randomtTabs
+package com.justcircleprod.randomspaceimages.ui.random.randomTabs
 
 import androidx.annotation.StringRes
 import com.justcircleprod.randomspaceimages.R

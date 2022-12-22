@@ -50,14 +50,14 @@ class SearchResultViewModel @Inject constructor(
     // fun to search for a new query
     fun searchImages(refresh: Boolean = false) {
         viewModelScope.launch {
-            setLoadingOrRefreshing(refresh = refresh, value = true)
+            setLoadingOrRefreshing(refresh = refresh, targetValue = true)
             noResults.value = false
             page = 1
 
             images.value = mutableListOf()
             setImages()
 
-            setLoadingOrRefreshing(refresh = refresh, value = false)
+            setLoadingOrRefreshing(refresh = refresh, targetValue = false)
         }
     }
 
@@ -139,25 +139,11 @@ class SearchResultViewModel @Inject constructor(
         }
     }
 
-    private fun setLoadingOrRefreshing(refresh: Boolean, value: Boolean) {
+    private fun setLoadingOrRefreshing(refresh: Boolean, targetValue: Boolean) {
         if (refresh) {
-            isRefreshing.value = value
+            isRefreshing.value = targetValue
         } else {
-            isLoading.value = value
+            isLoading.value = targetValue
         }
     }
-
-    /*private fun addAds() {
-        val itemsCountBetweenAds = 50
-
-        // add null (ad) every itemsCountBetweenAds items
-        for (i in 1..images.value.size / itemsCountBetweenAds) {
-            if (
-                i * itemsCountBetweenAds <= images.value.size - 1 &&
-                images.value[i * itemsCountBetweenAds] != null
-            ) {
-                images.value.add(i * itemsCountBetweenAds, null)
-            }
-        }
-    }*/
 }

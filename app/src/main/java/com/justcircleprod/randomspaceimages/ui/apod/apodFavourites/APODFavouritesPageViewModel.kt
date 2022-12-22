@@ -1,21 +1,22 @@
-package com.justcircleprod.randomspaceimages.ui.random.randomFavouritesPage
+package com.justcircleprod.randomspaceimages.ui.apod.apodFavourites
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.justcircleprod.randomspaceimages.data.models.NASALibraryImageEntry
+import com.justcircleprod.randomspaceimages.data.models.APODEntry
+import com.justcircleprod.randomspaceimages.data.remote.apod.APODConstants
 import com.justcircleprod.randomspaceimages.data.repositories.roomRepository.DefaultRoomRepository
-import com.justcircleprod.randomspaceimages.ui.random.nasaLibraryBaseViewModel.NASALibraryBaseViewModel
+import com.justcircleprod.randomspaceimages.ui.apod.apodBaseVIewModel.APODBaseViewModel
+import com.justcircleprod.randomspaceimages.ui.common.DateHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RandomFavouritesPageViewModel @Inject constructor(roomRepository: DefaultRoomRepository) :
-    NASALibraryBaseViewModel(roomRepository) {
+class APODFavouritesPageViewModel @Inject constructor(roomRepository: DefaultRoomRepository) :
+    APODBaseViewModel(roomRepository) {
 
-    val favourites = MutableLiveData<List<NASALibraryImageEntry>>()
+    val favourites = MutableLiveData<List<APODEntry>>()
 
     val isLoading = MutableStateFlow(true)
     val isRefreshing = MutableStateFlow(false)
@@ -25,11 +26,17 @@ class RandomFavouritesPageViewModel @Inject constructor(roomRepository: DefaultR
     }
 
     fun setFavourites(refresh: Boolean = false) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             setLoadingOrRefreshing(refresh, true)
 
+            val sortedFavourites = roomRepository.getAllAPODFavourites().sortedByDescending {
+                DateHelper.fromServerFormatToAppFormat(
+                    it.date,
+                    APODConstants.DATE_FORMAT
+                )
+            }
             favourites.postValue(
-                roomRepository.getAllNASALibraryFavourites()
+                sortedFavourites
             )
 
             setLoadingOrRefreshing(refresh, false)

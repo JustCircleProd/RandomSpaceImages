@@ -9,10 +9,10 @@ import com.justcircleprod.randomspaceimages.data.models.NASALibraryImageEntry
 
 @Dao
 interface NASALibraryFavouritesDao {
-    @Query("SELECT * FROM favourites")
+    @Query("SELECT * FROM nasa_library_favourites")
     suspend fun getAll(): List<NASALibraryImageEntry>
 
-    @Query("SELECT EXISTS(SELECT * FROM favourites WHERE nasaId = :nasaId)")
+    @Query("SELECT EXISTS(SELECT * FROM nasa_library_favourites WHERE nasaId = :nasaId)")
     fun isAdded(nasaId: String): LiveData<Boolean>
 
     @Insert

@@ -11,8 +11,11 @@
     <color name="bottom_navigation_unselected">#bdbfbe</color>
 
     <color name="text">#e5e5e5</color>
+    <color name="second_text">#A8A8A8</color>
 
     <color name="card_background">#373737</color>
+
+    <color name="line_color">#373737</color>
 
     <color name="favourite_list_button_neutral">#cccccc</color>
 
@@ -22,7 +25,7 @@
 
     <color name="icon_tint">#e5e5e5</color>
 
-    <color name="snackbar_background">#373737</color>
+    <color name="snackbar_background">#555555</color>
     <color name="snackbar_text">@color/white</color>
 
     <color name="search_field_background">#4a4a4a</color>
@@ -30,4 +33,8 @@
     <color name="search_field_text">#acacac</color>
 
     <color name="unselected_radio_button">#afafaf</color>
+
+    <color name="button_text">@color/black</color>
+
+    <color name="apod_item_image_progress_card_background">#555555</color>
 </resources>

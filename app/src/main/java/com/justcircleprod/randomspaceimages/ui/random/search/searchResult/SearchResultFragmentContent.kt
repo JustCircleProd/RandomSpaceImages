@@ -4,8 +4,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -19,9 +23,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.data.models.NASALibraryImageEntry
 import com.justcircleprod.randomspaceimages.ui.common.BackButton
@@ -58,6 +59,7 @@ fun SearchResultScreen(
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SearchImageList(
     viewModel: SearchResultViewModel,
@@ -74,99 +76,95 @@ fun SearchImageList(
 
     val endReached by viewModel.endReached.collectAsState()
 
-    SwipeRefresh(
-        state = rememberSwipeRefreshState(isRefreshing),
-        swipeEnabled = images.isNotEmpty() || loadError,
-        onRefresh = { viewModel.searchImages(refresh = true) },
-        indicator = { state, trigger ->
-            SwipeRefreshIndicator(
-                state = state,
-                refreshTriggerDistance = trigger,
-                scale = true,
-                backgroundColor = colorResource(id = R.color.card_background),
-                contentColor = colorResource(id = R.color.primary)
-            )
-        },
-        modifier = modifier.fillMaxSize()
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = isRefreshing,
+        onRefresh = {
+            if (!isLoading && !isRefreshing) {
+                viewModel.searchImages(refresh = true)
+            }
+        }
+    )
+
+    Box(
+        modifier = modifier
+            .pullRefresh(pullRefreshState)
+            .fillMaxSize()
     ) {
-        Box {
-            if (loadError && images.isEmpty() && !isLoading) {
-                ErrorInfo(modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.elements_space_size)))
+        if (loadError && images.isEmpty() && !isLoading) {
+            ErrorInfo(modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.elements_space_size)))
+        }
+
+        if (noResults && !isLoading && !isRefreshing) {
+            NoResults(modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.elements_space_size)))
+        }
+
+        if (isLoading && images.isEmpty()) {
+            ProgressIndicator(modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.elements_space_size)))
+        }
+
+        Column(modifier = Modifier.fillMaxSize()) {
+            if (loadError && images.isNotEmpty()) {
+                ErrorInfoCard()
+                Spacer(Modifier.height(dimensionResource(id = R.dimen.elements_space_size)))
             }
 
-            if (noResults && !isLoading && !isRefreshing) {
-                NoResults(modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.elements_space_size)))
-            }
-
-            if (isLoading && images.isEmpty()) {
-                ProgressIndicator(modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.elements_space_size)))
-            }
-
-            Column(modifier = Modifier.fillMaxSize()) {
-                if (loadError && images.isNotEmpty()) {
-                    ErrorInfoCard()
-                    Spacer(Modifier.height(dimensionResource(id = R.dimen.elements_space_size)))
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(dimensionResource(id = R.dimen.image_list_min_grid_cell_size)),
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.image_list_vertical_arrangement)),
+                horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.image_list_horizontal_arrangement)),
+                modifier = Modifier
+                    .padding(horizontal = dimensionResource(id = R.dimen.elements_space_size))
+                    .fillMaxSize()
+            ) {
+                if (images.isNotEmpty()) {
+                    item(span = { GridItemSpan(maxLineSpan) }) {
+                        Spacer(modifier = Modifier.height(0.dp))
+                    }
                 }
 
-                LazyVerticalGrid(
-                    columns = GridCells.Adaptive(dimensionResource(id = R.dimen.image_list_min_grid_cell_size)),
-                    verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.image_list_vertical_arrangement)),
-                    horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.image_list_horizontal_arrangement)),
-                    modifier = Modifier
-                        .padding(horizontal = dimensionResource(id = R.dimen.elements_space_size))
-                        .fillMaxSize()
-                ) {
-                    if (images.isNotEmpty()) {
-                        item(span = { GridItemSpan(maxLineSpan) }) {
-                            Spacer(modifier = Modifier.height(0.dp))
-                        }
+                items(images.size) {
+                    if (it >= images.size - 1 && !endReached && !isLoading) {
+                        viewModel.loadImages()
                     }
 
-                    items(images.size) {
-                        if (it >= images.size - 1 && !endReached && !isLoading) {
-                            viewModel.loadImages()
-                        }
+                    NASALibraryImageEntryItem(
+                        nasaLibraryImageEntry = images[it]!!,
+                        viewModel = viewModel,
+                        onImageEntryClick = onImageEntryClicked
+                    )
+                }
 
-                        NASALibraryImageEntryItem(
-                            nasaLibraryImageEntry = images[it]!!,
-                            viewModel = viewModel,
-                            onImageEntryClick = onImageEntryClicked
-                        )
-
-                        /*if (images[it] != null) {
-                            ImageItem(
-                                imageEntry = images[it]!!,
-                                navController = navController,
-                                viewModel = viewModel
-                            )
-                        } else {
-                            Ad()
-                        }*/
-                    }
-
-                    if (isLoading && images.isNotEmpty()) {
-                        item(span = { GridItemSpan(maxLineSpan) }) {
-                            ProgressIndicator(
-                                modifier = Modifier.padding(
-                                    horizontal = dimensionResource(
-                                        id = R.dimen.elements_space_size
-                                    )
+                if (isLoading && images.isNotEmpty()) {
+                    item(span = { GridItemSpan(maxLineSpan) }) {
+                        ProgressIndicator(
+                            modifier = Modifier.padding(
+                                horizontal = dimensionResource(
+                                    id = R.dimen.elements_space_size
                                 )
                             )
-                        }
-                        item(span = { GridItemSpan(maxLineSpan) }) {
-                            Spacer(Modifier.height(dimensionResource(id = R.dimen.image_list_vertical_arrangement)))
-                        }
+                        )
                     }
+                    item(span = { GridItemSpan(maxLineSpan) }) {
+                        Spacer(Modifier.height(dimensionResource(id = R.dimen.image_list_vertical_arrangement)))
+                    }
+                }
 
-                    if (endReached || loadError && images.isNotEmpty()) {
-                        item(span = { GridItemSpan(maxLineSpan) }) {
-                            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.image_list_bottom_space)))
-                        }
+                if (endReached || loadError && images.isNotEmpty()) {
+                    item(span = { GridItemSpan(maxLineSpan) }) {
+                        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.image_list_bottom_space)))
                     }
                 }
             }
         }
+
+        PullRefreshIndicator(
+            refreshing = isRefreshing,
+            state = pullRefreshState,
+            scale = true,
+            backgroundColor = colorResource(id = R.color.card_background),
+            contentColor = colorResource(id = R.color.primary),
+            modifier = Modifier.align(Alignment.TopCenter)
+        )
     }
 }
 

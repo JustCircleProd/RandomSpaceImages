@@ -61,6 +61,10 @@
 
     <string name="search_no_results">No results</string>
 
+    <string name="copyright">Copyright:</string>
+
+    <string name="load_more">Load more</string>
+
     <string name="more">More</string>
 
     <string name="app_theme">App theme</string>

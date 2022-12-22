@@ -1,14 +1,23 @@
 package com.justcircleprod.randomspaceimages.data.repositories.roomRepository
 
 import androidx.lifecycle.LiveData
+import com.justcircleprod.randomspaceimages.data.models.APODEntry
 import com.justcircleprod.randomspaceimages.data.models.NASALibraryImageEntry
 
 interface RoomRepository {
-    suspend fun getAllFavourites(): List<NASALibraryImageEntry>
+    suspend fun getAllNASALibraryFavourites(): List<NASALibraryImageEntry>
 
-    fun isAddedToFavourites(nasaId: String): LiveData<Boolean>
+    fun isAddedToNASALibraryFavourites(nasaId: String): LiveData<Boolean>
 
-    suspend fun addToFavourites(nasaLibraryImageEntry: NASALibraryImageEntry)
+    suspend fun addToNASALibraryFavourites(nasaLibraryImageEntry: NASALibraryImageEntry)
 
-    suspend fun removeFromFavourites(nasaLibraryImageEntry: NASALibraryImageEntry)
+    suspend fun removeFromNASALibraryFavourites(nasaLibraryImageEntry: NASALibraryImageEntry)
+
+    suspend fun getAllAPODFavourites(): List<APODEntry>
+
+    fun isAddedToAPODFavourites(date: String): LiveData<Boolean>
+
+    suspend fun addToAPODFavourites(apodEntry: APODEntry)
+
+    suspend fun removeFromAPODFavourites(apodEntry: APODEntry)
 }

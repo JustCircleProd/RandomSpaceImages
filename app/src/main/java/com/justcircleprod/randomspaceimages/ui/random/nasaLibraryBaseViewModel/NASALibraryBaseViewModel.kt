@@ -9,17 +9,17 @@ import kotlinx.coroutines.launch
 
 abstract class NASALibraryBaseViewModel(protected val roomRepository: DefaultRoomRepository) :
     ViewModel() {
-    fun isAddedToFavourites(nasaId: String) = roomRepository.isAddedToFavourites(nasaId)
+    fun isAddedToFavourites(nasaId: String) = roomRepository.isAddedToNASALibraryFavourites(nasaId)
 
     fun addToFavourites(nasaLibraryImageEntry: NASALibraryImageEntry) {
         viewModelScope.launch(Dispatchers.IO) {
-            roomRepository.addToFavourites(nasaLibraryImageEntry)
+            roomRepository.addToNASALibraryFavourites(nasaLibraryImageEntry)
         }
     }
 
     fun removeFromFavourites(nasaLibraryImageEntry: NASALibraryImageEntry) {
         viewModelScope.launch(Dispatchers.IO) {
-            roomRepository.removeFromFavourites(nasaLibraryImageEntry)
+            roomRepository.removeFromNASALibraryFavourites(nasaLibraryImageEntry)
         }
     }
 }

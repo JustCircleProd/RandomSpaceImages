@@ -41,11 +41,11 @@ class RandomPageViewModel @Inject constructor(
 
     fun loadImages(refresh: Boolean = false) {
         viewModelScope.launch {
-            setLoadingOrRefreshing(refresh = refresh, value = true)
+            setLoadingOrRefreshing(refresh = refresh, targetValue = true)
 
             setEndReached()
             if (endReached.value) {
-                setLoadingOrRefreshing(refresh = refresh, value = false)
+                setLoadingOrRefreshing(refresh = refresh, targetValue = false)
                 return@launch
             }
 
@@ -54,7 +54,7 @@ class RandomPageViewModel @Inject constructor(
             setYearAndPage()
 
             if (loadError.value) {
-                setLoadingOrRefreshing(refresh = refresh, value = false)
+                setLoadingOrRefreshing(refresh = refresh, targetValue = false)
                 return@launch
             }
 
@@ -95,7 +95,7 @@ class RandomPageViewModel @Inject constructor(
                 }
             }
 
-            setLoadingOrRefreshing(refresh = refresh, value = false)
+            setLoadingOrRefreshing(refresh = refresh, targetValue = false)
         }
     }
 
@@ -217,25 +217,11 @@ class RandomPageViewModel @Inject constructor(
         return pagesCount
     }
 
-    private fun setLoadingOrRefreshing(refresh: Boolean, value: Boolean) {
+    private fun setLoadingOrRefreshing(refresh: Boolean, targetValue: Boolean) {
         if (refresh) {
-            isRefreshing.value = value
+            isRefreshing.value = targetValue
         } else {
-            isLoading.value = value
-        }
-    }
-
-    private fun addAds() {
-        val itemsCountBetweenAds = 50
-
-        // add null (ad) every itemsCountBetweenAds items
-        for (i in 1..images.value.size / itemsCountBetweenAds) {
-            if (
-                i * itemsCountBetweenAds <= images.value.size - 1 &&
-                images.value[i * itemsCountBetweenAds] != null
-            ) {
-                images.value.add(i * itemsCountBetweenAds, null)
-            }
+            isLoading.value = targetValue
         }
     }
 }

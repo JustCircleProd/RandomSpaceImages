@@ -21,6 +21,12 @@ class MoreFragment : Fragment() {
     ): View {
         binding = FragmentMoreBinding.inflate(layoutInflater)
 
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         binding.contentComposeView.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
 
@@ -28,7 +34,5 @@ class MoreFragment : Fragment() {
                 MoreFragmentContent(viewModel = viewModel)
             }
         }
-
-        return binding.root
     }
 }

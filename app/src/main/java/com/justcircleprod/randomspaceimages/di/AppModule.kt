@@ -6,6 +6,7 @@ import com.justcircleprod.randomspaceimages.data.dataStore.DataStoreManager
 import com.justcircleprod.randomspaceimages.data.repositories.dataStoreRepository.DefaultDataStoreRepository
 import com.justcircleprod.randomspaceimages.data.repositories.roomRepository.DefaultRoomRepository
 import com.justcircleprod.randomspaceimages.data.room.database.AppDatabase
+import com.justcircleprod.randomspaceimages.data.room.migrations.MIGRATION_1_2
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,6 +21,7 @@ object AppModule {
     @Provides
     fun provideRoomDatabase(@ApplicationContext context: Context) =
         Room.databaseBuilder(context, AppDatabase::class.java, "RandomNASAImagesDatabase.db")
+            .addMigrations(MIGRATION_1_2)
             .build()
 
     @Singleton

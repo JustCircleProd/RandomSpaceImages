@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-@Entity(tableName = "favourites")
+@Entity(tableName = "nasa_library_favourites")
 data class NASALibraryImageEntry(
     @PrimaryKey @ColumnInfo(name = "nasaId") val nasaId: String,
     @ColumnInfo(name = "title") val title: String?,
