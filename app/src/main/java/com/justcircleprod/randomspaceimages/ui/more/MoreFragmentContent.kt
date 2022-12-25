@@ -21,6 +21,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.data.dataStore.DataStoreConstants
@@ -52,13 +53,7 @@ fun MoreFragmentContent(viewModel: MoreViewModel) {
             WhereAreTheImagesFromCard()
         }
         item {
-            RequestLimitsCard()
-        }
-        item {
-            DevelopersCard()
-        }
-        item {
-            OpenSourceLicensesCard()
+            DevelopersAndLicensesCard()
         }
     }
 }
@@ -204,49 +199,70 @@ fun StartScreenCard(viewModel: MoreViewModel) {
 
 @Composable
 fun WhereAreTheImagesFromCard() {
-    ExpandableCard(cardTitle = stringResource(id = R.string.where_are_the_images_from)) { contentModifier ->
-        Text(
-            text = stringResource(id = R.string.where_are_the_images_from_answer),
-            color = colorResource(id = R.color.text),
-            fontFamily = LatoFontFamily,
-            fontSize = 16.sp,
-            modifier = contentModifier.padding(horizontal = dimensionResource(id = R.dimen.more_card_horizontal_space_size))
-        )
-    }
-}
-
-@Composable
-fun RequestLimitsCard() {
-    ExpandableCard(cardTitle = stringResource(id = R.string.request_limits)) { contentModifier ->
-        Text(
-            text = stringResource(id = R.string.request_limits_text),
-            color = colorResource(id = R.color.text),
-            fontFamily = LatoFontFamily,
-            fontSize = 16.sp,
-            modifier = contentModifier.padding(horizontal = dimensionResource(id = R.dimen.more_card_horizontal_space_size))
-        )
-    }
-}
-
-@Composable
-fun DevelopersCard() {
-    ExpandableCard(cardTitle = stringResource(id = R.string.developers)) { contentModifier ->
-        Image(
-            painter = painterResource(id = R.drawable.developers_logo),
-            contentDescription = null,
-            contentScale = ContentScale.FillWidth,
+    ExpandableCard(cardTitle = stringResource(id = R.string.about_apis)) { contentModifier ->
+        Column(
             modifier = contentModifier
                 .padding(horizontal = dimensionResource(id = R.dimen.more_card_horizontal_space_size))
-                .fillMaxSize()
-                .clip(RoundedCornerShape(dimensionResource(id = R.dimen.developers_logo_rounded_corner_size))),
-        )
+        ) {
+            Text(
+                text = stringResource(id = R.string.where_are_the_media_from),
+                color = colorResource(id = R.color.text),
+                fontFamily = LatoFontFamily,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.more_card_content_title_bottom_space_size)))
+
+            Text(
+                text = stringResource(id = R.string.where_are_the_media_from_text),
+                color = colorResource(id = R.color.text),
+                fontFamily = LatoFontFamily,
+                fontSize = 15.sp
+            )
+
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.more_card_content_paragraph_space_size)))
+
+            Text(
+                text = stringResource(id = R.string.request_limits),
+                color = colorResource(id = R.color.text),
+                fontFamily = LatoFontFamily,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.more_card_content_title_bottom_space_size)))
+
+            Text(
+                text = stringResource(id = R.string.request_limits_text),
+                color = colorResource(id = R.color.text),
+                fontFamily = LatoFontFamily,
+                fontSize = 15.sp
+            )
+        }
     }
 }
 
 @Composable
-fun OpenSourceLicensesCard() {
-    ExpandableCard(cardTitle = stringResource(id = R.string.licenses)) { contentModifier ->
-        LicensesList(licenses = Licenses, modifier = contentModifier)
+fun DevelopersAndLicensesCard() {
+    ExpandableCard(cardTitle = stringResource(id = R.string.developers_and_licenses)) { contentModifier ->
+        Column(
+            modifier = contentModifier
+                .padding(horizontal = dimensionResource(id = R.dimen.more_card_horizontal_space_size))
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.developers_logo),
+                contentDescription = null,
+                contentScale = ContentScale.FillWidth,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(dimensionResource(id = R.dimen.developers_logo_rounded_corner_size))),
+            )
+
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.more_card_content_paragraph_space_size)))
+
+            LicensesList(licenses = Licenses)
+        }
     }
 }
 

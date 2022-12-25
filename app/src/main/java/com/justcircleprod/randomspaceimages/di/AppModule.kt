@@ -20,9 +20,7 @@ object AppModule {
     @Singleton
     @Provides
     fun provideRoomDatabase(@ApplicationContext context: Context) =
-        Room.databaseBuilder(context, AppDatabase::class.java, "RandomNASAImagesDatabase.db")
-            .addMigrations(MIGRATION_1_2)
-            .build()
+        AppDatabase.getInstance(context)
 
     @Singleton
     @Provides

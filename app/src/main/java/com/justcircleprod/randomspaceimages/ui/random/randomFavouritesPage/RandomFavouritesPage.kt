@@ -24,6 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.data.models.NASALibraryImageEntry
+import com.justcircleprod.randomspaceimages.ui.common.NoFavourites
 import com.justcircleprod.randomspaceimages.ui.common.ProgressIndicator
 import com.justcircleprod.randomspaceimages.ui.random.imageEntryItem.NASALibraryImageEntryItem
 import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
@@ -88,30 +89,6 @@ fun RandomFavouritesPage(
             backgroundColor = colorResource(id = R.color.card_background),
             contentColor = colorResource(id = R.color.primary),
             modifier = Modifier.align(Alignment.TopCenter)
-        )
-    }
-}
-
-@Composable
-fun NoFavourites() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = stringResource(id = R.string.no_favourites),
-            color = colorResource(id = R.color.text),
-            fontFamily = LatoFontFamily,
-            textAlign = TextAlign.Center,
-            fontSize = 18.sp
-        )
-        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.rocket_icon_space_size)))
-        Icon(
-            painter = painterResource(id = R.drawable.icon_rocket),
-            contentDescription = null,
-            tint = colorResource(id = R.color.icon_tint),
-            modifier = Modifier.size(dimensionResource(id = R.dimen.info_icon_size))
         )
     }
 }

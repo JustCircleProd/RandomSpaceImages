@@ -10,19 +10,23 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import com.justcircleprod.randomspaceimages.R
 
 @Composable
-fun ProgressIndicator(modifier: Modifier = Modifier) {
+fun ProgressIndicator(
+    modifier: Modifier = Modifier,
+    cardBackgroundColor: Color = colorResource(id = R.color.card_background)
+) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier.fillMaxSize()
     ) {
         Card(
             shape = CircleShape,
-            backgroundColor = colorResource(id = R.color.card_background),
+            backgroundColor = cardBackgroundColor,
             elevation = dimensionResource(id = R.dimen.progress_card_elevation)
         ) {
             Box(modifier = Modifier.padding(dimensionResource(id = R.dimen.progress_card_padding))) {

@@ -53,13 +53,13 @@ fun NASALibraryImageEntryItem(
                 }
             }
     ) {
-        Image(nasaLibraryImageEntry, isClickEnabled)
+        NASALibraryImageEntryImage(nasaLibraryImageEntry, isClickEnabled)
         ImageExtra(nasaLibraryImageEntry, viewModel)
     }
 }
 
 @Composable
-fun Image(
+fun NASALibraryImageEntryImage(
     nasaLibraryImageEntry: NASALibraryImageEntry,
     isClickEnabled: MutableState<Boolean>
 ) {

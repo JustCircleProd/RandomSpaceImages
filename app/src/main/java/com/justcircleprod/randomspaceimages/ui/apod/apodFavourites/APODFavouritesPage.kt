@@ -16,8 +16,9 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.ui.apod.apodEntryItem.APODEntryItem
+import com.justcircleprod.randomspaceimages.ui.common.NoFavourites
 import com.justcircleprod.randomspaceimages.ui.common.ProgressIndicator
-import com.justcircleprod.randomspaceimages.ui.random.randomFavouritesPage.NoFavourites
+
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

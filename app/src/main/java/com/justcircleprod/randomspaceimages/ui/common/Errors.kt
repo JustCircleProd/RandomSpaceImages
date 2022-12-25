@@ -33,7 +33,7 @@ fun ErrorInfo(
             color = colorResource(id = R.color.text),
             fontFamily = LatoFontFamily,
             textAlign = TextAlign.Center,
-            fontSize = 18.sp
+            fontSize = 17.sp
         )
 
         Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.rocket_icon_space_size)))
@@ -80,5 +80,29 @@ fun ErrorInfoCard(errorText: String = stringResource(id = R.string.error_info_ca
                     .size(dimensionResource(id = R.dimen.error_info_card_icon_size))
             )
         }
+    }
+}
+
+@Composable
+fun NoFavourites() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = stringResource(id = R.string.no_favourites),
+            color = colorResource(id = R.color.text),
+            fontFamily = LatoFontFamily,
+            textAlign = TextAlign.Center,
+            fontSize = 17.sp
+        )
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.rocket_icon_space_size)))
+        Icon(
+            painter = painterResource(id = R.drawable.icon_rocket),
+            contentDescription = null,
+            tint = colorResource(id = R.color.icon_tint),
+            modifier = Modifier.size(dimensionResource(id = R.dimen.info_icon_size))
+        )
     }
 }

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "fa6366b1e236bc8c33f13f7a2d500cae",
+    "identityHash": "bcbcb35900a08d84def81ff696ac2e1e",
     "entities": [
       {
         "tableName": "nasa_library_favourites",
@@ -74,7 +74,7 @@
       },
       {
         "tableName": "apod_favourites",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`copyright` TEXT, `date` TEXT NOT NULL, `explanation` TEXT NOT NULL, `hdurl` TEXT NOT NULL, `media_type` TEXT NOT NULL, `service_version` TEXT NOT NULL, `title` TEXT NOT NULL, `url` TEXT NOT NULL, PRIMARY KEY(`date`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`copyright` TEXT, `date` TEXT NOT NULL, `explanation` TEXT NOT NULL, `hdurl` TEXT, `media_type` TEXT NOT NULL, `service_version` TEXT NOT NULL, `title` TEXT NOT NULL, `url` TEXT NOT NULL, PRIMARY KEY(`date`))",
         "fields": [
           {
             "fieldPath": "copyright",
@@ -98,7 +98,7 @@
             "fieldPath": "hdurl",
             "columnName": "hdurl",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "media_type",
@@ -138,7 +138,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fa6366b1e236bc8c33f13f7a2d500cae')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'bcbcb35900a08d84def81ff696ac2e1e')"
     ]
   }
 }

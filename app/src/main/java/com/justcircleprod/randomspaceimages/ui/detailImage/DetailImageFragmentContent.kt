@@ -1,11 +1,19 @@
 package com.justcircleprod.randomspaceimages.ui.detailImage
 
 import android.graphics.drawable.Drawable
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.bumptech.glide.Glide
@@ -14,8 +22,9 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.github.chrisbanes.photoview.PhotoView
+import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.ui.common.BackButton
-import com.justcircleprod.randomspaceimages.ui.common.ProgressIndicator
+import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
 
 @Composable
 fun DetailImageFragmentContent(
@@ -28,7 +37,7 @@ fun DetailImageFragmentContent(
         val (imageView, backButton) = createRefs()
 
         if (isLoading) {
-            ProgressIndicator()
+            DetailImageProgressIndicator()
         }
 
         AndroidView(
@@ -76,5 +85,40 @@ fun DetailImageFragmentContent(
             },
             onClick = onBackButtonClick
         )
+    }
+}
+
+@Composable
+fun DetailImageProgressIndicator() {
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Text(
+            text = "Loading the image in high resolution",
+            color = colorResource(id = R.color.text),
+            fontFamily = LatoFontFamily,
+            textAlign = TextAlign.Center,
+            fontSize = 17.sp
+        )
+
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.detail_image_progress_indicator_spacer_size)))
+
+        Card(
+            shape = CircleShape,
+            backgroundColor = colorResource(id = R.color.card_background),
+            elevation = dimensionResource(id = R.dimen.progress_card_elevation)
+        ) {
+            Box(modifier = Modifier.padding(dimensionResource(id = R.dimen.progress_card_padding))) {
+                CircularProgressIndicator(
+                    strokeWidth = dimensionResource(id = R.dimen.progress_indicator_stroke_width),
+                    color = colorResource(id = R.color.primary),
+                    modifier = Modifier
+                        .size(dimensionResource(id = R.dimen.progress_indicator_size))
+                        .align(Alignment.Center)
+                )
+            }
+        }
     }
 }

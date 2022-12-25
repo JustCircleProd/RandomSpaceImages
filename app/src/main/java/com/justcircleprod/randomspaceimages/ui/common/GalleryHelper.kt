@@ -17,11 +17,16 @@ import java.io.IOException
 import java.util.*
 
 
+enum class SaveState {
+    NOT_SAVED, SAVING, SAVED
+}
+
+
 fun saveToGallery(
     context: Context,
     imageTitle: String?,
     imageHref: String,
-    savedToGallery: MutableState<Boolean>
+    onSaved: () -> Unit
 ) {
     Glide
         .with(context)
@@ -51,7 +56,7 @@ fun saveToGallery(
                             imageDrawable.toBitmap()
                         )
                     if (savedSuccessfully) {
-                        savedToGallery.value = true
+                        onSaved()
                     }
                 }
                 return true

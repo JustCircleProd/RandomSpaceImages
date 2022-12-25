@@ -21,12 +21,10 @@ import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
 
 @Composable
 @Suppress("UNCHECKED_CAST")
-fun LicensesList(licenses: List<Map<String, Any>>, modifier: Modifier) {
+fun LicensesList(licenses: List<Map<String, Any>>) {
     Column(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.license_list_vertical_arrangement)),
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = dimensionResource(id = R.dimen.more_card_horizontal_space_size))
+        modifier = Modifier.fillMaxWidth()
     ) {
         licenses.forEach { license ->
             LicenseTitle(

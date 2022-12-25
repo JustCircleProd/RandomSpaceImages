@@ -1,5 +1,6 @@
 package com.justcircleprod.randomspaceimages.ui.random
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ScrollableTabRow
@@ -9,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,10 +53,12 @@ fun RandomFragmentContent(
         ) {
             Tabs(pagerState)
 
-            SearchButton(
-                onClick = { onSearchClick() },
-                modifier = Modifier.padding(end = 6.dp)
-            )
+            if (pagerState.currentPage == 0) {
+                SearchButton(
+                    onClick = { onSearchClick() },
+                    modifier = Modifier.padding(end = 6.dp)
+                )
+            }
         }
 
         HorizontalPager(count = RandomTabItem.items.size, state = pagerState) { page ->
@@ -82,8 +86,13 @@ fun Tabs(pagerState: PagerState) {
     val coroutineScope = rememberCoroutineScope()
 
     CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
-        val scrollableTabRowWidth =
-            LocalConfiguration.current.screenWidthDp.dp - dimensionResource(id = R.dimen.search_button_summary_width)
+        val scrollableTabRowWidth by animateDpAsState(
+            if (pagerState.currentPage == 0) {
+                LocalConfiguration.current.screenWidthDp.dp - dimensionResource(id = R.dimen.search_button_summary_width)
+            } else {
+                LocalConfiguration.current.screenWidthDp.dp
+            }
+        )
 
         ScrollableTabRow(
             selectedTabIndex = pagerState.currentPage,
