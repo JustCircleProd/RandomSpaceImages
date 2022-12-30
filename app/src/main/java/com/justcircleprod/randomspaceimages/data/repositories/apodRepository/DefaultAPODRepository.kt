@@ -28,4 +28,12 @@ class DefaultAPODRepository @Inject constructor(private val apodAPI: APODAPI) : 
             Resource.Error(true)
         }
     }
+
+    override suspend fun getAPODByDate(date: String): Resource<APODEntry> {
+        return try {
+            Resource.Success(apodAPI.getAPODByDate(date))
+        } catch (e: Exception) {
+            Resource.Error(true)
+        }
+    }
 }

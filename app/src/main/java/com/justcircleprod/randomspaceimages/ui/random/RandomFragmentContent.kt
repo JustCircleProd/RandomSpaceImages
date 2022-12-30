@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.*
 import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.data.models.NASALibraryImageEntry
-import com.justcircleprod.randomspaceimages.ui.common.SearchButton
+import com.justcircleprod.randomspaceimages.ui.random.common.SearchButton
 import com.justcircleprod.randomspaceimages.ui.random.randomFavouritesPage.RandomFavouritesPage
 import com.justcircleprod.randomspaceimages.ui.random.randomFavouritesPage.RandomFavouritesPageViewModel
 import com.justcircleprod.randomspaceimages.ui.random.randomPage.RandomPage

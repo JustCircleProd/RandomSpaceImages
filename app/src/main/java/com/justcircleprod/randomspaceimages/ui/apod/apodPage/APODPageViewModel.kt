@@ -30,12 +30,17 @@ class APODPageViewModel @Inject constructor(
 
     private lateinit var lastDate: Date
 
+    val isDatePicked = MutableStateFlow(false)
+
     init {
         loadTodayAPOD()
     }
 
     fun loadTodayAPOD(refresh: Boolean = false) {
         viewModelScope.launch {
+            if (refresh) {
+                apodList.value.clear()
+            }
             setLoadingOrRefreshing(refresh, true)
 
             val result = apodRepository.getTodayAPOD()
@@ -120,6 +125,26 @@ class APODPageViewModel @Inject constructor(
         }
     }
 
+    fun loadAPODByDay(date: String) {
+        viewModelScope.launch {
+            apodList.value.clear()
+            isLoading.value = true
+
+            val result = apodRepository.getAPODByDate(date)
+
+            if (result is Resource.Success || result.data != null) {
+                loadError.value = false
+                isDatePicked.value = true
+
+                apodList.value = mutableListOf(result.data!!)
+            } else {
+                loadError.value = true
+            }
+
+            isLoading.value = false
+        }
+    }
+
     private fun setLoadingOrRefreshing(refresh: Boolean, targetValue: Boolean) {
         if (refresh) {
             isRefreshing.value = targetValue
@@ -128,15 +153,15 @@ class APODPageViewModel @Inject constructor(
         }
     }
 
-    infix fun Date.minus(other: Date): Date {
+    private infix fun Date.minus(other: Date): Date {
         return Date(this.time - other.time)
     }
 
-    infix fun Date.plus(other: Date): Date {
+    private infix fun Date.plus(other: Date): Date {
         return Date(this.time + other.time)
     }
 
-    infix fun Date.minusDays(daysCount: Int): Date {
+    private infix fun Date.minusDays(daysCount: Int): Date {
         return Date(this.time - 24 * 60 * 60 * 1000 * daysCount)
     }
 }

@@ -7,4 +7,6 @@ interface APODRepository {
     suspend fun getTodayAPOD(): Resource<APODEntry>
 
     suspend fun getAPODsInDateRange(startDate: String, endDate: String): Resource<List<APODEntry>>
+
+    suspend fun getAPODByDate(date: String): Resource<APODEntry>
 }

@@ -1,4 +1,4 @@
-package com.justcircleprod.randomspaceimages.ui.common
+package com.justcircleprod.randomspaceimages.ui.random.common
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource

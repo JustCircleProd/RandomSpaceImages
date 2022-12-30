@@ -16,4 +16,10 @@ interface APODAPI {
         @Query("end_date") endDate: String,
         @Query("api_key") apiKey: String = APODConstants.API_KEY
     ): List<APODEntry>
+
+    @GET("apod")
+    suspend fun getAPODByDate(
+        @Query("date") date: String,
+        @Query("api_key") apiKey: String = APODConstants.API_KEY
+    ): APODEntry
 }

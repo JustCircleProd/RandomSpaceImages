@@ -45,6 +45,8 @@ fun APODPage(
 
     val endReached by viewModel.endReached.collectAsState()
 
+    val isDatePicked by viewModel.isDatePicked.collectAsState()
+
     val scaffoldState = rememberScaffoldState()
 
     Scaffold(
@@ -68,8 +70,7 @@ fun APODPage(
         val pullRefreshState = rememberPullRefreshState(
             refreshing = isRefreshing,
             onRefresh = {
-                if (!isLoading && !isRefreshing) {
-                    viewModel.apodList.value.clear()
+                if (!isLoading && !isRefreshing && !isDatePicked) {
                     viewModel.loadTodayAPOD(refresh = true)
                 }
             }
@@ -92,7 +93,6 @@ fun APODPage(
             Column(modifier = Modifier.fillMaxSize()) {
                 if (loadError && apodList.isNotEmpty()) {
                     ErrorInfoCard()
-                    Spacer(Modifier.height(dimensionResource(id = R.dimen.elements_space_size)))
                 }
 
                 LazyColumn(
@@ -114,7 +114,7 @@ fun APODPage(
                         )
                     }
 
-                    if (apodList.size == 1 && !isLoading && !endReached) {
+                    if (apodList.size == 1 && !isLoading && !endReached && !isDatePicked) {
                         item {
                             LoadMoreButton(onClick = {
                                 viewModel.loadMoreAPODs()

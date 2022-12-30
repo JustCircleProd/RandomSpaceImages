@@ -1,21 +1,22 @@
 package com.justcircleprod.randomspaceimages.ui.apod
 
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ScrollableTabRow
-import androidx.compose.material.Tab
-import androidx.compose.material.TabRowDefaults
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.ripple.LocalRippleTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -36,17 +37,35 @@ import kotlinx.coroutines.launch
 fun APODFragmentContent(
     apodPageViewModel: APODPageViewModel,
     apodFavouritesPageViewModel: APODFavouritesPageViewModel,
+    onPickDateButtonClick: () -> Unit,
     onAPODEntryImageClick: (imageUrl: String) -> Unit
 ) {
     val pagerState = rememberPagerState()
 
     Column {
         Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.spacedBy(
+                space = dimensionResource(id = R.dimen.apod_tabs_elements_space_size),
+                alignment = Alignment.CenterHorizontally
+            ),
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Tabs(pagerState)
+            val isDatePicked = apodPageViewModel.isDatePicked.collectAsState()
+
+            Tabs(isDatePicked = isDatePicked, pagerState = pagerState)
+
+            PickDateButtons(
+                isDatePicked = isDatePicked,
+                onPickDateButtonClick = {
+                    onPickDateButtonClick()
+                },
+                onCancelButtonClick = {
+                    apodPageViewModel.isDatePicked.value = false
+                    apodPageViewModel.apodList.value.clear()
+                    apodPageViewModel.loadTodayAPOD()
+                }
+            )
         }
 
         HorizontalPager(count = APODTabItem.items.size, state = pagerState) { page ->
@@ -70,12 +89,23 @@ fun APODFragmentContent(
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun Tabs(pagerState: PagerState) {
+fun Tabs(pagerState: PagerState, isDatePicked: State<Boolean>) {
     val coroutineScope = rememberCoroutineScope()
 
     CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
-        val scrollableTabRowWidth =
-            LocalConfiguration.current.screenWidthDp.dp
+        val scrollableTabRowWidth by animateDpAsState(
+            when {
+                pagerState.currentPage == 0 && isDatePicked.value -> {
+                    LocalConfiguration.current.screenWidthDp.dp - dimensionResource(id = R.dimen.apod_tabs_two_buttons_summary_width)
+                }
+                pagerState.currentPage == 0 && !isDatePicked.value -> {
+                    LocalConfiguration.current.screenWidthDp.dp - dimensionResource(id = R.dimen.apod_tabs_one_button_summary_width)
+                }
+                else -> {
+                    LocalConfiguration.current.screenWidthDp.dp
+                }
+            }
+        )
 
         ScrollableTabRow(
             selectedTabIndex = pagerState.currentPage,
@@ -132,4 +162,61 @@ fun Tabs(pagerState: PagerState) {
             }
         }
     }
+}
+
+@Composable
+fun PickDateButtons(
+    isDatePicked: State<Boolean>,
+    onPickDateButtonClick: () -> Unit,
+    onCancelButtonClick: () -> Unit
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .clip(CircleShape)
+            .size(dimensionResource(id = R.dimen.tabs_button_size))
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = rememberRipple(
+                    bounded = true,
+                    color = colorResource(id = R.color.ripple)
+                ),
+            ) {
+                onPickDateButtonClick()
+            }
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.icon_pick_date),
+            contentDescription = stringResource(id = R.string.select_a_date),
+            tint = if (isDatePicked.value) colorResource(id = R.color.primary) else colorResource(id = R.color.icon_tint),
+            modifier = Modifier.size(dimensionResource(id = R.dimen.tabs_button_icon_size))
+        )
+    }
+
+    if (isDatePicked.value) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .clip(CircleShape)
+                .size(dimensionResource(id = R.dimen.tabs_button_size))
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(
+                        bounded = true,
+                        color = colorResource(id = R.color.ripple)
+                    ),
+                ) {
+                    onCancelButtonClick()
+                }
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.icon_cancel),
+                contentDescription = stringResource(id = R.string.cancel_date_selection),
+                tint = colorResource(id = R.color.icon_tint),
+                modifier = Modifier.size(dimensionResource(id = R.dimen.tabs_button_icon_size))
+            )
+        }
+    }
+
+    Spacer(Modifier.width(dimensionResource(id = R.dimen.apod_tabs_elements_space_size)))
 }

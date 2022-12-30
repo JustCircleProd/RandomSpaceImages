@@ -5,8 +5,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -18,16 +16,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.sp
 import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.data.models.NASALibraryImageEntry
 import com.justcircleprod.randomspaceimages.ui.common.NoFavourites
 import com.justcircleprod.randomspaceimages.ui.common.ProgressIndicator
 import com.justcircleprod.randomspaceimages.ui.random.imageEntryItem.NASALibraryImageEntryItem
-import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

@@ -51,7 +51,6 @@ fun DetailImageFragmentContent(
                 },
             factory = { context ->
                 PhotoView(context).also { photoView ->
-                    photoView.maximumScale = 4f
                     Glide.with(context).load(imageUrl)
                         .listener(object : RequestListener<Drawable> {
                             override fun onLoadFailed(

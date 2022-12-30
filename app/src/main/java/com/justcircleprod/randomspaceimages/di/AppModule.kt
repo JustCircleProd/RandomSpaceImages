@@ -1,12 +1,10 @@
 package com.justcircleprod.randomspaceimages.di
 
 import android.content.Context
-import androidx.room.Room
 import com.justcircleprod.randomspaceimages.data.dataStore.DataStoreManager
 import com.justcircleprod.randomspaceimages.data.repositories.dataStoreRepository.DefaultDataStoreRepository
 import com.justcircleprod.randomspaceimages.data.repositories.roomRepository.DefaultRoomRepository
 import com.justcircleprod.randomspaceimages.data.room.database.AppDatabase
-import com.justcircleprod.randomspaceimages.data.room.migrations.MIGRATION_1_2
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -10,7 +10,10 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
@@ -18,7 +21,6 @@ import androidx.compose.material.ScaffoldState
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,8 +35,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.justcircleprod.randomspaceimages.R
-import com.justcircleprod.randomspaceimages.data.models.APODEntry
-import com.justcircleprod.randomspaceimages.ui.apod.apodBaseVIewModel.APODBaseViewModel
 import kotlinx.coroutines.launch
 
 @Composable
@@ -148,7 +148,7 @@ fun SaveToGalleryButton(
                 painter = painterResource(id = if (savedToGallery.value == SaveState.SAVED) R.drawable.icon_download_done else R.drawable.icon_download),
                 contentDescription = stringResource(
                     id = if (savedToGallery.value == SaveState.SAVED) {
-                        R.string.saved_to_gallery
+                        R.string.already_saved_to_gallery
                     } else {
                         R.string.save_to_gallery
                     }
@@ -236,31 +236,36 @@ fun ImageActionMenu(
 
         ActionMenu {
             SaveToGalleryButton(
-                savedToGallery = savedToGallery
-            ) {
-                if (hasWriteExternalStoragePermission.value) {
-                    if (savedToGallery.value == SaveState.SAVED) {
-                        coroutineScope.launch {
-                            scaffoldState.snackbarHostState.showSnackbar(
-                                message = context.getString(R.string.already_saved_to_gallery),
-                                duration = SnackbarDuration.Short
-                            )
+                savedToGallery = savedToGallery,
+                onClick = {
+                    if (hasWriteExternalStoragePermission.value) {
+                        when (savedToGallery.value) {
+                            SaveState.NOT_SAVED -> {
+                                savedToGallery.value = SaveState.SAVING
+
+                                saveToGallery(
+                                    context = context,
+                                    imageTitle = imageTitle,
+                                    imageHref = imageHref,
+                                    onSaved = onSaved
+                                )
+                            }
+                            SaveState.SAVING -> {}
+                            SaveState.SAVED -> {
+                                coroutineScope.launch {
+                                    scaffoldState.snackbarHostState.showSnackbar(
+                                        message = context.getString(R.string.already_saved_to_gallery),
+                                        duration = SnackbarDuration.Short
+                                    )
+                                }
+                                return@SaveToGalleryButton
+                            }
                         }
-                        return@SaveToGalleryButton
+                    } else {
+                        permissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     }
-
-                    savedToGallery.value = SaveState.SAVING
-
-                    saveToGallery(
-                        context = context,
-                        imageTitle = imageTitle,
-                        imageHref = imageHref,
-                        onSaved = onSaved
-                    )
-                } else {
-                    permissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 }
-            }
+            )
 
             FavouriteButton(
                 isAddedToFavourites = isAddedToFavourites,

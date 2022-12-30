@@ -6,7 +6,6 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.provider.MediaStore
-import androidx.compose.runtime.MutableState
 import androidx.core.graphics.drawable.toBitmap
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
