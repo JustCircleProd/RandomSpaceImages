@@ -30,7 +30,7 @@ class APODPageViewModel @Inject constructor(
 
     private lateinit var lastDate: Date
 
-    val isDatePicked = MutableStateFlow(false)
+    val pickedDateInMills: MutableStateFlow<Long?> = MutableStateFlow(null)
 
     init {
         loadTodayAPOD()
@@ -125,16 +125,19 @@ class APODPageViewModel @Inject constructor(
         }
     }
 
-    fun loadAPODByDay(date: String) {
+    fun loadAPODByDay(dateInMills: Long) {
         viewModelScope.launch {
+            pickedDateInMills.value = dateInMills
+
             apodList.value.clear()
             isLoading.value = true
 
-            val result = apodRepository.getAPODByDate(date)
+            val result = apodRepository.getAPODByDate(
+                SimpleDateFormat(APODConstants.DATE_FORMAT, Locale.US).format(Date(dateInMills))
+            )
 
             if (result is Resource.Success || result.data != null) {
                 loadError.value = false
-                isDatePicked.value = true
 
                 apodList.value = mutableListOf(result.data!!)
             } else {

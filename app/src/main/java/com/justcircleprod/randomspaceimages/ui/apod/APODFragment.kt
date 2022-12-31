@@ -86,13 +86,19 @@ class APODFragment : Fragment() {
             .setValidator(validators)
             .build()
 
+        val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
+            apodPageViewModel.pickedDateInMills.value?.let {
+                timeInMillis = it
+            }
+        }
+
         val datePicker = MaterialDatePicker.Builder.datePicker()
             .setCalendarConstraints(constraints)
+            .setSelection(calendar.timeInMillis)
             .build()
 
         datePicker.addOnPositiveButtonClickListener {
-            val pickedDate = SimpleDateFormat(APODConstants.DATE_FORMAT, Locale.US).format(Date(it))
-            apodPageViewModel.loadAPODByDay(pickedDate)
+            apodPageViewModel.loadAPODByDay(it)
         }
 
         datePicker.show(

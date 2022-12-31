@@ -46,26 +46,25 @@ fun APODFragmentContent(
         Row(
             horizontalArrangement = Arrangement.spacedBy(
                 space = dimensionResource(id = R.dimen.apod_tabs_elements_space_size),
-                alignment = Alignment.CenterHorizontally
+                alignment = Alignment.Start
             ),
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            val isDatePicked = apodPageViewModel.isDatePicked.collectAsState()
+            val pickedDate = apodPageViewModel.pickedDateInMills.collectAsState()
 
-            Tabs(isDatePicked = isDatePicked, pagerState = pagerState)
+            Tabs(isDatePicked = pickedDate, pagerState = pagerState)
 
             PickDateButtons(
-                isDatePicked = isDatePicked,
+                isDatePicked = pickedDate,
                 onPickDateButtonClick = {
                     onPickDateButtonClick()
-                },
-                onCancelButtonClick = {
-                    apodPageViewModel.isDatePicked.value = false
-                    apodPageViewModel.apodList.value.clear()
-                    apodPageViewModel.loadTodayAPOD()
                 }
-            )
+            ) {
+                apodPageViewModel.pickedDateInMills.value = null
+                apodPageViewModel.apodList.value.clear()
+                apodPageViewModel.loadTodayAPOD()
+            }
         }
 
         HorizontalPager(count = APODTabItem.items.size, state = pagerState) { page ->
@@ -89,16 +88,16 @@ fun APODFragmentContent(
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun Tabs(pagerState: PagerState, isDatePicked: State<Boolean>) {
+fun Tabs(pagerState: PagerState, isDatePicked: State<Long?>) {
     val coroutineScope = rememberCoroutineScope()
 
     CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
         val scrollableTabRowWidth by animateDpAsState(
             when {
-                pagerState.currentPage == 0 && isDatePicked.value -> {
+                pagerState.currentPage == 0 && isDatePicked.value != null -> {
                     LocalConfiguration.current.screenWidthDp.dp - dimensionResource(id = R.dimen.apod_tabs_two_buttons_summary_width)
                 }
-                pagerState.currentPage == 0 && !isDatePicked.value -> {
+                pagerState.currentPage == 0 && isDatePicked.value == null -> {
                     LocalConfiguration.current.screenWidthDp.dp - dimensionResource(id = R.dimen.apod_tabs_one_button_summary_width)
                 }
                 else -> {
@@ -166,7 +165,7 @@ fun Tabs(pagerState: PagerState, isDatePicked: State<Boolean>) {
 
 @Composable
 fun PickDateButtons(
-    isDatePicked: State<Boolean>,
+    isDatePicked: State<Long?>,
     onPickDateButtonClick: () -> Unit,
     onCancelButtonClick: () -> Unit
 ) {
@@ -188,12 +187,14 @@ fun PickDateButtons(
         Icon(
             painter = painterResource(id = R.drawable.icon_pick_date),
             contentDescription = stringResource(id = R.string.select_a_date),
-            tint = if (isDatePicked.value) colorResource(id = R.color.primary) else colorResource(id = R.color.icon_tint),
+            tint = if (isDatePicked.value != null) colorResource(id = R.color.primary) else colorResource(
+                id = R.color.icon_tint
+            ),
             modifier = Modifier.size(dimensionResource(id = R.dimen.tabs_button_icon_size))
         )
     }
 
-    if (isDatePicked.value) {
+    if (isDatePicked.value != null) {
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier

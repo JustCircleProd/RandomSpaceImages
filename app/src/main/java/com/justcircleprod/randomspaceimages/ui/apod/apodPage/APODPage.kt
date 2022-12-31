@@ -45,7 +45,7 @@ fun APODPage(
 
     val endReached by viewModel.endReached.collectAsState()
 
-    val isDatePicked by viewModel.isDatePicked.collectAsState()
+    val pickedDate by viewModel.pickedDateInMills.collectAsState()
 
     val scaffoldState = rememberScaffoldState()
 
@@ -70,7 +70,7 @@ fun APODPage(
         val pullRefreshState = rememberPullRefreshState(
             refreshing = isRefreshing,
             onRefresh = {
-                if (!isLoading && !isRefreshing && !isDatePicked) {
+                if (!isLoading && !isRefreshing && pickedDate == null) {
                     viewModel.loadTodayAPOD(refresh = true)
                 }
             }
@@ -114,7 +114,7 @@ fun APODPage(
                         )
                     }
 
-                    if (apodList.size == 1 && !isLoading && !endReached && !isDatePicked) {
+                    if (apodList.size == 1 && !isLoading && !endReached && pickedDate == null) {
                         item {
                             LoadMoreButton(onClick = {
                                 viewModel.loadMoreAPODs()

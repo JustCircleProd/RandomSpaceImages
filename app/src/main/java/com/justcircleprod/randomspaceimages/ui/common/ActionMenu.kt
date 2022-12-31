@@ -21,7 +21,6 @@ import androidx.compose.material.ScaffoldState
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,9 +38,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun ActionMenu(Buttons: @Composable () -> Unit) {
-    var isMenuOpened by rememberSaveable {
-        mutableStateOf(false)
-    }
+    var isMenuOpened by remember { mutableStateOf(false) }
     val angle by animateFloatAsState(if (isMenuOpened) 90f else 0f)
 
     Row(
@@ -177,7 +174,7 @@ fun ImageActionMenu(
         val context = LocalContext.current
         val coroutineScope = rememberCoroutineScope()
 
-        val savedToGallery = rememberSaveable { mutableStateOf(SaveState.NOT_SAVED) }
+        val savedToGallery = remember { mutableStateOf(SaveState.NOT_SAVED) }
         val onSaved = {
             savedToGallery.value = SaveState.SAVED
         }
