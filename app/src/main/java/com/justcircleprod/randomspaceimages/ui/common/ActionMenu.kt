@@ -271,3 +271,23 @@ fun ImageActionMenu(
         }
     }
 }
+
+@Composable
+fun VideoActionMenu(
+    isAddedToFavourites: State<Boolean?>,
+    onFavouriteButtonClick: () -> Unit,
+    modifier: Modifier
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+            .clip(CircleShape)
+            .background(Color.Black.copy(0.45f))
+            .size(dimensionResource(id = R.dimen.action_icon_button_size))
+    ) {
+        FavouriteButton(
+            isAddedToFavourites = isAddedToFavourites,
+            onClick = { onFavouriteButtonClick() }
+        )
+    }
+}

@@ -41,6 +41,7 @@ import com.justcircleprod.randomspaceimages.ui.apod.apodBaseVIewModel.APODBaseVi
 import com.justcircleprod.randomspaceimages.ui.common.DateHelper
 import com.justcircleprod.randomspaceimages.ui.common.ImageActionMenu
 import com.justcircleprod.randomspaceimages.ui.common.ProgressIndicator
+import com.justcircleprod.randomspaceimages.ui.common.VideoActionMenu
 import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.components.rememberImageComponent
@@ -91,29 +92,49 @@ fun APODEntryItem(
                 APODInfo(apodEntry = apodEntry)
             }
 
-            if (isImageClickEnabled.value) {
-                val isAddedToFavourites =
-                    viewModel.isAddedToFavourites(apodEntry.date).observeAsState()
+            val isAddedToFavourites =
+                viewModel.isAddedToFavourites(apodEntry.date).observeAsState()
 
-                ImageActionMenu(
-                    scaffoldState = scaffoldState,
-                    imageTitle = apodEntry.title,
-                    imageHref = apodEntry.hdurl ?: apodEntry.url,
-                    isAddedToFavourites = isAddedToFavourites,
-                    onFavouriteButtonClick = {
-                        if (isAddedToFavourites.value == true) {
-                            viewModel.removeFromFavourites(apodEntry)
-                        } else {
-                            viewModel.addToFavourites(apodEntry)
-                        }
-                    },
-                    modifier = Modifier
-                        .constrainAs(actionButtons) {
-                            top.linkTo(parent.top, margin = 9.dp)
-                            end.linkTo(parent.end)
-                        }
-                        .padding(horizontal = dimensionResource(id = R.dimen.action_buttons_horizontal_space_size))
-                )
+            when {
+                isImageClickEnabled.value && apodEntry.media_type == "image" -> {
+                    ImageActionMenu(
+                        scaffoldState = scaffoldState,
+                        imageTitle = apodEntry.title,
+                        imageHref = apodEntry.hdurl ?: apodEntry.url,
+                        isAddedToFavourites = isAddedToFavourites,
+                        onFavouriteButtonClick = {
+                            if (isAddedToFavourites.value == true) {
+                                viewModel.removeFromFavourites(apodEntry)
+                            } else {
+                                viewModel.addToFavourites(apodEntry)
+                            }
+                        },
+                        modifier = Modifier
+                            .constrainAs(actionButtons) {
+                                top.linkTo(parent.top, margin = 9.dp)
+                                end.linkTo(parent.end)
+                            }
+                            .padding(horizontal = dimensionResource(id = R.dimen.action_buttons_horizontal_space_size))
+                    )
+                }
+                apodEntry.media_type == "video" -> {
+                    VideoActionMenu(
+                        isAddedToFavourites = isAddedToFavourites,
+                        onFavouriteButtonClick = {
+                            if (isAddedToFavourites.value == true) {
+                                viewModel.removeFromFavourites(apodEntry)
+                            } else {
+                                viewModel.addToFavourites(apodEntry)
+                            }
+                        },
+                        modifier = Modifier
+                            .constrainAs(actionButtons) {
+                                top.linkTo(parent.top, margin = 9.dp)
+                                end.linkTo(parent.end)
+                            }
+                            .padding(horizontal = dimensionResource(id = R.dimen.action_buttons_horizontal_space_size))
+                    )
+                }
             }
         }
     }
