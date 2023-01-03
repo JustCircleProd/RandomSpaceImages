@@ -59,7 +59,9 @@ fun RandomFavouritesPage(
             columns = GridCells.Adaptive(dimensionResource(id = R.dimen.image_list_min_grid_cell_size)),
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.image_list_vertical_arrangement)),
             horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.image_list_horizontal_arrangement)),
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .padding(horizontal = dimensionResource(id = R.dimen.elements_space_size))
+                .fillMaxSize()
         ) {
             if (favourites != null) {
                 items(favourites!!.size) {
