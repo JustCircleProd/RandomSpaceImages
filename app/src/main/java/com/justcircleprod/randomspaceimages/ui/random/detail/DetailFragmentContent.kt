@@ -100,7 +100,7 @@ fun DetailFragmentContent(
                 }
             }
 
-            ActionButtons(
+            DetailActionButtons(
                 viewModel = viewModel,
                 nasaLibraryImageEntry = nasaLibraryImageEntry,
                 scaffoldState = scaffoldState,
@@ -340,7 +340,7 @@ fun AdditionalInfoCard(nasaLibraryImageEntry: NASALibraryImageEntry) {
 }
 
 @Composable
-fun ActionButtons(
+fun DetailActionButtons(
     viewModel: DetailViewModel,
     nasaLibraryImageEntry: NASALibraryImageEntry,
     scaffoldState: ScaffoldState,

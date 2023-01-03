@@ -32,9 +32,6 @@
     <string name="save_to_gallery">Save to gallery</string>
     <string name="already_saved_to_gallery">Already saved to gallery</string>
 
-    <string name="enable_image_interaction">Enable image interaction</string>
-    <string name="disable_image_interaction">Disable image interaction</string>
-
     <string name="no_favourites">No favourites.\nSwipe down to Refresh</string>
 
     <string name="search">Search</string>

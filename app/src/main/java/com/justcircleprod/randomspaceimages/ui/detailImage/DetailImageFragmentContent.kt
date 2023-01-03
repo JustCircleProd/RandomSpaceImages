@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -31,10 +32,10 @@ fun DetailImageFragmentContent(
     imageUrl: String,
     onBackButtonClick: () -> Unit
 ) {
-    var isLoading by remember { mutableStateOf(true) }
-
     ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
         val (imageView, backButton) = createRefs()
+
+        var isLoading by remember { mutableStateOf(true) }
 
         if (isLoading) {
             DetailImageProgressIndicator()
@@ -50,7 +51,7 @@ fun DetailImageFragmentContent(
                     bottom.linkTo(parent.bottom)
                 },
             factory = { context ->
-                PhotoView(context).also { photoView ->
+                PhotoView(context).apply {
                     Glide.with(context).load(imageUrl)
                         .listener(object : RequestListener<Drawable> {
                             override fun onLoadFailed(
@@ -72,7 +73,7 @@ fun DetailImageFragmentContent(
                                 isLoading = false
                                 return false
                             }
-                        }).into(photoView)
+                        }).into(this)
                 }
             }
         )
@@ -95,7 +96,7 @@ fun DetailImageProgressIndicator() {
         modifier = Modifier.fillMaxSize()
     ) {
         Text(
-            text = "Loading the image in high resolution",
+            text = stringResource(id = R.string.loading_image_in_high_resolution),
             color = colorResource(id = R.color.text),
             fontFamily = LatoFontFamily,
             textAlign = TextAlign.Center,
