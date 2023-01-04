@@ -20,8 +20,8 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep public class com.justcircleprod.randomspaceimages.data.models.ImageEntry { *; }
--keep class com.justcircleprod.randomspaceimages.data.remote.responses.** { *; }
+-keep public class com.justcircleprod.randomspaceimages.data.models.** { *; }
+-keep class com.justcircleprod.randomspaceimages.data.remote.nasaLibrary.responses.** { *; }
 
 ##---------------Begin: proguard configuration for Retrofit  ----------
 # Retrofit does reflection on generic parameters. InnerClasses is required to use Signature and

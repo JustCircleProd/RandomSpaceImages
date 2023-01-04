@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Random Space Images</string>
+    <string name="app_name">Random Space Images (APOD)</string>
 
     <string name="random">Random</string>
     <string name="apod">APOD</string>

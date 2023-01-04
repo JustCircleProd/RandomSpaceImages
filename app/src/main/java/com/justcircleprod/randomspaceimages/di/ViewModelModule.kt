@@ -11,8 +11,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -37,14 +35,14 @@ object ViewModelModule {
     @Provides
     @ViewModelScoped
     fun provideAPODAPI(): APODAPI {
-        val interceptor = HttpLoggingInterceptor()
+        /*val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.HEADERS
-        val client: OkHttpClient = OkHttpClient.Builder().addInterceptor(interceptor).build()
+        val client: OkHttpClient = OkHttpClient.Builder().addInterceptor(interceptor).build()*/
 
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(APODConstants.BASE_URL)
-            .client(client)
+            // .client(client)
             .build()
             .create(APODAPI::class.java)
     }

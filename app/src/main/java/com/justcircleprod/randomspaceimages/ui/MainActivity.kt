@@ -120,7 +120,7 @@ class MainActivity : AppCompatActivity() {
         val startDestinationId = when (startScreen) {
             DataStoreConstants.RANDOM_SCREEN -> R.id.navigation_random
             DataStoreConstants.APOD_SCREEN -> R.id.navigation_apod
-            else -> R.id.navigation_random
+            else -> R.id.navigation_apod
         }
         graph.setStartDestination(startDestinationId)
 
