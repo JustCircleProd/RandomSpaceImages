@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.asLiveData
@@ -62,9 +64,11 @@ class MainActivity : AppCompatActivity() {
                 setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
 
                 viewModel.startScreen.asLiveData().observe(this@MainActivity) { startScreen ->
-                    val bottomNavItems = BottomNavItem.getItems(startScreen)
+                    viewModel.bottomNavItems.value = BottomNavItem.getItems(startScreen)
 
                     setContent {
+                        val bottomNavItems by viewModel.bottomNavItems.collectAsState()
+
                         BottomNavigation(
                             navController = navController,
                             items = bottomNavItems

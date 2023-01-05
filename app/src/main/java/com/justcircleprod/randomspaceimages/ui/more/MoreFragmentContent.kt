@@ -136,23 +136,23 @@ fun StartScreenCard(viewModel: MoreViewModel) {
 
     ExpandableCard(cardTitle = stringResource(id = R.string.start_screen)) { contentModifier ->
         val radioButtonItems = listOf(
-            stringResource(id = R.string.random),
-            stringResource(id = R.string.apod)
+            stringResource(id = R.string.apod),
+            stringResource(id = R.string.random)
         )
 
         val isSelected: (Int) -> Boolean = { index ->
             when {
-                index == 0 && (startScreen.value == DataStoreConstants.RANDOM_SCREEN || startScreen.value == null) -> true
-                index == 1 && startScreen.value == DataStoreConstants.APOD_SCREEN -> true
+                index == 0 && (startScreen.value == DataStoreConstants.APOD_SCREEN || startScreen.value == null) -> true
+                index == 1 && startScreen.value == DataStoreConstants.RANDOM_SCREEN -> true
                 else -> false
             }
         }
 
         val onClick: (Int) -> Unit = { index ->
             val selectedThemeValue = when (index) {
-                0 -> DataStoreConstants.RANDOM_SCREEN
-                1 -> DataStoreConstants.APOD_SCREEN
-                else -> DataStoreConstants.RANDOM_SCREEN
+                0 -> DataStoreConstants.APOD_SCREEN
+                1 -> DataStoreConstants.RANDOM_SCREEN
+                else -> DataStoreConstants.APOD_SCREEN
             }
 
             viewModel.saveStartScreenValue(selectedThemeValue)

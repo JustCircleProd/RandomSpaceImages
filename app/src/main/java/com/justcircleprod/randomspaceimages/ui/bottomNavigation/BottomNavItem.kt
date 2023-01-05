@@ -33,11 +33,11 @@ sealed class BottomNavItem(
     companion object {
         fun getItems(startScreen: String?) =
             when (startScreen) {
-                DataStoreConstants.RANDOM_SCREEN, null -> {
-                    listOf(Random, APOD, More)
+                DataStoreConstants.APOD_SCREEN, null -> {
+                    listOf(APOD, Random, More)
                 }
                 else -> {
-                    listOf(APOD, Random, More)
+                    listOf(Random, APOD, More)
                 }
             }
     }
