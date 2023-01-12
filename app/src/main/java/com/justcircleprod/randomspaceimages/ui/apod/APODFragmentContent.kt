@@ -38,7 +38,7 @@ fun APODFragmentContent(
     apodPageViewModel: APODPageViewModel,
     apodFavouritesPageViewModel: APODFavouritesPageViewModel,
     onPickDateButtonClick: () -> Unit,
-    onAPODEntryImageClick: (imageUrl: String) -> Unit
+    onAPODEntryImageClick: (imageUrl: String, imageUrlHd: String?) -> Unit
 ) {
     val pagerState = rememberPagerState()
 

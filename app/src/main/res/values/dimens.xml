@@ -48,7 +48,7 @@
     <dimen name="action_icon_button_size">42dp</dimen>
     <dimen name="action_menu_button_icon_size">25dp</dimen>
     
-    <dimen name="action_menu_progress_indicator_size">21dp</dimen>
+    <dimen name="action_button_progress_indicator_size">21dp</dimen>
 
 
     <dimen name="detail_card_content_vertical_space">12dp</dimen>

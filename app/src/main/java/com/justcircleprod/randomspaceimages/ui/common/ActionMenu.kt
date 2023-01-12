@@ -37,6 +37,136 @@ import com.justcircleprod.randomspaceimages.R
 import kotlinx.coroutines.launch
 
 @Composable
+fun ImageActionMenu(
+    scaffoldState: ScaffoldState,
+    imageTitle: String?,
+    imageHref: String,
+    isAddedToFavourites: State<Boolean?>,
+    onFavouriteButtonClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+    ) {
+        // SaveToGalleryButton
+        val context = LocalContext.current
+        val coroutineScope = rememberCoroutineScope()
+
+        val savingToGalleryState = remember { mutableStateOf(false) }
+        val onSaved = {
+            coroutineScope.launch {
+                savingToGalleryState.value = false
+
+                scaffoldState.snackbarHostState.showSnackbar(
+                    message = context.getString(R.string.successfully_saved_to_gallery),
+                    duration = SnackbarDuration.Short
+                )
+            }
+            Unit
+        }
+
+        val hasWriteExternalStoragePermission = remember {
+            mutableStateOf(
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                    ContextCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ) == PackageManager.PERMISSION_GRANTED
+                } else {
+                    true
+                }
+            )
+        }
+        val permissionLauncher = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.RequestPermission(),
+            onResult = { isGranted ->
+                hasWriteExternalStoragePermission.value = isGranted
+
+                if (isGranted) {
+                    savingToGalleryState.value = true
+
+                    saveToGallery(
+                        context = context,
+                        imageTitle = imageTitle,
+                        imageHref = imageHref,
+                        onSaved = onSaved
+                    )
+                } else {
+                    context.getActivity()?.let {
+                        if (!ActivityCompat.shouldShowRequestPermissionRationale(
+                                it,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                            )
+                        ) {
+                            coroutineScope.launch {
+                                scaffoldState.snackbarHostState.showSnackbar(
+                                    message = context.getString(R.string.grant_permission),
+                                    duration = SnackbarDuration.Short
+                                )
+                            }
+                        } else {
+                            coroutineScope.launch {
+                                scaffoldState.snackbarHostState.showSnackbar(
+                                    message = context.getString(R.string.permission_is_required),
+                                    duration = SnackbarDuration.Short
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        )
+
+        ActionMenu {
+            SaveToGalleryButton(
+                savingToGalleryState = savingToGalleryState,
+                onClick = {
+                    if (hasWriteExternalStoragePermission.value) {
+                        if (!savingToGalleryState.value) {
+                            savingToGalleryState.value = true
+
+                            saveToGallery(
+                                context = context,
+                                imageTitle = imageTitle,
+                                imageHref = imageHref,
+                                onSaved = onSaved
+                            )
+                        }
+                    } else {
+                        permissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    }
+                }
+            )
+
+            FavouriteButton(
+                isAddedToFavourites = isAddedToFavourites,
+                onClick = { onFavouriteButtonClick() }
+            )
+        }
+    }
+}
+
+@Composable
+fun VideoActionMenu(
+    isAddedToFavourites: State<Boolean?>,
+    onFavouriteButtonClick: () -> Unit,
+    modifier: Modifier
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+            .clip(CircleShape)
+            .background(Color.Black.copy(0.45f))
+            .size(dimensionResource(id = R.dimen.action_icon_button_size))
+    ) {
+        FavouriteButton(
+            isAddedToFavourites = isAddedToFavourites,
+            onClick = { onFavouriteButtonClick() }
+        )
+    }
+}
+
+@Composable
 fun ActionMenu(Buttons: @Composable () -> Unit) {
     var isMenuOpened by remember { mutableStateOf(false) }
     val angle by animateFloatAsState(if (isMenuOpened) 90f else 0f)
@@ -115,7 +245,7 @@ fun FavouriteButton(
 
 @Composable
 fun SaveToGalleryButton(
-    savedToGallery: MutableState<SaveState>,
+    savingToGalleryState: MutableState<Boolean>,
     onClick: () -> Unit
 ) {
     Box(
@@ -132,162 +262,24 @@ fun SaveToGalleryButton(
                 onClick()
             }
     ) {
-        if (savedToGallery.value == SaveState.SAVING) {
+        if (savingToGalleryState.value) {
             CircularProgressIndicator(
                 strokeWidth = dimensionResource(id = R.dimen.progress_indicator_stroke_width),
                 color = colorResource(id = R.color.primary),
                 modifier = Modifier
-                    .size(dimensionResource(id = R.dimen.action_menu_progress_indicator_size))
+                    .size(dimensionResource(id = R.dimen.action_button_progress_indicator_size))
                     .align(Alignment.Center)
             )
         } else {
             Icon(
-                painter = painterResource(id = if (savedToGallery.value == SaveState.SAVED) R.drawable.icon_download_done else R.drawable.icon_download),
+                painter = painterResource(id = R.drawable.icon_download),
                 contentDescription = stringResource(
-                    id = if (savedToGallery.value == SaveState.SAVED) {
-                        R.string.already_saved_to_gallery
-                    } else {
-                        R.string.save_to_gallery
-                    }
+                    id = R.string.save_to_gallery
                 ),
-                tint = if (savedToGallery.value == SaveState.SAVED) colorResource(id = R.color.saved_to_gallery) else Color.White,
+                tint = Color.White,
                 modifier = Modifier
                     .size(dimensionResource(id = R.dimen.action_menu_button_icon_size))
             )
         }
-    }
-}
-
-@Composable
-fun ImageActionMenu(
-    scaffoldState: ScaffoldState,
-    imageTitle: String?,
-    imageHref: String,
-    isAddedToFavourites: State<Boolean?>,
-    onFavouriteButtonClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier
-    ) {
-        // SaveToGalleryButton
-        val context = LocalContext.current
-        val coroutineScope = rememberCoroutineScope()
-
-        val savedToGallery = remember { mutableStateOf(SaveState.NOT_SAVED) }
-        val onSaved = {
-            savedToGallery.value = SaveState.SAVED
-        }
-
-        val hasWriteExternalStoragePermission = remember {
-            mutableStateOf(
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                    ContextCompat.checkSelfPermission(
-                        context,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    ) == PackageManager.PERMISSION_GRANTED
-                } else {
-                    true
-                }
-            )
-        }
-        val permissionLauncher = rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.RequestPermission(),
-            onResult = { isGranted ->
-                hasWriteExternalStoragePermission.value = isGranted
-
-                if (isGranted) {
-                    savedToGallery.value = SaveState.SAVING
-
-                    saveToGallery(
-                        context = context,
-                        imageTitle = imageTitle,
-                        imageHref = imageHref,
-                        onSaved = onSaved
-                    )
-                } else {
-                    context.getActivity()?.let {
-                        if (!ActivityCompat.shouldShowRequestPermissionRationale(
-                                it,
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE
-                            )
-                        ) {
-                            coroutineScope.launch {
-                                scaffoldState.snackbarHostState.showSnackbar(
-                                    message = context.getString(R.string.grant_permission),
-                                    duration = SnackbarDuration.Short
-                                )
-                            }
-                        } else {
-                            coroutineScope.launch {
-                                scaffoldState.snackbarHostState.showSnackbar(
-                                    message = context.getString(R.string.permission_is_required),
-                                    duration = SnackbarDuration.Short
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-        )
-
-        ActionMenu {
-            SaveToGalleryButton(
-                savedToGallery = savedToGallery,
-                onClick = {
-                    if (hasWriteExternalStoragePermission.value) {
-                        when (savedToGallery.value) {
-                            SaveState.NOT_SAVED -> {
-                                savedToGallery.value = SaveState.SAVING
-
-                                saveToGallery(
-                                    context = context,
-                                    imageTitle = imageTitle,
-                                    imageHref = imageHref,
-                                    onSaved = onSaved
-                                )
-                            }
-                            SaveState.SAVING -> {}
-                            SaveState.SAVED -> {
-                                coroutineScope.launch {
-                                    scaffoldState.snackbarHostState.showSnackbar(
-                                        message = context.getString(R.string.already_saved_to_gallery),
-                                        duration = SnackbarDuration.Short
-                                    )
-                                }
-                                return@SaveToGalleryButton
-                            }
-                        }
-                    } else {
-                        permissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    }
-                }
-            )
-
-            FavouriteButton(
-                isAddedToFavourites = isAddedToFavourites,
-                onClick = { onFavouriteButtonClick() }
-            )
-        }
-    }
-}
-
-@Composable
-fun VideoActionMenu(
-    isAddedToFavourites: State<Boolean?>,
-    onFavouriteButtonClick: () -> Unit,
-    modifier: Modifier
-) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier
-            .clip(CircleShape)
-            .background(Color.Black.copy(0.45f))
-            .size(dimensionResource(id = R.dimen.action_icon_button_size))
-    ) {
-        FavouriteButton(
-            isAddedToFavourites = isAddedToFavourites,
-            onClick = { onFavouriteButtonClick() }
-        )
     }
 }

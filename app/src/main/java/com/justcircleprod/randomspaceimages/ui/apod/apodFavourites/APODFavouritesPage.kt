@@ -24,7 +24,7 @@ import com.justcircleprod.randomspaceimages.ui.common.ProgressIndicator
 @Composable
 fun APODFavouritesPage(
     viewModel: APODFavouritesPageViewModel,
-    onAPODEntryImageClick: (imageUrl: String) -> Unit
+    onAPODEntryImageClick: (imageUrl: String, imageUrlHd: String?) -> Unit
 ) {
     val favourites by viewModel.favourites.observeAsState()
 

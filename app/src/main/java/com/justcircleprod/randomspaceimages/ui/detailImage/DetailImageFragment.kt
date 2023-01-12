@@ -36,6 +36,7 @@ class DetailImageFragment : Fragment() {
             setContent {
                 DetailImageFragmentContent(
                     imageUrl = args.imageUrl,
+                    imageUrlHd = args.imageUrlHd,
                     onBackButtonClick = {
                         navController.popBackStack()
                     }

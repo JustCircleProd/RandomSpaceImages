@@ -30,7 +30,7 @@
     <string name="grant_permission">Please grant permission in app settings</string>
 
     <string name="save_to_gallery">Save to gallery</string>
-    <string name="already_saved_to_gallery">Already saved to gallery</string>
+    <string name="successfully_saved_to_gallery">Successfully saved to gallery</string>
 
     <string name="no_favourites">No favourites.\nSwipe down to Refresh</string>
 

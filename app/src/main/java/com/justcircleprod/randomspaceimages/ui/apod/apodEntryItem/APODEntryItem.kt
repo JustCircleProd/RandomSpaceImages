@@ -54,7 +54,7 @@ fun APODEntryItem(
     apodEntry: APODEntry,
     viewModel: APODBaseViewModel,
     scaffoldState: ScaffoldState,
-    onImageClick: (imageUrl: String) -> Unit
+    onImageClick: (imageUrl: String, imageUrlHd: String?) -> Unit
 ) {
     Card(
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.apod_item_rounded_corner_radius)),
@@ -144,7 +144,7 @@ fun APODEntryItem(
 fun APODImage(
     apodEntry: APODEntry,
     isClickEnabled: MutableState<Boolean>,
-    onImageClick: (imageUrl: String) -> Unit
+    onImageClick: (imageUrl: String, imageUrlHd: String?) -> Unit
 ) {
     Card(
         shape = RectangleShape,
@@ -195,7 +195,7 @@ fun APODImage(
                         ),
                     ) {
                         if (isClickEnabled.value) {
-                            onImageClick(apodEntry.hdurl ?: apodEntry.url)
+                            onImageClick(apodEntry.url, apodEntry.hdurl)
                         }
                     }
             )

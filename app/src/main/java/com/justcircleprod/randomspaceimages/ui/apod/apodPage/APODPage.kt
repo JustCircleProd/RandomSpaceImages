@@ -34,7 +34,7 @@ import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
 @Composable
 fun APODPage(
     viewModel: APODPageViewModel,
-    onAPODEntryImageClick: (imageUrl: String) -> Unit
+    onAPODEntryImageClick: (imageUrl: String, imageUrlHd: String?) -> Unit
 ) {
     val apodList by viewModel.apodList.collectAsState()
 

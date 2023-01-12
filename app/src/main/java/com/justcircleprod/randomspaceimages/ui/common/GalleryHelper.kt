@@ -16,11 +16,6 @@ import java.io.IOException
 import java.util.*
 
 
-enum class SaveState {
-    NOT_SAVED, SAVING, SAVED
-}
-
-
 fun saveToGallery(
     context: Context,
     imageTitle: String?,

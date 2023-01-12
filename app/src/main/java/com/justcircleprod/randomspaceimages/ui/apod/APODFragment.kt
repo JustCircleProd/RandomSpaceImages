@@ -55,10 +55,10 @@ class APODFragment : Fragment() {
                     onPickDateButtonClick = {
                         showDatePicker()
                     },
-                    onAPODEntryImageClick = {
+                    onAPODEntryImageClick = { imageUrl, imageUrlHd ->
                         navController.navigateSafety(
                             destinationId,
-                            APODFragmentDirections.toDetailImage(it)
+                            APODFragmentDirections.toDetailImage(imageUrl, imageUrlHd)
                         )
                     }
                 )
