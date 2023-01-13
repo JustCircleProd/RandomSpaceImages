@@ -37,6 +37,9 @@ fun BottomNavigation(navController: NavController, items: List<BottomNavItem>) {
         }
     }
 
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+
     AnimatedVisibility(
         visibleState = bottomNavigationState,
         enter = slideInVertically(initialOffsetY = { it }),
@@ -49,9 +52,6 @@ fun BottomNavigation(navController: NavController, items: List<BottomNavItem>) {
             androidx.compose.material.BottomNavigation(
                 backgroundColor = colorResource(id = R.color.bottom_navigation_background)
             ) {
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
-                val currentDestination = navBackStackEntry?.destination
-
                 items.forEach { bottomNavItem ->
                     BottomNavigationItem(
                         icon = {
