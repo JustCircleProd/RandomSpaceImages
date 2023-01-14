@@ -38,10 +38,10 @@ import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.data.models.APODEntry
 import com.justcircleprod.randomspaceimages.data.remote.apod.APODConstants
 import com.justcircleprod.randomspaceimages.ui.apod.apodBaseVIewModel.APODBaseViewModel
-import com.justcircleprod.randomspaceimages.ui.common.DateHelper
 import com.justcircleprod.randomspaceimages.ui.common.ImageActionMenu
 import com.justcircleprod.randomspaceimages.ui.common.ProgressIndicator
 import com.justcircleprod.randomspaceimages.ui.common.VideoActionMenu
+import com.justcircleprod.randomspaceimages.ui.common.fromServerFormatToAppFormat
 import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.components.rememberImageComponent
@@ -99,8 +99,8 @@ fun APODEntryItem(
                 isImageClickEnabled.value && apodEntry.media_type == "image" -> {
                     ImageActionMenu(
                         scaffoldState = scaffoldState,
-                        imageTitle = apodEntry.title,
-                        imageHref = apodEntry.hdurl ?: apodEntry.url,
+                        title = apodEntry.title,
+                        href = apodEntry.hdurl ?: apodEntry.url,
                         isAddedToFavourites = isAddedToFavourites,
                         onFavouriteButtonClick = {
                             if (isAddedToFavourites.value == true) {
@@ -119,6 +119,8 @@ fun APODEntryItem(
                 }
                 apodEntry.media_type == "video" -> {
                     VideoActionMenu(
+                        title = apodEntry.title,
+                        href = apodEntry.hdurl ?: apodEntry.url,
                         isAddedToFavourites = isAddedToFavourites,
                         onFavouriteButtonClick = {
                             if (isAddedToFavourites.value == true) {
@@ -260,7 +262,7 @@ fun APODInfo(apodEntry: APODEntry) {
             )
 
             val formattedDate =
-                DateHelper.fromServerFormatToAppFormat(apodEntry.date, APODConstants.DATE_FORMAT)
+                fromServerFormatToAppFormat(apodEntry.date, APODConstants.DATE_FORMAT)
 
             if (formattedDate != null) {
                 Text(

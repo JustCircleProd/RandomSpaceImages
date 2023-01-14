@@ -6,10 +6,11 @@ import com.justcircleprod.randomspaceimages.data.models.APODEntry
 import com.justcircleprod.randomspaceimages.data.remote.apod.APODConstants
 import com.justcircleprod.randomspaceimages.data.repositories.roomRepository.DefaultRoomRepository
 import com.justcircleprod.randomspaceimages.ui.apod.apodBaseVIewModel.APODBaseViewModel
-import com.justcircleprod.randomspaceimages.ui.common.DateHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,10 +31,7 @@ class APODFavouritesPageViewModel @Inject constructor(roomRepository: DefaultRoo
             setLoadingOrRefreshing(refresh, true)
 
             val sortedFavourites = roomRepository.getAllAPODFavourites().sortedByDescending {
-                DateHelper.fromServerFormatToAppFormat(
-                    it.date,
-                    APODConstants.DATE_FORMAT
-                )
+                SimpleDateFormat(APODConstants.DATE_FORMAT, Locale.US).parse(it.date)
             }
             favourites.postValue(
                 sortedFavourites

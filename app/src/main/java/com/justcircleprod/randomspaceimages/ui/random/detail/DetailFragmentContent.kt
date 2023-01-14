@@ -27,8 +27,8 @@ import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.data.models.NASALibraryImageEntry
 import com.justcircleprod.randomspaceimages.data.remote.nasaLibrary.NASALibraryConstants
 import com.justcircleprod.randomspaceimages.ui.common.BackButton
-import com.justcircleprod.randomspaceimages.ui.common.DateHelper
 import com.justcircleprod.randomspaceimages.ui.common.ImageActionMenu
+import com.justcircleprod.randomspaceimages.ui.common.fromServerFormatToAppFormat
 import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.components.rememberImageComponent
@@ -210,7 +210,7 @@ fun CenterAndDateInfo(nasaLibraryImageEntry: NASALibraryImageEntry, modifier: Mo
             )
         }
 
-        val date = DateHelper.fromServerFormatToAppFormat(
+        val date = fromServerFormatToAppFormat(
             nasaLibraryImageEntry.dateCreated,
             NASALibraryConstants.DATE_CREATED_FORMAT
         )
@@ -361,8 +361,8 @@ fun DetailActionButtons(
 
         ImageActionMenu(
             scaffoldState = scaffoldState,
-            imageTitle = nasaLibraryImageEntry.title,
-            imageHref = nasaLibraryImageEntry.imageHref,
+            title = nasaLibraryImageEntry.title,
+            href = nasaLibraryImageEntry.imageHref,
             isAddedToFavourites = isAddedToFavourites,
             onFavouriteButtonClick = {
                 if (isAddedToFavourites.value == true) {

@@ -1,7 +1,10 @@
 package com.justcircleprod.randomspaceimages.ui.common
 
 import android.Manifest
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.drawable.Drawable
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -33,14 +36,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.justcircleprod.randomspaceimages.R
 import kotlinx.coroutines.launch
+
 
 @Composable
 fun ImageActionMenu(
     scaffoldState: ScaffoldState,
-    imageTitle: String?,
-    imageHref: String,
+    title: String?,
+    href: String,
     isAddedToFavourites: State<Boolean?>,
     onFavouriteButtonClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -87,8 +97,8 @@ fun ImageActionMenu(
 
                     saveToGallery(
                         context = context,
-                        imageTitle = imageTitle,
-                        imageHref = imageHref,
+                        imageTitle = title,
+                        imageHref = href,
                         onSaved = onSaved
                     )
                 } else {
@@ -117,9 +127,28 @@ fun ImageActionMenu(
             }
         )
 
+        // ShareButton
+        val shareLoadingState = remember { mutableStateOf(false) }
+
         ActionMenu {
+            ShareButton(
+                loadingState = shareLoadingState.value,
+                onClick = {
+                    if (!shareLoadingState.value) {
+                        shareLoadingState.value = true
+
+                        shareImage(
+                            context = context,
+                            title = title,
+                            href = href,
+                            loadingState = shareLoadingState
+                        )
+                    }
+                }
+            )
+
             SaveToGalleryButton(
-                savingToGalleryState = savingToGalleryState,
+                savingToGallery = savingToGalleryState.value,
                 onClick = {
                     if (hasWriteExternalStoragePermission.value) {
                         if (!savingToGalleryState.value) {
@@ -127,8 +156,8 @@ fun ImageActionMenu(
 
                             saveToGallery(
                                 context = context,
-                                imageTitle = imageTitle,
-                                imageHref = imageHref,
+                                imageTitle = title,
+                                imageHref = href,
                                 onSaved = onSaved
                             )
                         }
@@ -146,25 +175,116 @@ fun ImageActionMenu(
     }
 }
 
+private fun shareImage(
+    context: Context,
+    title: String?,
+    href: String,
+    loadingState: MutableState<Boolean>
+) {
+    Glide.with(context).load(href)
+        .listener(object : RequestListener<Drawable> {
+            override fun onLoadFailed(
+                e: GlideException?,
+                model: Any?,
+                target: Target<Drawable>?,
+                isFirstResource: Boolean
+            ): Boolean {
+                return false
+            }
+
+            override fun onResourceReady(
+                resource: Drawable?,
+                model: Any?,
+                target: Target<Drawable>?,
+                dataSource: DataSource?,
+                isFirstResource: Boolean
+            ): Boolean {
+                resource?.let {
+                    if (!CachedImageHelper.save(context, it.toBitmap())) {
+                        return false
+                    }
+                }
+
+                val sendIntent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(
+                        Intent.EXTRA_TEXT,
+                        StringBuilder().apply {
+                            if (title != null) {
+                                append(title, "\n\n")
+                            }
+                            append(context.getString(R.string.watch_more_in_the_app))
+                        }.toString()
+                    )
+
+                    putExtra(
+                        Intent.EXTRA_STREAM,
+                        CachedImageHelper.getImageUri(context)
+                    )
+                    type = "image/png"
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                }
+
+                val shareIntent = Intent.createChooser(sendIntent, null)
+                context.startActivity(shareIntent)
+
+                loadingState.value = false
+                return false
+            }
+        }).submit()
+}
+
 @Composable
 fun VideoActionMenu(
+    title: String,
+    href: String,
     isAddedToFavourites: State<Boolean?>,
     onFavouriteButtonClick: () -> Unit,
     modifier: Modifier
 ) {
     Box(
-        contentAlignment = Alignment.Center,
         modifier = modifier
-            .clip(CircleShape)
-            .background(Color.Black.copy(0.45f))
-            .size(dimensionResource(id = R.dimen.action_icon_button_size))
     ) {
-        FavouriteButton(
-            isAddedToFavourites = isAddedToFavourites,
-            onClick = { onFavouriteButtonClick() }
-        )
+        val context = LocalContext.current
+
+        ActionMenu {
+            ShareButton(
+                onClick = {
+                    shareVideo(context, title, href)
+                }
+            )
+
+            FavouriteButton(
+                isAddedToFavourites = isAddedToFavourites,
+                onClick = { onFavouriteButtonClick() }
+            )
+        }
     }
 }
+
+private fun shareVideo(context: Context, title: String, href: String) {
+    val sendIntent = Intent().apply {
+        action = Intent.ACTION_SEND
+        putExtra(
+            Intent.EXTRA_TEXT,
+            StringBuilder().apply {
+                append(
+                    title,
+                    '\n',
+                    href,
+                    "\n\n",
+                    context.getString(R.string.watch_more_in_the_app)
+                )
+            }.toString()
+        )
+
+        type = "text/plain"
+    }
+
+    val shareIntent = Intent.createChooser(sendIntent, null)
+    context.startActivity(shareIntent)
+}
+
 
 @Composable
 fun ActionMenu(Buttons: @Composable () -> Unit) {
@@ -245,7 +365,7 @@ fun FavouriteButton(
 
 @Composable
 fun SaveToGalleryButton(
-    savingToGalleryState: MutableState<Boolean>,
+    savingToGallery: Boolean,
     onClick: () -> Unit
 ) {
     Box(
@@ -262,7 +382,7 @@ fun SaveToGalleryButton(
                 onClick()
             }
     ) {
-        if (savingToGalleryState.value) {
+        if (savingToGallery) {
             CircularProgressIndicator(
                 strokeWidth = dimensionResource(id = R.dimen.progress_indicator_stroke_width),
                 color = colorResource(id = R.color.primary),
@@ -276,6 +396,42 @@ fun SaveToGalleryButton(
                 contentDescription = stringResource(
                     id = R.string.save_to_gallery
                 ),
+                tint = Color.White,
+                modifier = Modifier
+                    .size(dimensionResource(id = R.dimen.action_menu_button_icon_size))
+            )
+        }
+    }
+}
+
+@Composable
+fun ShareButton(onClick: () -> Unit, loadingState: Boolean? = null) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .size(dimensionResource(id = R.dimen.action_icon_button_size))
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = rememberRipple(
+                    bounded = true,
+                    color = colorResource(id = R.color.ripple)
+                ),
+            ) {
+                onClick()
+            }
+    ) {
+        if (loadingState == true) {
+            CircularProgressIndicator(
+                strokeWidth = dimensionResource(id = R.dimen.progress_indicator_stroke_width),
+                color = colorResource(id = R.color.primary),
+                modifier = Modifier
+                    .size(dimensionResource(id = R.dimen.action_button_progress_indicator_size))
+                    .align(Alignment.Center)
+            )
+        } else {
+            Icon(
+                painter = painterResource(id = R.drawable.icon_share),
+                contentDescription = null,
                 tint = Color.White,
                 modifier = Modifier
                     .size(dimensionResource(id = R.dimen.action_menu_button_icon_size))
