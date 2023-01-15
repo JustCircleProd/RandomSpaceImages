@@ -1,6 +1,7 @@
 package com.justcircleprod.randomspaceimages.ui.common
 
 import android.Manifest
+import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -43,6 +44,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.justcircleprod.randomspaceimages.R
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
@@ -132,19 +134,28 @@ fun ImageActionMenu(
 
         ActionMenu {
             ShareButton(
-                loadingState = shareLoadingState.value,
                 onClick = {
                     if (!shareLoadingState.value) {
                         shareLoadingState.value = true
 
                         shareImage(
                             context = context,
+                            coroutineScope = coroutineScope,
                             title = title,
                             href = href,
-                            loadingState = shareLoadingState
+                            loadingState = shareLoadingState,
+                            onShareFailed = {
+                                coroutineScope.launch {
+                                    scaffoldState.snackbarHostState.showSnackbar(
+                                        context.getString(R.string.failed_to_share),
+                                        duration = SnackbarDuration.Short
+                                    )
+                                }
+                            }
                         )
                     }
-                }
+                },
+                loadingState = shareLoadingState.value,
             )
 
             SaveToGalleryButton(
@@ -177,9 +188,11 @@ fun ImageActionMenu(
 
 private fun shareImage(
     context: Context,
+    coroutineScope: CoroutineScope,
     title: String?,
     href: String,
-    loadingState: MutableState<Boolean>
+    loadingState: MutableState<Boolean>,
+    onShareFailed: () -> Unit
 ) {
     Glide.with(context).load(href)
         .listener(object : RequestListener<Drawable> {
@@ -189,6 +202,8 @@ private fun shareImage(
                 target: Target<Drawable>?,
                 isFirstResource: Boolean
             ): Boolean {
+                loadingState.value = false
+                onShareFailed()
                 return false
             }
 
@@ -199,36 +214,50 @@ private fun shareImage(
                 dataSource: DataSource?,
                 isFirstResource: Boolean
             ): Boolean {
-                resource?.let {
-                    if (!CachedImageHelper.save(context, it.toBitmap())) {
-                        return false
+                coroutineScope.launch {
+                    resource?.let {
+                        if (!CachedImageHelper.save(context, it.toBitmap())) {
+                            loadingState.value = false
+                            onShareFailed()
+                            return@launch
+                        }
                     }
+
+                    val uri = CachedImageHelper.getUri(context) ?: return@launch
+
+                    val sendIntent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(
+                            Intent.EXTRA_TEXT,
+                            StringBuilder().apply {
+                                if (title != null) {
+                                    append(title, "\n\n")
+                                }
+                                append(context.getString(R.string.watch_more_in_the_app))
+                            }.toString()
+                        )
+
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+                        clipData = ClipData(
+                            "Image",
+                            arrayOf("image/png"),
+                            ClipData.Item(uri)
+                        )
+
+                        putExtra(
+                            Intent.EXTRA_STREAM,
+                            uri
+                        )
+                        type = "image/png"
+                    }
+
+                    val shareIntent = Intent.createChooser(sendIntent, null)
+                    context.startActivity(shareIntent)
+
+                    loadingState.value = false
                 }
 
-                val sendIntent = Intent().apply {
-                    action = Intent.ACTION_SEND
-                    putExtra(
-                        Intent.EXTRA_TEXT,
-                        StringBuilder().apply {
-                            if (title != null) {
-                                append(title, "\n\n")
-                            }
-                            append(context.getString(R.string.watch_more_in_the_app))
-                        }.toString()
-                    )
-
-                    putExtra(
-                        Intent.EXTRA_STREAM,
-                        CachedImageHelper.getImageUri(context)
-                    )
-                    type = "image/png"
-                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                }
-
-                val shareIntent = Intent.createChooser(sendIntent, null)
-                context.startActivity(shareIntent)
-
-                loadingState.value = false
                 return false
             }
         }).submit()

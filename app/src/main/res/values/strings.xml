@@ -33,6 +33,7 @@
     <string name="successfully_saved_to_gallery">Successfully saved to gallery</string>
 
     <string name="watch_more_in_the_app">Watch more in the app:\nhttps://play.google.com/store/apps/details?id=com.justcircleprod.randomspaceimages</string>
+    <string name="failed_to_share">Failed to share</string>
 
     <string name="no_favourites">No favourites.\nSwipe down to Refresh</string>
 

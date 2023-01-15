@@ -5,6 +5,8 @@ import android.graphics.Bitmap
 import android.net.Uri
 import androidx.core.content.FileProvider
 import com.justcircleprod.randomspaceimages.BuildConfig
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -13,30 +15,37 @@ object CachedImageHelper {
     private const val CACHE_DIR_CHILD = "images"
     private const val CACHE_IMAGE_FOR_SHARE_NAME = "image.png"
 
-    fun save(context: Context, bitmap: Bitmap): Boolean {
-        return try {
-            val cachePath = File(context.cacheDir, CACHE_DIR_CHILD)
-            cachePath.mkdirs()
+    suspend fun save(context: Context, bitmap: Bitmap): Boolean {
+        return withContext(Dispatchers.IO) {
+            try {
+                val cachePath = File(context.cacheDir, CACHE_DIR_CHILD)
+                cachePath.mkdirs()
 
-            val stream = FileOutputStream("$cachePath/$CACHE_IMAGE_FOR_SHARE_NAME")
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
-            stream.close()
+                val stream = FileOutputStream("$cachePath/$CACHE_IMAGE_FOR_SHARE_NAME")
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+                stream.close()
 
-            true
-        } catch (e: IOException) {
-            false
+                true
+            } catch (e: IOException) {
+                false
+            }
         }
-
     }
 
-    fun getImageUri(context: Context): Uri {
-        val imagePath = File(context.cacheDir, CACHE_DIR_CHILD)
-        val imageFile = File(imagePath, CACHE_IMAGE_FOR_SHARE_NAME)
+    suspend fun getUri(context: Context): Uri? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val imagePath = File(context.cacheDir, CACHE_DIR_CHILD)
+                val imageFile = File(imagePath, CACHE_IMAGE_FOR_SHARE_NAME)
 
-        return FileProvider.getUriForFile(
-            context,
-            "${BuildConfig.APPLICATION_ID}.fileprovider",
-            imageFile
-        )
+                FileProvider.getUriForFile(
+                    context,
+                    "${BuildConfig.APPLICATION_ID}.fileprovider",
+                    imageFile
+                )
+            } catch (e: IOException) {
+                null
+            }
+        }
     }
 }
