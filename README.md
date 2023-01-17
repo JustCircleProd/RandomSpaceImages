@@ -50,7 +50,7 @@ The principle of "Single Activity" is used. The application is built using MVVM.
 API queries are done with Retrofit2, data is converted into Kotlin DataClass with Gson Converter.
 
 Room is used to store favorites.
-DataStore is used to store custom settings, such as the application theme and start screen.
+DataStore is used to store user settings, such as application theme and start screen.
   
 ## About APIs📲
 
