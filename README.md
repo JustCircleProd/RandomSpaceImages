@@ -24,7 +24,7 @@ View today's Astronomy Picture of the Day or previous ones in the form of a feed
 
 Tech stack:
 - **Compose**
-- Navigation
+- Navigation Component
 - ViewModel
 - Coroutines + Flow
 - Room
