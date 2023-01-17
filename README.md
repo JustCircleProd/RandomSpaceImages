@@ -32,13 +32,25 @@ Tech stack:
 - Hilt
 - Retrofit2, OkHttp3
 - Architecture
-    - MVVM Architecture (View - ViewModel - Model)
+    - MVVM Architecture (View -  - ViewModel - Model)
     - Repository Pattern
 - Custom Views
   - [Landscapist Glide](https://github.com/skydoves/landscapist#glide), [placeholder](https://github.com/skydoves/landscapist#placeholder)
   - [Jetpack Compose Number Picker](https://github.com/ChargeMap/Compose-NumberPicker)
   - [PhotoView](https://github.com/Baseflow/PhotoView)
   - [Pager](https://google.github.io/accompanist/pager/#pager-layouts), [Pager indicator](https://google.github.io/accompanist/pager/#indicators)
+  
+### Tech explanation
+
+The design is 100% based on Compose, Fragments are only used for Navigation, because some problems were found in Compose Navigation with saving states.
+Therefore, a hybrid way was chosen, maximizing the benefits of usual and modern solutions.
+
+The principle of "Single Activity" is used. The application is built using MVVM.
+
+API queries are done with Retrofit2, data is converted into Kotlin DataClass with Gson Converter.
+
+Room is used to store favorites.
+DataStore is used to store custom settings, such as the application theme and start screen.
   
 ## About APIs📲
 
