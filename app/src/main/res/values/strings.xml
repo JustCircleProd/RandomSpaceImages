@@ -75,7 +75,12 @@
     <string name="dark_theme">Dark</string>
 
     <string name="start_screen">Start screen</string>
-    
+
+    <string name="quality_of_saving_and_sharing_images">Quality of Saving and Sharing images</string>
+    <string name="standard_quality">Standard</string>
+    <string name="high_quality">High</string>
+    <string name="quality_of_saving_and_sharing_images_hint">Some images can be saved and shared in high quality. This requires more time and memory (up to several tens of MB).</string>
+
     <string name="about_apis">About APIs</string>
 
     <string name="where_are_the_media_from">Where are the media from?</string>

@@ -50,6 +50,9 @@ fun MoreFragmentContent(viewModel: MoreViewModel) {
             StartScreenCard(viewModel = viewModel)
         }
         item {
+            QualityOfSavingAndSharingImagesCard(viewModel = viewModel)
+        }
+        item {
             WhereAreTheImagesFromCard()
         }
         item {
@@ -149,13 +152,13 @@ fun StartScreenCard(viewModel: MoreViewModel) {
         }
 
         val onClick: (Int) -> Unit = { index ->
-            val selectedThemeValue = when (index) {
+            val selectedValue = when (index) {
                 0 -> DataStoreConstants.APOD_SCREEN
                 1 -> DataStoreConstants.RANDOM_SCREEN
                 else -> DataStoreConstants.APOD_SCREEN
             }
 
-            viewModel.saveStartScreenValue(selectedThemeValue)
+            viewModel.saveStartScreenValue(selectedValue)
         }
 
         Column(modifier = contentModifier) {
@@ -193,6 +196,84 @@ fun StartScreenCard(viewModel: MoreViewModel) {
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun QualityOfSavingAndSharingImagesCard(viewModel: MoreViewModel) {
+    val qualityOfSavingAndSharingImages =
+        viewModel.qualityOfSavingAndSharingImages.collectAsState(initial = "not_initialized")
+
+    ExpandableCard(cardTitle = stringResource(id = R.string.quality_of_saving_and_sharing_images)) { contentModifier ->
+        val radioButtonItems = listOf(
+            stringResource(id = R.string.standard_quality),
+            stringResource(id = R.string.high_quality)
+        )
+
+        val isSelected: (Int) -> Boolean = { index ->
+            when {
+                index == 0 && (qualityOfSavingAndSharingImages.value == DataStoreConstants.STANDARD_QUALITY || qualityOfSavingAndSharingImages.value == null) -> true
+                index == 1 && qualityOfSavingAndSharingImages.value == DataStoreConstants.HIGH_QUALITY -> true
+                else -> false
+            }
+        }
+
+        val onClick: (Int) -> Unit = { index ->
+            val selectedValue = when (index) {
+                0 -> DataStoreConstants.STANDARD_QUALITY
+                1 -> DataStoreConstants.HIGH_QUALITY
+                else -> DataStoreConstants.STANDARD_QUALITY
+            }
+
+            viewModel.saveQualityOfSavingAndSharingImagesValue(selectedValue)
+        }
+
+        Column(modifier = contentModifier) {
+            radioButtonItems.forEachIndexed { index, item ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = rememberRipple(
+                                bounded = true,
+                                color = colorResource(id = R.color.ripple)
+                            )
+                        ) {
+                            onClick(index)
+                        }
+                        .padding(vertical = dimensionResource(id = R.dimen.theme_item_vertical_space_size))
+                        .padding(horizontal = dimensionResource(id = R.dimen.more_card_horizontal_space_size))
+                        .fillMaxWidth()
+                ) {
+                    RadioButton(
+                        selected = isSelected(index),
+                        onClick = null,
+                        colors = RadioButtonDefaults.colors(
+                            unselectedColor = colorResource(id = R.color.unselected_radio_button),
+                            selectedColor = colorResource(id = R.color.primary)
+                        )
+                    )
+                    Text(
+                        text = item,
+                        color = colorResource(id = R.color.text),
+                        fontFamily = LatoFontFamily,
+                        fontSize = 16.sp,
+                        modifier = Modifier.padding(start = dimensionResource(id = R.dimen.theme_item_text_start_space_size))
+                    )
+                }
+            }
+
+            Text(
+                text = stringResource(id = R.string.quality_of_saving_and_sharing_images_hint),
+                color = colorResource(id = R.color.second_text),
+                fontFamily = LatoFontFamily,
+                fontSize = 14.sp,
+                modifier = Modifier
+                    .padding(top = dimensionResource(id = R.dimen.more_card_hint_top_space_size))
+                    .padding(horizontal = dimensionResource(id = R.dimen.more_card_horizontal_space_size))
+            )
         }
     }
 }

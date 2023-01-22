@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.justcircleprod.randomspaceimages.data.models.APODEntry
 import com.justcircleprod.randomspaceimages.data.remote.apod.APODConstants
+import com.justcircleprod.randomspaceimages.data.repositories.dataStoreRepository.DefaultDataStoreRepository
 import com.justcircleprod.randomspaceimages.data.repositories.roomRepository.DefaultRoomRepository
 import com.justcircleprod.randomspaceimages.ui.apod.apodBaseVIewModel.APODBaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,8 +15,10 @@ import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
-class APODFavouritesPageViewModel @Inject constructor(roomRepository: DefaultRoomRepository) :
-    APODBaseViewModel(roomRepository) {
+class APODFavouritesPageViewModel @Inject constructor(
+    roomRepository: DefaultRoomRepository,
+    dataStoreRepository: DefaultDataStoreRepository
+) : APODBaseViewModel(roomRepository, dataStoreRepository) {
 
     val favourites = MutableLiveData<List<APODEntry>>()
 

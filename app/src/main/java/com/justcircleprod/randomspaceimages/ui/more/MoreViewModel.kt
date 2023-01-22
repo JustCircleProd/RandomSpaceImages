@@ -14,6 +14,8 @@ class MoreViewModel @Inject constructor(private val dataStoreRepository: Default
     ViewModel() {
     val themeValue = dataStoreRepository.readSetting(DataStoreConstants.THEME_KEY)
     val startScreenValue = dataStoreRepository.readSetting(DataStoreConstants.START_SCREEN)
+    val qualityOfSavingAndSharingImages =
+        dataStoreRepository.readSetting(DataStoreConstants.QUALITY_OF_SAVING_AND_SHARING_IMAGES)
 
     fun saveThemeValue(themeValue: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -24,6 +26,15 @@ class MoreViewModel @Inject constructor(private val dataStoreRepository: Default
     fun saveStartScreenValue(startScreenValue: String) {
         viewModelScope.launch(Dispatchers.IO) {
             dataStoreRepository.saveSetting(DataStoreConstants.START_SCREEN, startScreenValue)
+        }
+    }
+
+    fun saveQualityOfSavingAndSharingImagesValue(value: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            dataStoreRepository.saveSetting(
+                DataStoreConstants.QUALITY_OF_SAVING_AND_SHARING_IMAGES,
+                value
+            )
         }
     }
 }

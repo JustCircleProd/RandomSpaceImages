@@ -40,8 +40,8 @@
 
     <color name="success">#5CD361</color>
 
-    <color name="snackbar_background">#ffffff</color>
-    <color name="snackbar_text">@color/black</color>
+    <color name="snackbar_background">#373737</color>
+    <color name="snackbar_text">@color/white</color>
 
     <color name="search_field_background">#dddddd</color>
     <color name="search_field_placeholder">#585858</color>

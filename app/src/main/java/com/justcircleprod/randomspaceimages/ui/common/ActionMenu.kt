@@ -44,7 +44,10 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.justcircleprod.randomspaceimages.R
+import com.justcircleprod.randomspaceimages.data.dataStore.DataStoreConstants
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 
@@ -55,7 +58,9 @@ fun ImageActionMenu(
     href: String,
     isAddedToFavourites: State<Boolean?>,
     onFavouriteButtonClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    qualityOfSavingAndSharingImages: Flow<String?>? = null,
+    hrefHd: String? = null
 ) {
     Box(
         modifier = modifier
@@ -97,12 +102,21 @@ fun ImageActionMenu(
                 if (isGranted) {
                     savingToGalleryState.value = true
 
-                    saveToGallery(
-                        context = context,
-                        imageTitle = title,
-                        imageHref = href,
-                        onSaved = onSaved
-                    )
+                    coroutineScope.launch {
+                        val imageHref =
+                            if (hrefHd != null && qualityOfSavingAndSharingImages?.first() == DataStoreConstants.HIGH_QUALITY) {
+                                hrefHd
+                            } else {
+                                href
+                            }
+
+                        saveToGallery(
+                            context = context,
+                            imageTitle = title,
+                            imageHref = imageHref,
+                            onSaved = onSaved
+                        )
+                    }
                 } else {
                     context.getActivity()?.let {
                         if (!ActivityCompat.shouldShowRequestPermissionRationale(
@@ -138,21 +152,30 @@ fun ImageActionMenu(
                     if (!shareLoadingState.value) {
                         shareLoadingState.value = true
 
-                        shareImage(
-                            context = context,
-                            coroutineScope = coroutineScope,
-                            title = title,
-                            href = href,
-                            loadingState = shareLoadingState,
-                            onShareFailed = {
-                                coroutineScope.launch {
-                                    scaffoldState.snackbarHostState.showSnackbar(
-                                        context.getString(R.string.failed_to_share),
-                                        duration = SnackbarDuration.Short
-                                    )
+                        coroutineScope.launch {
+                            val imageHref =
+                                if (hrefHd != null && qualityOfSavingAndSharingImages?.first() == DataStoreConstants.HIGH_QUALITY) {
+                                    hrefHd
+                                } else {
+                                    href
                                 }
-                            }
-                        )
+
+                            shareImage(
+                                context = context,
+                                coroutineScope = coroutineScope,
+                                title = title,
+                                href = imageHref,
+                                loadingState = shareLoadingState,
+                                onShareFailed = {
+                                    coroutineScope.launch {
+                                        scaffoldState.snackbarHostState.showSnackbar(
+                                            context.getString(R.string.failed_to_share),
+                                            duration = SnackbarDuration.Short
+                                        )
+                                    }
+                                }
+                            )
+                        }
                     }
                 },
                 loadingState = shareLoadingState.value,
@@ -165,12 +188,21 @@ fun ImageActionMenu(
                         if (!savingToGalleryState.value) {
                             savingToGalleryState.value = true
 
-                            saveToGallery(
-                                context = context,
-                                imageTitle = title,
-                                imageHref = href,
-                                onSaved = onSaved
-                            )
+                            coroutineScope.launch {
+                                val imageHref =
+                                    if (hrefHd != null && qualityOfSavingAndSharingImages?.first() == DataStoreConstants.HIGH_QUALITY) {
+                                        hrefHd
+                                    } else {
+                                        href
+                                    }
+
+                                saveToGallery(
+                                    context = context,
+                                    imageTitle = title,
+                                    imageHref = imageHref,
+                                    onSaved = onSaved
+                                )
+                            }
                         }
                     } else {
                         permissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)

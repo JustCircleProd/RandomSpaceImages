@@ -25,8 +25,8 @@
 
     <color name="icon_tint">#e5e5e5</color>
 
-    <color name="snackbar_background">#555555</color>
-    <color name="snackbar_text">@color/white</color>
+    <color name="snackbar_background">#ffffff</color>
+    <color name="snackbar_text">@color/black</color>
 
     <color name="search_field_background">#4a4a4a</color>
     <color name="search_field_placeholder">#b7b7b7</color>

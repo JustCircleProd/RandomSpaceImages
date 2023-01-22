@@ -100,7 +100,9 @@ fun APODEntryItem(
                     ImageActionMenu(
                         scaffoldState = scaffoldState,
                         title = apodEntry.title,
-                        href = apodEntry.hdurl ?: apodEntry.url,
+                        qualityOfSavingAndSharingImages = viewModel.qualityOfSavingAndSharingImages,
+                        href = apodEntry.url,
+                        hrefHd = apodEntry.hdurl,
                         isAddedToFavourites = isAddedToFavourites,
                         onFavouriteButtonClick = {
                             if (isAddedToFavourites.value == true) {

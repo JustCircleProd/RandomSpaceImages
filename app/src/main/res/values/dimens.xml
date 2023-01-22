@@ -3,7 +3,7 @@
     <dimen name="main_rounded_corner_radius">12dp</dimen>
     <dimen name="elements_space_size">6dp</dimen>
 
-    <dimen name="snackbar_elevation">4dp</dimen>
+    <dimen name="snackbar_elevation">2dp</dimen>
 
 
     <dimen name="bottom_navigation_width">200dp</dimen>
@@ -132,6 +132,7 @@
     <dimen name="more_card_vertical_space_size">12dp</dimen>
     <dimen name="more_card_horizontal_space_size">16dp</dimen>
     <dimen name="more_card_icon_size">16dp</dimen>
+    <dimen name="more_card_hint_top_space_size">8dp</dimen>
 
     <dimen name="theme_item_vertical_space_size">4dp</dimen>
     <dimen name="theme_item_text_start_space_size">2dp</dimen>
