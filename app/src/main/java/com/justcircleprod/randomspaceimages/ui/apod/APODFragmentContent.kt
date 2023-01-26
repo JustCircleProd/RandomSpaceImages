@@ -53,10 +53,10 @@ fun APODFragmentContent(
         ) {
             val pickedDate = apodPageViewModel.pickedDateInMills.collectAsState()
 
-            Tabs(isDatePicked = pickedDate, pagerState = pagerState)
+            Tabs(pickedDate = pickedDate, pagerState = pagerState)
 
             PickDateButtons(
-                isDatePicked = pickedDate,
+                pickedDate = pickedDate,
                 onPickDateButtonClick = {
                     onPickDateButtonClick()
                 }
@@ -88,16 +88,16 @@ fun APODFragmentContent(
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun Tabs(pagerState: PagerState, isDatePicked: State<Long?>) {
+fun Tabs(pagerState: PagerState, pickedDate: State<Long?>) {
     val coroutineScope = rememberCoroutineScope()
 
     CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
         val scrollableTabRowWidth by animateDpAsState(
             when {
-                pagerState.currentPage == 0 && isDatePicked.value != null -> {
+                pagerState.currentPage == 0 && pickedDate.value != null -> {
                     LocalConfiguration.current.screenWidthDp.dp - dimensionResource(id = R.dimen.apod_tabs_two_buttons_summary_width)
                 }
-                pagerState.currentPage == 0 && isDatePicked.value == null -> {
+                pagerState.currentPage == 0 && pickedDate.value == null -> {
                     LocalConfiguration.current.screenWidthDp.dp - dimensionResource(id = R.dimen.apod_tabs_one_button_summary_width)
                 }
                 else -> {
@@ -165,7 +165,7 @@ fun Tabs(pagerState: PagerState, isDatePicked: State<Long?>) {
 
 @Composable
 fun PickDateButtons(
-    isDatePicked: State<Long?>,
+    pickedDate: State<Long?>,
     onPickDateButtonClick: () -> Unit,
     onCancelButtonClick: () -> Unit
 ) {
@@ -187,14 +187,14 @@ fun PickDateButtons(
         Icon(
             painter = painterResource(id = R.drawable.icon_pick_date),
             contentDescription = stringResource(id = R.string.select_a_date),
-            tint = if (isDatePicked.value != null) colorResource(id = R.color.primary) else colorResource(
+            tint = if (pickedDate.value != null) colorResource(id = R.color.primary) else colorResource(
                 id = R.color.icon_tint
             ),
             modifier = Modifier.size(dimensionResource(id = R.dimen.tabs_button_icon_size))
         )
     }
 
-    if (isDatePicked.value != null) {
+    if (pickedDate.value != null) {
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier

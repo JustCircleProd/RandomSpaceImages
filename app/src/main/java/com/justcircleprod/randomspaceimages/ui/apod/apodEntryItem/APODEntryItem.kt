@@ -34,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.viewModelScope
 import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.data.models.APODEntry
 import com.justcircleprod.randomspaceimages.data.remote.apod.APODConstants
@@ -48,12 +49,14 @@ import com.skydoves.landscapist.components.rememberImageComponent
 import com.skydoves.landscapist.glide.GlideImage
 import com.skydoves.landscapist.glide.GlideImageState
 import com.skydoves.landscapist.placeholder.shimmer.ShimmerPlugin
+import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun APODEntryItem(
     apodEntry: APODEntry,
     viewModel: APODBaseViewModel,
     scaffoldState: ScaffoldState,
+    coroutineScope: CoroutineScope,
     onImageClick: (imageUrl: String, imageUrlHd: String?) -> Unit
 ) {
     Card(
@@ -78,7 +81,6 @@ fun APODEntryItem(
                     }
                     .fillMaxWidth()
             ) {
-
                 if (apodEntry.media_type == "image") {
                     APODImage(
                         apodEntry = apodEntry,
@@ -99,6 +101,8 @@ fun APODEntryItem(
                 isImageClickEnabled.value && apodEntry.media_type == "image" -> {
                     ImageActionMenu(
                         scaffoldState = scaffoldState,
+                        coroutineScope = coroutineScope,
+                        viewModelScope = viewModel.viewModelScope,
                         title = apodEntry.title,
                         qualityOfSavingAndSharingImages = viewModel.qualityOfSavingAndSharingImages,
                         href = apodEntry.url,

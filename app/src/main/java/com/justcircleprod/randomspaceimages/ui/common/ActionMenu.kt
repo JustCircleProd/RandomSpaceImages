@@ -54,6 +54,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun ImageActionMenu(
     scaffoldState: ScaffoldState,
+    coroutineScope: CoroutineScope, // for showing snackbars
+    viewModelScope: CoroutineScope, // for working with files
     title: String?,
     href: String,
     isAddedToFavourites: State<Boolean?>,
@@ -67,7 +69,6 @@ fun ImageActionMenu(
     ) {
         // SaveToGalleryButton
         val context = LocalContext.current
-        val coroutineScope = rememberCoroutineScope()
 
         val savingToGalleryState = remember { mutableStateOf(false) }
         val onSaved = {
@@ -102,7 +103,7 @@ fun ImageActionMenu(
                 if (isGranted) {
                     savingToGalleryState.value = true
 
-                    coroutineScope.launch {
+                    viewModelScope.launch {
                         val imageHref =
                             if (hrefHd != null && qualityOfSavingAndSharingImages?.first() == DataStoreConstants.HIGH_QUALITY) {
                                 hrefHd
@@ -112,6 +113,7 @@ fun ImageActionMenu(
 
                         saveToGallery(
                             context = context,
+                            viewModelScope = viewModelScope,
                             imageTitle = title,
                             imageHref = imageHref,
                             onSaved = onSaved
@@ -152,7 +154,7 @@ fun ImageActionMenu(
                     if (!shareLoadingState.value) {
                         shareLoadingState.value = true
 
-                        coroutineScope.launch {
+                        viewModelScope.launch {
                             val imageHref =
                                 if (hrefHd != null && qualityOfSavingAndSharingImages?.first() == DataStoreConstants.HIGH_QUALITY) {
                                     hrefHd
@@ -162,7 +164,7 @@ fun ImageActionMenu(
 
                             shareImage(
                                 context = context,
-                                coroutineScope = coroutineScope,
+                                viewModelScope = viewModelScope,
                                 title = title,
                                 href = imageHref,
                                 loadingState = shareLoadingState,
@@ -182,13 +184,13 @@ fun ImageActionMenu(
             )
 
             SaveToGalleryButton(
-                savingToGallery = savingToGalleryState.value,
+                savingToGallery = { savingToGalleryState.value },
                 onClick = {
                     if (hasWriteExternalStoragePermission.value) {
                         if (!savingToGalleryState.value) {
                             savingToGalleryState.value = true
 
-                            coroutineScope.launch {
+                            viewModelScope.launch {
                                 val imageHref =
                                     if (hrefHd != null && qualityOfSavingAndSharingImages?.first() == DataStoreConstants.HIGH_QUALITY) {
                                         hrefHd
@@ -198,6 +200,7 @@ fun ImageActionMenu(
 
                                 saveToGallery(
                                     context = context,
+                                    viewModelScope = viewModelScope,
                                     imageTitle = title,
                                     imageHref = imageHref,
                                     onSaved = onSaved
@@ -218,9 +221,55 @@ fun ImageActionMenu(
     }
 }
 
+private fun saveToGallery(
+    context: Context,
+    viewModelScope: CoroutineScope,
+    imageTitle: String?,
+    imageHref: String,
+    onSaved: () -> Unit
+) {
+    Glide
+        .with(context)
+        .load(imageHref)
+        .listener(object : RequestListener<Drawable> {
+            override fun onLoadFailed(
+                e: GlideException?,
+                model: Any?,
+                target: Target<Drawable>?,
+                isFirstResource: Boolean
+            ): Boolean {
+                return true
+            }
+
+            override fun onResourceReady(
+                resource: Drawable?,
+                model: Any?,
+                target: Target<Drawable>?,
+                dataSource: DataSource?,
+                isFirstResource: Boolean
+            ): Boolean {
+                viewModelScope.launch {
+                    resource?.let { imageDrawable ->
+                        val savedSuccessfully =
+                            saveToExternalStorage(
+                                context,
+                                getDisplayName(imageTitle),
+                                imageDrawable.toBitmap()
+                            )
+                        if (savedSuccessfully) {
+                            onSaved()
+                        }
+                    }
+                }
+                return true
+            }
+        })
+        .submit()
+}
+
 private fun shareImage(
     context: Context,
-    coroutineScope: CoroutineScope,
+    viewModelScope: CoroutineScope,
     title: String?,
     href: String,
     loadingState: MutableState<Boolean>,
@@ -246,7 +295,7 @@ private fun shareImage(
                 dataSource: DataSource?,
                 isFirstResource: Boolean
             ): Boolean {
-                coroutineScope.launch {
+                viewModelScope.launch {
                     resource?.let {
                         if (!CachedImageHelper.save(context, it.toBitmap())) {
                             loadingState.value = false
@@ -426,7 +475,7 @@ fun FavouriteButton(
 
 @Composable
 fun SaveToGalleryButton(
-    savingToGallery: Boolean,
+    savingToGallery: () -> Boolean,
     onClick: () -> Unit
 ) {
     Box(
@@ -443,7 +492,7 @@ fun SaveToGalleryButton(
                 onClick()
             }
     ) {
-        if (savingToGallery) {
+        if (savingToGallery()) {
             CircularProgressIndicator(
                 strokeWidth = dimensionResource(id = R.dimen.progress_indicator_stroke_width),
                 color = colorResource(id = R.color.primary),

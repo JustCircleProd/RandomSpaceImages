@@ -297,7 +297,7 @@ fun WhereAreTheImagesFromCard() {
 
             Text(
                 text = stringResource(id = R.string.where_are_the_media_from_text),
-                color = colorResource(id = R.color.text),
+                color = colorResource(id = R.color.second_text),
                 fontFamily = LatoFontFamily,
                 fontSize = 15.sp
             )
@@ -316,7 +316,7 @@ fun WhereAreTheImagesFromCard() {
 
             Text(
                 text = stringResource(id = R.string.request_limits_text),
-                color = colorResource(id = R.color.text),
+                color = colorResource(id = R.color.second_text),
                 fontFamily = LatoFontFamily,
                 fontSize = 15.sp
             )

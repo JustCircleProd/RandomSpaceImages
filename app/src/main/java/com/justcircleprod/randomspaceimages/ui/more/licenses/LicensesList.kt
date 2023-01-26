@@ -82,7 +82,7 @@ private fun ProjectInfo(
         )
         Text(
             text = projectInfo,
-            color = colorResource(id = R.color.text),
+            color = colorResource(id = R.color.second_text),
             fontFamily = LatoFontFamily,
             fontSize = 14.sp
         )

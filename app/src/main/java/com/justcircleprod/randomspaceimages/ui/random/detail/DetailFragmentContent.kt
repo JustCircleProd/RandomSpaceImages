@@ -23,6 +23,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.viewModelScope
 import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.data.models.NASALibraryImageEntry
 import com.justcircleprod.randomspaceimages.data.remote.nasaLibrary.NASALibraryConstants
@@ -35,6 +36,7 @@ import com.skydoves.landscapist.components.rememberImageComponent
 import com.skydoves.landscapist.glide.GlideImage
 import com.skydoves.landscapist.glide.GlideImageState
 import com.skydoves.landscapist.placeholder.shimmer.ShimmerPlugin
+import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun DetailFragmentContent(
@@ -44,6 +46,7 @@ fun DetailFragmentContent(
     onImageClick: (imageUrl: String) -> Unit
 ) {
     val scaffoldState = rememberScaffoldState()
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         backgroundColor = colorResource(id = R.color.background),
@@ -104,6 +107,7 @@ fun DetailFragmentContent(
                 viewModel = viewModel,
                 nasaLibraryImageEntry = nasaLibraryImageEntry,
                 scaffoldState = scaffoldState,
+                coroutineScope = coroutineScope,
                 onBackButtonClick = onBackButtonClick,
                 modifier = Modifier
                     .constrainAs(actionButtons) {
@@ -344,6 +348,7 @@ fun DetailActionButtons(
     viewModel: DetailViewModel,
     nasaLibraryImageEntry: NASALibraryImageEntry,
     scaffoldState: ScaffoldState,
+    coroutineScope: CoroutineScope,
     onBackButtonClick: () -> Unit,
     modifier: Modifier
 ) {
@@ -361,6 +366,8 @@ fun DetailActionButtons(
 
         ImageActionMenu(
             scaffoldState = scaffoldState,
+            coroutineScope = coroutineScope,
+            viewModelScope = viewModel.viewModelScope,
             title = nasaLibraryImageEntry.title,
             href = nasaLibraryImageEntry.imageHref,
             isAddedToFavourites = isAddedToFavourites,
