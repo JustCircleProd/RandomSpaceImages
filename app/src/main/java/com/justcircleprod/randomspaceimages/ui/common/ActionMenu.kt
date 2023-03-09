@@ -41,6 +41,7 @@ import androidx.core.graphics.drawable.toBitmap
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.justcircleprod.randomspaceimages.R
@@ -250,12 +251,19 @@ private fun saveToGallery(
             ): Boolean {
                 viewModelScope.launch {
                     resource?.let { imageDrawable ->
-                        val savedSuccessfully =
-                            saveToExternalStorage(
+                        val savedSuccessfully = if (imageHref.endsWith(".gif")) {
+                            saveGifToExternalStorage(
+                                context,
+                                getDisplayName(imageTitle),
+                                imageDrawable as GifDrawable
+                            )
+                        } else {
+                            savePngToExternalStorage(
                                 context,
                                 getDisplayName(imageTitle),
                                 imageDrawable.toBitmap()
                             )
+                        }
                         if (savedSuccessfully) {
                             onSaved()
                         }
@@ -285,7 +293,7 @@ private fun shareImage(
             ): Boolean {
                 loadingState.value = false
                 onShareFailed()
-                return false
+                return true
             }
 
             override fun onResourceReady(
@@ -297,49 +305,56 @@ private fun shareImage(
             ): Boolean {
                 viewModelScope.launch {
                     resource?.let {
-                        if (!CachedImageHelper.save(context, it.toBitmap())) {
+                        val uri = if (href.endsWith(".gif")) {
+                            CachedImageHelper.saveGif(context, it as GifDrawable)
+                        } else {
+                            CachedImageHelper.savePng(context, it.toBitmap())
+                        }
+
+                        if (uri == null) {
                             loadingState.value = false
                             onShareFailed()
                             return@launch
                         }
+
+                        val sendIntent = Intent().apply {
+                            action = Intent.ACTION_SEND
+
+                            putExtra(
+                                Intent.EXTRA_TEXT,
+                                StringBuilder().apply {
+                                    if (title != null) {
+                                        append(title, "\n\n")
+                                    }
+                                    append(context.getString(R.string.watch_more_in_the_app))
+                                }.toString()
+                            )
+
+                            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+                            val imageType = if (href.endsWith(".gif")) "gif" else "png"
+
+                            clipData = ClipData(
+                                "Image",
+                                arrayOf("image/$imageType"),
+                                ClipData.Item(uri)
+                            )
+
+                            putExtra(
+                                Intent.EXTRA_STREAM,
+                                uri
+                            )
+                            type = "image/$imageType"
+                        }
+
+                        val shareIntent = Intent.createChooser(sendIntent, null)
+                        context.startActivity(shareIntent)
+
+                        loadingState.value = false
                     }
-
-                    val uri = CachedImageHelper.getUri(context) ?: return@launch
-
-                    val sendIntent = Intent().apply {
-                        action = Intent.ACTION_SEND
-                        putExtra(
-                            Intent.EXTRA_TEXT,
-                            StringBuilder().apply {
-                                if (title != null) {
-                                    append(title, "\n\n")
-                                }
-                                append(context.getString(R.string.watch_more_in_the_app))
-                            }.toString()
-                        )
-
-                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-
-                        clipData = ClipData(
-                            "Image",
-                            arrayOf("image/png"),
-                            ClipData.Item(uri)
-                        )
-
-                        putExtra(
-                            Intent.EXTRA_STREAM,
-                            uri
-                        )
-                        type = "image/png"
-                    }
-
-                    val shareIntent = Intent.createChooser(sendIntent, null)
-                    context.startActivity(shareIntent)
-
-                    loadingState.value = false
                 }
 
-                return false
+                return true
             }
         }).submit()
 }
