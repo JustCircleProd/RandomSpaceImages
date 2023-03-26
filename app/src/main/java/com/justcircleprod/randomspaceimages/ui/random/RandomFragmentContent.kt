@@ -1,7 +1,11 @@
 package com.justcircleprod.randomspaceimages.ui.random
 
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.Tab
@@ -22,9 +26,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.accompanist.pager.*
 import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.data.models.NASALibraryImageEntry
+import com.justcircleprod.randomspaceimages.ui.common.pagerTabIndicatorOffset
 import com.justcircleprod.randomspaceimages.ui.random.common.SearchButton
 import com.justcircleprod.randomspaceimages.ui.random.randomFavouritesPage.RandomFavouritesPage
 import com.justcircleprod.randomspaceimages.ui.random.randomFavouritesPage.RandomFavouritesPageViewModel
@@ -35,7 +39,7 @@ import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
 import com.justcircleprod.randomspaceimages.ui.theme.NoRippleTheme
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun RandomFragmentContent(
     randomViewModel: RandomPageViewModel,
@@ -61,7 +65,7 @@ fun RandomFragmentContent(
             }
         }
 
-        HorizontalPager(count = RandomTabItem.items.size, state = pagerState) { page ->
+        HorizontalPager(pageCount = RandomTabItem.items.size, state = pagerState) { page ->
             when (page) {
                 0 -> {
                     RandomPage(
@@ -80,7 +84,8 @@ fun RandomFragmentContent(
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
+
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Tabs(pagerState: PagerState) {
     val coroutineScope = rememberCoroutineScope()

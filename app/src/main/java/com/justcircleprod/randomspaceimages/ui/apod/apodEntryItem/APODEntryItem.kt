@@ -8,10 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -24,6 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
@@ -50,6 +48,7 @@ import com.skydoves.landscapist.glide.GlideImage
 import com.skydoves.landscapist.glide.GlideImageState
 import com.skydoves.landscapist.placeholder.shimmer.ShimmerPlugin
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun APODEntryItem(
@@ -88,7 +87,19 @@ fun APODEntryItem(
                         isClickEnabled = isImageClickEnabled
                     )
                 } else {
-                    Video(videoUrl = apodEntry.url)
+                    val context = LocalContext.current
+
+                    Video(
+                        videoUrl = apodEntry.url,
+                        onOpenError = {
+                            coroutineScope.launch {
+                                scaffoldState.snackbarHostState.showSnackbar(
+                                    context.getString(R.string.failed_to_open_video),
+                                    duration = SnackbarDuration.Short
+                                )
+                            }
+                        }
+                    )
                 }
 
                 APODInfo(apodEntry = apodEntry)
@@ -212,7 +223,7 @@ fun APODImage(
 }
 
 @Composable
-fun Video(videoUrl: String) {
+fun Video(videoUrl: String, onOpenError: () -> Unit) {
     val uriHandler = LocalUriHandler.current
 
     Box(contentAlignment = Alignment.Center) {
@@ -236,13 +247,17 @@ fun Video(videoUrl: String) {
                         color = colorResource(id = R.color.ripple)
                     ),
                 ) {
-                    uriHandler.openUri(videoUrl)
+                    try {
+                        uriHandler.openUri(videoUrl)
+                    } catch (e: Exception) {
+                        onOpenError()
+                    }
                 }
 
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.icon_play),
-                contentDescription = stringResource(id = R.string.watch_video_in_browser),
+                contentDescription = stringResource(id = R.string.open_video_in_another_app),
                 tint = Color.White,
                 modifier = Modifier.size(dimensionResource(id = R.dimen.apod_item_play_video_icon_button_size))
             )

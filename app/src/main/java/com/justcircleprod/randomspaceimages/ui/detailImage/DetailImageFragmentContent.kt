@@ -33,11 +33,11 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.github.chrisbanes.photoview.PhotoView
 import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.ui.common.BackButton
 import com.justcircleprod.randomspaceimages.ui.common.ProgressIndicator
 import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
+import com.ortiz.touchview.TouchImageView
 
 @Composable
 fun DetailImageFragmentContent(
@@ -65,7 +65,7 @@ fun DetailImageFragmentContent(
                     bottom.linkTo(parent.bottom)
                 },
             factory = { context ->
-                PhotoView(context).apply {
+                TouchImageView(context).apply {
                     Glide.with(context).load(imageUrl)
                         .listener(object : RequestListener<Drawable> {
                             override fun onLoadFailed(

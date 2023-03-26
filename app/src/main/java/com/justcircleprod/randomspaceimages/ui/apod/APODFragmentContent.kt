@@ -1,9 +1,13 @@
 package com.justcircleprod.randomspaceimages.ui.apod
 
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -21,18 +25,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.accompanist.pager.*
 import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.ui.apod.apodFavourites.APODFavouritesPage
 import com.justcircleprod.randomspaceimages.ui.apod.apodFavourites.APODFavouritesPageViewModel
 import com.justcircleprod.randomspaceimages.ui.apod.apodPage.APODPage
 import com.justcircleprod.randomspaceimages.ui.apod.apodPage.APODPageViewModel
 import com.justcircleprod.randomspaceimages.ui.apod.apodTabs.APODTabItem
+import com.justcircleprod.randomspaceimages.ui.common.pagerTabIndicatorOffset
 import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
 import com.justcircleprod.randomspaceimages.ui.theme.NoRippleTheme
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun APODFragmentContent(
     apodPageViewModel: APODPageViewModel,
@@ -67,7 +71,7 @@ fun APODFragmentContent(
             }
         }
 
-        HorizontalPager(count = APODTabItem.items.size, state = pagerState) { page ->
+        HorizontalPager(pageCount = APODTabItem.items.size, state = pagerState) { page ->
             when (page) {
                 0 -> {
                     APODPage(
@@ -86,7 +90,7 @@ fun APODFragmentContent(
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Tabs(pagerState: PagerState, pickedDate: State<Long?>) {
     val coroutineScope = rememberCoroutineScope()
