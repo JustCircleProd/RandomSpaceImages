@@ -32,13 +32,12 @@ Tech stack:
 - Hilt
 - Retrofit2, OkHttp3
 - Architecture
-    - MVVM Architecture (View -  - ViewModel - Model)
-    - Repository Pattern
+  - MVVM Architecture
+  - Repository Pattern
 - Custom Views
   - [Landscapist Glide](https://github.com/skydoves/landscapist#glide), [placeholder](https://github.com/skydoves/landscapist#placeholder)
   - [Jetpack Compose Number Picker](https://github.com/ChargeMap/Compose-NumberPicker)
-  - [PhotoView](https://github.com/Baseflow/PhotoView)
-  - [Pager](https://google.github.io/accompanist/pager/#pager-layouts), [Pager indicator](https://google.github.io/accompanist/pager/#indicators)
+  - [TouchImageView](https://github.com/MikeOrtiz/TouchImageView)
   
 ### Tech explanation
 
