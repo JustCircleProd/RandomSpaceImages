@@ -47,8 +47,7 @@ fun RandomFragmentContent(
     Scaffold(
         backgroundColor = colorResource(id = R.color.background),
         scaffoldState = rememberScaffoldState()
-    )
-    { scaffoldPadding ->
+    ) { scaffoldPadding ->
         val pagerState = rememberPagerState()
 
         Column(modifier = Modifier.padding(scaffoldPadding)) {
