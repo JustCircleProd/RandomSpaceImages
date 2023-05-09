@@ -4,13 +4,12 @@ import android.graphics.drawable.Drawable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -45,28 +44,64 @@ fun DetailImageFragmentContent(
     imageUrlHd: String?,
     onBackButtonClick: () -> Unit
 ) {
-    ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
-        val (imageView, backButton, hdButton) = createRefs()
-
-        val loadState = remember { mutableStateOf(DetailImageLoadState.FIRST_LOAD) }
-        val inHd = remember { mutableStateOf(false) }
-
-        if (loadState.value == DetailImageLoadState.FIRST_LOAD) {
-            ProgressIndicator()
-        }
-
-        AndroidView(
+    Scaffold(
+        backgroundColor = colorResource(id = R.color.background),
+        scaffoldState = rememberScaffoldState()
+    )
+    { scaffoldPadding ->
+        ConstraintLayout(
             modifier = Modifier
-                .fillMaxSize()
-                .constrainAs(imageView) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
+                .fillMaxWidth()
+                .padding(scaffoldPadding)
+        ) {
+            val (imageView, backButton, hdButton) = createRefs()
+
+            val loadState = remember { mutableStateOf(DetailImageLoadState.FIRST_LOAD) }
+            val inHd = remember { mutableStateOf(false) }
+
+            if (loadState.value == DetailImageLoadState.FIRST_LOAD) {
+                ProgressIndicator()
+            }
+
+            AndroidView(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .constrainAs(imageView) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(parent.bottom)
+                    },
+                factory = { context ->
+                    TouchImageView(context).apply {
+                        Glide.with(context).load(imageUrl)
+                            .listener(object : RequestListener<Drawable> {
+                                override fun onLoadFailed(
+                                    e: GlideException?,
+                                    model: Any?,
+                                    target: Target<Drawable>?,
+                                    isFirstResource: Boolean
+                                ): Boolean {
+                                    return false
+                                }
+
+                                override fun onResourceReady(
+                                    resource: Drawable?,
+                                    model: Any?,
+                                    target: Target<Drawable>?,
+                                    dataSource: DataSource?,
+                                    isFirstResource: Boolean
+                                ): Boolean {
+                                    loadState.value = DetailImageLoadState.LOADED
+                                    return false
+                                }
+                            }).into(this)
+                    }
                 },
-            factory = { context ->
-                TouchImageView(context).apply {
-                    Glide.with(context).load(imageUrl)
+                update = {
+                    val url = if (inHd.value) imageUrlHd else imageUrl
+
+                    Glide.with(it.context).load(url)
                         .listener(object : RequestListener<Drawable> {
                             override fun onLoadFailed(
                                 e: GlideException?,
@@ -87,58 +122,32 @@ fun DetailImageFragmentContent(
                                 loadState.value = DetailImageLoadState.LOADED
                                 return false
                             }
-                        }).into(this)
-                }
-            },
-            update = {
-                val url = if (inHd.value) imageUrlHd else imageUrl
-
-                Glide.with(it.context).load(url)
-                    .listener(object : RequestListener<Drawable> {
-                        override fun onLoadFailed(
-                            e: GlideException?,
-                            model: Any?,
-                            target: Target<Drawable>?,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            return false
-                        }
-
-                        override fun onResourceReady(
-                            resource: Drawable?,
-                            model: Any?,
-                            target: Target<Drawable>?,
-                            dataSource: DataSource?,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            loadState.value = DetailImageLoadState.LOADED
-                            return false
-                        }
-                    }).into(it)
-            }
-        )
-
-        BackButton(
-            modifier = Modifier.constrainAs(backButton) {
-                start.linkTo(parent.start, margin = 9.dp)
-                top.linkTo(parent.top, margin = 9.dp)
-            },
-            onClick = onBackButtonClick
-        )
-
-        if (imageUrlHd != null) {
-            HdButton(
-                activationState = inHd,
-                loadState = loadState,
-                modifier = Modifier.constrainAs(hdButton) {
-                    end.linkTo(parent.end, margin = 9.dp)
-                    top.linkTo(parent.top, margin = 9.dp)
-                },
-                onClick = {
-                    inHd.value = !inHd.value
-                    loadState.value = DetailImageLoadState.LOADING
+                        }).into(it)
                 }
             )
+
+            BackButton(
+                modifier = Modifier.constrainAs(backButton) {
+                    start.linkTo(parent.start, margin = 9.dp)
+                    top.linkTo(parent.top, margin = 9.dp)
+                },
+                onClick = onBackButtonClick
+            )
+
+            if (imageUrlHd != null) {
+                HdButton(
+                    activationState = inHd,
+                    loadState = loadState,
+                    modifier = Modifier.constrainAs(hdButton) {
+                        end.linkTo(parent.end, margin = 9.dp)
+                        top.linkTo(parent.top, margin = 9.dp)
+                    },
+                    onClick = {
+                        inHd.value = !inHd.value
+                        loadState.value = DetailImageLoadState.LOADING
+                    }
+                )
+            }
         }
     }
 }

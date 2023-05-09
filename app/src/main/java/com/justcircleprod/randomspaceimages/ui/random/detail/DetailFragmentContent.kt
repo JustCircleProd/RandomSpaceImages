@@ -30,6 +30,7 @@ import com.justcircleprod.randomspaceimages.data.remote.nasaLibrary.NASALibraryC
 import com.justcircleprod.randomspaceimages.ui.common.BackButton
 import com.justcircleprod.randomspaceimages.ui.common.ImageActionMenu
 import com.justcircleprod.randomspaceimages.ui.common.fromServerFormatToAppFormat
+import com.justcircleprod.randomspaceimages.ui.common.localCompositions.LocalImageActionStates
 import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.components.rememberImageComponent
@@ -369,6 +370,8 @@ fun DetailActionButtons(
             coroutineScope = coroutineScope,
             viewModelScope = viewModel.viewModelScope,
             title = nasaLibraryImageEntry.title,
+            sharingImage = LocalImageActionStates.current.sharingImage,
+            savingImageToGallery = LocalImageActionStates.current.savingToGallery,
             href = nasaLibraryImageEntry.imageHref,
             isAddedToFavourites = isAddedToFavourites,
             onFavouriteButtonClick = {

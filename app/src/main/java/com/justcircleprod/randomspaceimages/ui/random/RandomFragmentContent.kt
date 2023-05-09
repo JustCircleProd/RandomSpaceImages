@@ -7,10 +7,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ScrollableTabRow
-import androidx.compose.material.Tab
-import androidx.compose.material.TabRowDefaults
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -47,37 +44,43 @@ fun RandomFragmentContent(
     onImageEntryClick: (nasaLibraryImageEntry: NASALibraryImageEntry) -> Unit,
     onSearchClick: () -> Unit
 ) {
-    val pagerState = rememberPagerState()
+    Scaffold(
+        backgroundColor = colorResource(id = R.color.background),
+        scaffoldState = rememberScaffoldState()
+    )
+    { scaffoldPadding ->
+        val pagerState = rememberPagerState()
 
-    Column {
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Tabs(pagerState)
+        Column(modifier = Modifier.padding(scaffoldPadding)) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Tabs(pagerState)
 
-            if (pagerState.currentPage == 0) {
-                SearchButton(
-                    onClick = { onSearchClick() },
-                    modifier = Modifier.padding(end = 6.dp)
-                )
-            }
-        }
-
-        HorizontalPager(pageCount = RandomTabItem.items.size, state = pagerState) { page ->
-            when (page) {
-                0 -> {
-                    RandomPage(
-                        viewModel = randomViewModel,
-                        onImageEntryClick = onImageEntryClick
+                if (pagerState.currentPage == 0) {
+                    SearchButton(
+                        onClick = { onSearchClick() },
+                        modifier = Modifier.padding(end = 6.dp)
                     )
                 }
-                1 -> {
-                    RandomFavouritesPage(
-                        viewModel = favouriteViewModel,
-                        onImageEntryClick = onImageEntryClick
-                    )
+            }
+
+            HorizontalPager(pageCount = RandomTabItem.items.size, state = pagerState) { page ->
+                when (page) {
+                    0 -> {
+                        RandomPage(
+                            viewModel = randomViewModel,
+                            onImageEntryClick = onImageEntryClick
+                        )
+                    }
+                    1 -> {
+                        RandomFavouritesPage(
+                            viewModel = favouriteViewModel,
+                            onImageEntryClick = onImageEntryClick
+                        )
+                    }
                 }
             }
         }

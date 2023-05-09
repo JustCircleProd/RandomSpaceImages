@@ -44,46 +44,73 @@ fun APODFragmentContent(
     onPickDateButtonClick: () -> Unit,
     onAPODEntryImageClick: (imageUrl: String, imageUrlHd: String?) -> Unit
 ) {
-    val pagerState = rememberPagerState()
+    val scaffoldState = rememberScaffoldState()
+    val coroutineScope = rememberCoroutineScope()
 
-    Column {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(
-                space = dimensionResource(id = R.dimen.apod_tabs_elements_space_size),
-                alignment = Alignment.Start
-            ),
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            val pickedDate = apodPageViewModel.pickedDateInMills.collectAsState()
-
-            Tabs(pickedDate = pickedDate, pagerState = pagerState)
-
-            PickDateButtons(
-                pickedDate = pickedDate,
-                onPickDateButtonClick = {
-                    onPickDateButtonClick()
-                }
-            ) {
-                apodPageViewModel.pickedDateInMills.value = null
-                apodPageViewModel.apodList.value.clear()
-                apodPageViewModel.loadTodayAPOD()
+    Scaffold(
+        backgroundColor = colorResource(id = R.color.background),
+        scaffoldState = scaffoldState,
+        snackbarHost = {
+            SnackbarHost(
+                hostState = it,
+                modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.apod_snackbar_host_bottom_space_size))
+            ) { data ->
+                Snackbar(
+                    actionColor = colorResource(id = R.color.primary),
+                    snackbarData = data,
+                    elevation = dimensionResource(id = R.dimen.snackbar_elevation),
+                    backgroundColor = colorResource(id = R.color.snackbar_background),
+                    contentColor = colorResource(id = R.color.snackbar_text)
+                )
             }
         }
+    ) { scaffoldPadding ->
+        val pagerState = rememberPagerState()
 
-        HorizontalPager(pageCount = APODTabItem.items.size, state = pagerState) { page ->
-            when (page) {
-                0 -> {
-                    APODPage(
-                        viewModel = apodPageViewModel,
-                        onAPODEntryImageClick = onAPODEntryImageClick
-                    )
-                }
-                1 -> {
-                    APODFavouritesPage(
-                        viewModel = apodFavouritesPageViewModel,
-                        onAPODEntryImageClick = onAPODEntryImageClick
-                    )
+        Column(modifier = Modifier.padding(scaffoldPadding)) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(
+                    space = dimensionResource(id = R.dimen.apod_tabs_elements_space_size),
+                    alignment = Alignment.Start
+                ),
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                val pickedDate = apodPageViewModel.pickedDateInMills.collectAsState()
+
+                Tabs(pickedDate = pickedDate, pagerState = pagerState)
+
+                PickDateButtons(
+                    pickedDate = pickedDate,
+                    onPickDateButtonClick = {
+                        onPickDateButtonClick()
+                    },
+                    onCancelButtonClick = {
+                        apodPageViewModel.pickedDateInMills.value = null
+                        apodPageViewModel.apodList.value.clear()
+                        apodPageViewModel.loadTodayAPOD()
+                    }
+                )
+            }
+
+            HorizontalPager(pageCount = APODTabItem.items.size, state = pagerState) { page ->
+                when (page) {
+                    0 -> {
+                        APODPage(
+                            viewModel = apodPageViewModel,
+                            scaffoldState = scaffoldState,
+                            coroutineScope = coroutineScope,
+                            onAPODEntryImageClick = onAPODEntryImageClick
+                        )
+                    }
+                    1 -> {
+                        APODFavouritesPage(
+                            viewModel = apodFavouritesPageViewModel,
+                            scaffoldState = scaffoldState,
+                            coroutineScope = coroutineScope,
+                            onAPODEntryImageClick = onAPODEntryImageClick
+                        )
+                    }
                 }
             }
         }

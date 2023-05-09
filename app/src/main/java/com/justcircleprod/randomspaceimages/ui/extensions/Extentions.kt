@@ -1,4 +1,4 @@
-package com.justcircleprod.randomspaceimages.ui.common
+package com.justcircleprod.randomspaceimages.ui.extensions
 
 import android.content.Context
 import android.content.ContextWrapper

@@ -19,10 +19,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.SnackbarDuration
+import androidx.compose.material.*
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -46,8 +43,10 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.data.dataStore.DataStoreConstants
+import com.justcircleprod.randomspaceimages.ui.extensions.getActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -63,18 +62,83 @@ fun ImageActionMenu(
     onFavouriteButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
     qualityOfSavingAndSharingImages: Flow<String?>? = null,
-    hrefHd: String? = null
+    hrefHd: String? = null,
+    savingImageToGallery: MutableStateFlow<Boolean>,
+    sharingImage: MutableStateFlow<Boolean>
 ) {
     Box(
         modifier = modifier
     ) {
-        // SaveToGalleryButton
         val context = LocalContext.current
 
-        val savingToGalleryState = remember { mutableStateOf(false) }
+        // ShareButton
+
+        val onShareButtonClicked = {
+            if (!sharingImage.value) {
+                sharingImage.value = true
+
+                coroutineScope.launch {
+                    val snackbarResult = scaffoldState.snackbarHostState.showSnackbar(
+                        message = context.getString(R.string.preparing_to_share),
+                        actionLabel = context.getString(R.string.dismiss),
+                        duration = SnackbarDuration.Indefinite
+                    )
+
+                    when (snackbarResult) {
+                        SnackbarResult.Dismissed -> {}
+                        SnackbarResult.ActionPerformed -> {
+                            coroutineScope.launch {
+                                scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
+                            }
+                        }
+                    }
+                }
+
+                viewModelScope.launch {
+                    val imageHref =
+                        if (hrefHd != null && qualityOfSavingAndSharingImages?.first() == DataStoreConstants.HIGH_QUALITY) {
+                            hrefHd
+                        } else {
+                            href
+                        }
+
+                    shareImage(
+                        context = context,
+                        viewModelScope = viewModelScope,
+                        title = title,
+                        href = imageHref,
+                        onShareFailed = {
+                            sharingImage.value = false
+
+                            coroutineScope.launch {
+                                scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
+
+                                scaffoldState.snackbarHostState.showSnackbar(
+                                    context.getString(R.string.failed_to_share),
+                                    duration = SnackbarDuration.Short
+                                )
+                            }
+                        },
+                        onShareReady = {
+                            sharingImage.value = false
+
+                            coroutineScope.launch {
+                                scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
+                            }
+                        }
+                    )
+                }
+            }
+        }
+
+
+        // SaveToGalleryButton
+
         val onSaved = {
+            savingImageToGallery.value = false
+
             coroutineScope.launch {
-                savingToGalleryState.value = false
+                scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
 
                 scaffoldState.snackbarHostState.showSnackbar(
                     message = context.getString(R.string.successfully_saved_to_gallery),
@@ -82,6 +146,58 @@ fun ImageActionMenu(
                 )
             }
             Unit
+        }
+
+        val onSaveFailed = {
+            savingImageToGallery.value = false
+
+            coroutineScope.launch {
+                scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
+
+                scaffoldState.snackbarHostState.showSnackbar(
+                    message = context.getString(R.string.failed_to_share),
+                    duration = SnackbarDuration.Short
+                )
+            }
+            Unit
+        }
+
+        // update state, show snackbar, and call fun for download and save image to gallery
+        val startSavingToGallery = {
+            savingImageToGallery.value = true
+
+            coroutineScope.launch {
+                val snackbarResult = scaffoldState.snackbarHostState.showSnackbar(
+                    message = context.getString(R.string.saving_the_image),
+                    actionLabel = context.getString(R.string.dismiss),
+                    duration = SnackbarDuration.Indefinite
+                )
+
+                when (snackbarResult) {
+                    SnackbarResult.Dismissed -> {}
+                    SnackbarResult.ActionPerformed -> {
+                        scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
+                    }
+                }
+            }
+
+            viewModelScope.launch {
+                val imageHref =
+                    if (hrefHd != null && qualityOfSavingAndSharingImages?.first() == DataStoreConstants.HIGH_QUALITY) {
+                        hrefHd
+                    } else {
+                        href
+                    }
+
+                saveImageToGallery(
+                    context = context,
+                    viewModelScope = viewModelScope,
+                    imageTitle = title,
+                    imageHref = imageHref,
+                    onSaved = onSaved,
+                    onSaveFailed = onSaveFailed
+                )
+            }
         }
 
         val hasWriteExternalStoragePermission = remember {
@@ -102,132 +218,72 @@ fun ImageActionMenu(
                 hasWriteExternalStoragePermission.value = isGranted
 
                 if (isGranted) {
-                    savingToGalleryState.value = true
+                    startSavingToGallery()
+                    return@rememberLauncherForActivityResult
+                }
 
-                    viewModelScope.launch {
-                        val imageHref =
-                            if (hrefHd != null && qualityOfSavingAndSharingImages?.first() == DataStoreConstants.HIGH_QUALITY) {
-                                hrefHd
-                            } else {
-                                href
-                            }
-
-                        saveToGallery(
-                            context = context,
-                            viewModelScope = viewModelScope,
-                            imageTitle = title,
-                            imageHref = imageHref,
-                            onSaved = onSaved
+                context.getActivity()?.let {
+                    if (!ActivityCompat.shouldShowRequestPermissionRationale(
+                            it,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
                         )
-                    }
-                } else {
-                    context.getActivity()?.let {
-                        if (!ActivityCompat.shouldShowRequestPermissionRationale(
-                                it,
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ) {
+                        coroutineScope.launch {
+                            scaffoldState.snackbarHostState.showSnackbar(
+                                message = context.getString(R.string.grant_permission),
+                                duration = SnackbarDuration.Short
                             )
-                        ) {
-                            coroutineScope.launch {
-                                scaffoldState.snackbarHostState.showSnackbar(
-                                    message = context.getString(R.string.grant_permission),
-                                    duration = SnackbarDuration.Short
-                                )
-                            }
-                        } else {
-                            coroutineScope.launch {
-                                scaffoldState.snackbarHostState.showSnackbar(
-                                    message = context.getString(R.string.permission_is_required),
-                                    duration = SnackbarDuration.Short
-                                )
-                            }
+                        }
+                    } else {
+                        coroutineScope.launch {
+                            scaffoldState.snackbarHostState.showSnackbar(
+                                message = context.getString(R.string.permission_is_required),
+                                duration = SnackbarDuration.Short
+                            )
                         }
                     }
                 }
+
             }
         )
 
-        // ShareButton
-        val shareLoadingState = remember { mutableStateOf(false) }
+        val onSaveToGalleryButtonClicked = {
+            if (hasWriteExternalStoragePermission.value) {
+                if (!savingImageToGallery.value) {
+                    startSavingToGallery()
+                }
+            } else {
+                permissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            }
+        }
+
 
         ActionMenu {
             ShareButton(
-                onClick = {
-                    if (!shareLoadingState.value) {
-                        shareLoadingState.value = true
-
-                        viewModelScope.launch {
-                            val imageHref =
-                                if (hrefHd != null && qualityOfSavingAndSharingImages?.first() == DataStoreConstants.HIGH_QUALITY) {
-                                    hrefHd
-                                } else {
-                                    href
-                                }
-
-                            shareImage(
-                                context = context,
-                                viewModelScope = viewModelScope,
-                                title = title,
-                                href = imageHref,
-                                loadingState = shareLoadingState,
-                                onShareFailed = {
-                                    coroutineScope.launch {
-                                        scaffoldState.snackbarHostState.showSnackbar(
-                                            context.getString(R.string.failed_to_share),
-                                            duration = SnackbarDuration.Short
-                                        )
-                                    }
-                                }
-                            )
-                        }
-                    }
-                },
-                loadingState = shareLoadingState.value,
+                loadingState = sharingImage.collectAsState(),
+                onClick = onShareButtonClicked
             )
 
             SaveToGalleryButton(
-                savingToGallery = { savingToGalleryState.value },
-                onClick = {
-                    if (hasWriteExternalStoragePermission.value) {
-                        if (!savingToGalleryState.value) {
-                            savingToGalleryState.value = true
-
-                            viewModelScope.launch {
-                                val imageHref =
-                                    if (hrefHd != null && qualityOfSavingAndSharingImages?.first() == DataStoreConstants.HIGH_QUALITY) {
-                                        hrefHd
-                                    } else {
-                                        href
-                                    }
-
-                                saveToGallery(
-                                    context = context,
-                                    viewModelScope = viewModelScope,
-                                    imageTitle = title,
-                                    imageHref = imageHref,
-                                    onSaved = onSaved
-                                )
-                            }
-                        }
-                    } else {
-                        permissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    }
-                }
+                savingToGallery = savingImageToGallery.collectAsState(),
+                onClick = onSaveToGalleryButtonClicked
             )
 
             FavouriteButton(
                 isAddedToFavourites = isAddedToFavourites,
-                onClick = { onFavouriteButtonClick() }
+                onClick = onFavouriteButtonClick
             )
         }
     }
 }
 
-private fun saveToGallery(
+private fun saveImageToGallery(
     context: Context,
     viewModelScope: CoroutineScope,
     imageTitle: String?,
     imageHref: String,
-    onSaved: () -> Unit
+    onSaved: () -> Unit,
+    onSaveFailed: () -> Unit,
 ) {
     Glide
         .with(context)
@@ -239,6 +295,7 @@ private fun saveToGallery(
                 target: Target<Drawable>?,
                 isFirstResource: Boolean
             ): Boolean {
+                onSaveFailed()
                 return true
             }
 
@@ -266,6 +323,8 @@ private fun saveToGallery(
                         }
                         if (savedSuccessfully) {
                             onSaved()
+                        } else {
+                            onSaveFailed()
                         }
                     }
                 }
@@ -280,8 +339,8 @@ private fun shareImage(
     viewModelScope: CoroutineScope,
     title: String?,
     href: String,
-    loadingState: MutableState<Boolean>,
-    onShareFailed: () -> Unit
+    onShareFailed: () -> Unit,
+    onShareReady: () -> Unit
 ) {
     Glide.with(context).load(href)
         .listener(object : RequestListener<Drawable> {
@@ -291,7 +350,6 @@ private fun shareImage(
                 target: Target<Drawable>?,
                 isFirstResource: Boolean
             ): Boolean {
-                loadingState.value = false
                 onShareFailed()
                 return true
             }
@@ -312,7 +370,6 @@ private fun shareImage(
                         }
 
                         if (uri == null) {
-                            loadingState.value = false
                             onShareFailed()
                             return@launch
                         }
@@ -350,7 +407,7 @@ private fun shareImage(
                         val shareIntent = Intent.createChooser(sendIntent, null)
                         context.startActivity(shareIntent)
 
-                        loadingState.value = false
+                        onShareReady()
                     }
                 }
 
@@ -381,7 +438,7 @@ fun VideoActionMenu(
 
             FavouriteButton(
                 isAddedToFavourites = isAddedToFavourites,
-                onClick = { onFavouriteButtonClick() }
+                onClick = onFavouriteButtonClick
             )
         }
     }
@@ -490,7 +547,7 @@ fun FavouriteButton(
 
 @Composable
 fun SaveToGalleryButton(
-    savingToGallery: () -> Boolean,
+    savingToGallery: State<Boolean>,
     onClick: () -> Unit
 ) {
     Box(
@@ -507,7 +564,7 @@ fun SaveToGalleryButton(
                 onClick()
             }
     ) {
-        if (savingToGallery()) {
+        if (savingToGallery.value) {
             CircularProgressIndicator(
                 strokeWidth = dimensionResource(id = R.dimen.progress_indicator_stroke_width),
                 color = colorResource(id = R.color.primary),
@@ -530,7 +587,7 @@ fun SaveToGalleryButton(
 }
 
 @Composable
-fun ShareButton(onClick: () -> Unit, loadingState: Boolean? = null) {
+fun ShareButton(onClick: () -> Unit, loadingState: State<Boolean>? = null) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
@@ -545,7 +602,7 @@ fun ShareButton(onClick: () -> Unit, loadingState: Boolean? = null) {
                 onClick()
             }
     ) {
-        if (loadingState == true) {
+        if (loadingState?.value == true) {
             CircularProgressIndicator(
                 strokeWidth = dimensionResource(id = R.dimen.progress_indicator_stroke_width),
                 color = colorResource(id = R.color.primary),

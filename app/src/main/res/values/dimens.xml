@@ -47,7 +47,7 @@
     <dimen name="action_buttons_horizontal_space_size">9dp</dimen>
     <dimen name="action_icon_button_size">42dp</dimen>
     <dimen name="action_menu_button_icon_size">25dp</dimen>
-    
+
     <dimen name="action_button_progress_indicator_size">21dp</dimen>
 
 

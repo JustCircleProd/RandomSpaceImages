@@ -16,19 +16,18 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Starting"
         tools:targetApi="33">
+
         <activity
             android:name="com.justcircleprod.randomspaceimages.ui.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.Starting">
+            android:theme="@style/Theme.RandomSpaceImages">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
 
         <provider
             android:name="androidx.core.content.FileProvider"

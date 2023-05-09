@@ -4,9 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -38,24 +36,30 @@ fun SearchResultScreen(
     onImageEntryClick: (nasaLibraryImageEntry: NASALibraryImageEntry) -> Unit,
     onBackButtonClick: () -> Unit
 ) {
-    ConstraintLayout {
-        val (imageList, backButton) = createRefs()
-        SearchImageList(
-            viewModel = viewModel,
-            onImageEntryClicked = onImageEntryClick,
-            modifier = Modifier.constrainAs(imageList) {
-                top.linkTo(parent.top)
-                start.linkTo(parent.start)
-                bottom.linkTo(parent.bottom)
-                end.linkTo(parent.end)
-            })
+    Scaffold(
+        backgroundColor = colorResource(id = R.color.background),
+        scaffoldState = rememberScaffoldState()
+    )
+    { scaffoldPadding ->
+        ConstraintLayout(modifier = Modifier.padding(scaffoldPadding)) {
+            val (imageList, backButton) = createRefs()
+            SearchImageList(
+                viewModel = viewModel,
+                onImageEntryClicked = onImageEntryClick,
+                modifier = Modifier.constrainAs(imageList) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    bottom.linkTo(parent.bottom)
+                    end.linkTo(parent.end)
+                })
 
-        BackButton(onBackButtonClick, modifier = Modifier
-            .constrainAs(backButton) {
-                top.linkTo(parent.top, margin = 6.dp)
-                start.linkTo(parent.start, margin = 8.dp)
-            }
-        )
+            BackButton(onBackButtonClick, modifier = Modifier
+                .constrainAs(backButton) {
+                    top.linkTo(parent.top, margin = 6.dp)
+                    start.linkTo(parent.start, margin = 8.dp)
+                }
+            )
+        }
     }
 }
 

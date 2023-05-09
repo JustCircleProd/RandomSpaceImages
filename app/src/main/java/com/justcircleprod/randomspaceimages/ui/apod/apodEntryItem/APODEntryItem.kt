@@ -41,6 +41,7 @@ import com.justcircleprod.randomspaceimages.ui.common.ImageActionMenu
 import com.justcircleprod.randomspaceimages.ui.common.ProgressIndicator
 import com.justcircleprod.randomspaceimages.ui.common.VideoActionMenu
 import com.justcircleprod.randomspaceimages.ui.common.fromServerFormatToAppFormat
+import com.justcircleprod.randomspaceimages.ui.common.localCompositions.LocalImageActionStates
 import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.components.rememberImageComponent
@@ -115,6 +116,8 @@ fun APODEntryItem(
                         coroutineScope = coroutineScope,
                         viewModelScope = viewModel.viewModelScope,
                         title = apodEntry.title,
+                        savingImageToGallery = LocalImageActionStates.current.savingToGallery,
+                        sharingImage = LocalImageActionStates.current.sharingImage,
                         qualityOfSavingAndSharingImages = viewModel.qualityOfSavingAndSharingImages,
                         href = apodEntry.url,
                         hrefHd = apodEntry.hdurl,

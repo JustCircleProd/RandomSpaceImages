@@ -6,9 +6,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.RadioButton
-import androidx.compose.material.RadioButtonDefaults
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -32,31 +30,38 @@ import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
 
 @Composable
 fun MoreFragmentContent(viewModel: MoreViewModel) {
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.more_screen_cards_vertical_arrangement)),
-        contentPadding = PaddingValues(bottom = dimensionResource(id = R.dimen.more_screen_bottom_space_size)),
-        modifier = Modifier
-            .padding(horizontal = dimensionResource(id = R.dimen.more_screen_horizontal_space_size))
-            .fillMaxSize()
-    ) {
-        item {
-            Spacer(Modifier.height(dimensionResource(id = R.dimen.more_screen_top_space_size)))
-        }
+    Scaffold(
+        backgroundColor = colorResource(id = R.color.background),
+        scaffoldState = rememberScaffoldState()
+    )
+    { scaffoldPadding ->
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.more_screen_cards_vertical_arrangement)),
+            contentPadding = PaddingValues(bottom = dimensionResource(id = R.dimen.more_screen_bottom_space_size)),
+            modifier = Modifier
+                .padding(scaffoldPadding)
+                .padding(horizontal = dimensionResource(id = R.dimen.more_screen_horizontal_space_size))
+                .fillMaxSize()
+        ) {
+            item {
+                Spacer(Modifier.height(dimensionResource(id = R.dimen.more_screen_top_space_size)))
+            }
 
-        item {
-            ThemeCard(viewModel = viewModel)
-        }
-        item {
-            StartScreenCard(viewModel = viewModel)
-        }
-        item {
-            QualityOfSavingAndSharingImagesCard(viewModel = viewModel)
-        }
-        item {
-            WhereAreTheImagesFromCard()
-        }
-        item {
-            DevelopersAndLicensesCard()
+            item {
+                ThemeCard(viewModel = viewModel)
+            }
+            item {
+                StartScreenCard(viewModel = viewModel)
+            }
+            item {
+                QualityOfSavingAndSharingImagesCard(viewModel = viewModel)
+            }
+            item {
+                WhereAreTheImagesFromCard()
+            }
+            item {
+                DevelopersAndLicensesCard()
+            }
         }
     }
 }

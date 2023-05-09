@@ -12,7 +12,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.databinding.FragmentRandomBinding
-import com.justcircleprod.randomspaceimages.ui.common.navigateSafety
+import com.justcircleprod.randomspaceimages.ui.extensions.navigateSafety
 import com.justcircleprod.randomspaceimages.ui.random.randomFavouritesPage.RandomFavouritesPageViewModel
 import com.justcircleprod.randomspaceimages.ui.random.randomPage.RandomPageViewModel
 import dagger.hilt.android.AndroidEntryPoint

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.IdRes
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -14,9 +15,12 @@ import com.google.android.material.datepicker.CalendarConstraints.DateValidator
 import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.data.remote.apod.APODConstants
 import com.justcircleprod.randomspaceimages.databinding.FragmentApodBinding
+import com.justcircleprod.randomspaceimages.ui.MainActivity
 import com.justcircleprod.randomspaceimages.ui.apod.apodFavourites.APODFavouritesPageViewModel
 import com.justcircleprod.randomspaceimages.ui.apod.apodPage.APODPageViewModel
-import com.justcircleprod.randomspaceimages.ui.common.navigateSafety
+import com.justcircleprod.randomspaceimages.ui.common.localCompositions.ImageActionStates
+import com.justcircleprod.randomspaceimages.ui.common.localCompositions.LocalImageActionStates
+import com.justcircleprod.randomspaceimages.ui.extensions.navigateSafety
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
@@ -49,19 +53,26 @@ class APODFragment : Fragment() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
 
             setContent {
-                APODFragmentContent(
-                    apodPageViewModel = apodPageViewModel,
-                    apodFavouritesPageViewModel = apodFavouritesPageViewModel,
-                    onPickDateButtonClick = {
-                        showDatePicker()
-                    },
-                    onAPODEntryImageClick = { imageUrl, imageUrlHd ->
-                        navController.navigateSafety(
-                            destinationId,
-                            APODFragmentDirections.toDetailImage(imageUrl, imageUrlHd)
-                        )
-                    }
+                val imageActionStates = ImageActionStates(
+                    savingToGallery = (requireActivity() as MainActivity).viewModel.savingToGallery,
+                    sharingImage = (requireActivity() as MainActivity).viewModel.sharingImage,
                 )
+
+                CompositionLocalProvider(LocalImageActionStates provides imageActionStates) {
+                    APODFragmentContent(
+                        apodPageViewModel = apodPageViewModel,
+                        apodFavouritesPageViewModel = apodFavouritesPageViewModel,
+                        onPickDateButtonClick = {
+                            showDatePicker()
+                        },
+                        onAPODEntryImageClick = { imageUrl, imageUrlHd ->
+                            navController.navigateSafety(
+                                destinationId,
+                                APODFragmentDirections.toDetailImage(imageUrl, imageUrlHd)
+                            )
+                        }
+                    )
+                }
             }
         }
     }

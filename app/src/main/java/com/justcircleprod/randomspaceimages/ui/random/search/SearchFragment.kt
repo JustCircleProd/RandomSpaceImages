@@ -11,7 +11,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.databinding.FragmentSearchBinding
-import com.justcircleprod.randomspaceimages.ui.common.navigateSafety
+import com.justcircleprod.randomspaceimages.ui.extensions.navigateSafety
 
 class SearchFragment : Fragment() {
     private lateinit var binding: FragmentSearchBinding
