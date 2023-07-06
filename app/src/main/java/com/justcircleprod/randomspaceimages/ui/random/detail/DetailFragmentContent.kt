@@ -206,13 +206,15 @@ fun CenterAndDateInfo(nasaLibraryImageEntry: NASALibraryImageEntry, modifier: Mo
             .fillMaxWidth()
     ) {
         if (nasaLibraryImageEntry.center != null) {
-            Text(
-                text = nasaLibraryImageEntry.center,
-                color = colorResource(id = R.color.text),
-                fontFamily = LatoFontFamily,
-                fontSize = 15.sp,
-                modifier = Modifier.weight(1f)
-            )
+            SelectionContainer {
+                Text(
+                    text = nasaLibraryImageEntry.center,
+                    color = colorResource(id = R.color.text),
+                    fontFamily = LatoFontFamily,
+                    fontSize = 15.sp,
+                    modifier = Modifier.weight(1f)
+                )
+            }
         }
 
         val date = fromServerFormatToAppFormat(
@@ -221,13 +223,15 @@ fun CenterAndDateInfo(nasaLibraryImageEntry: NASALibraryImageEntry, modifier: Mo
         )
 
         if (date != null) {
-            Text(
-                text = date,
-                color = colorResource(id = R.color.text),
-                fontFamily = LatoFontFamily,
-                fontSize = 15.sp,
-                maxLines = 1
-            )
+            SelectionContainer {
+                Text(
+                    text = date,
+                    color = colorResource(id = R.color.text),
+                    fontFamily = LatoFontFamily,
+                    fontSize = 15.sp,
+                    maxLines = 1
+                )
+            }
         }
     }
 }
