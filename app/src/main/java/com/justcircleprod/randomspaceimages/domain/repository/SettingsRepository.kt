@@ -1,8 +1,8 @@
-package com.justcircleprod.randomspaceimages.data.repositories.dataStoreRepository
+package com.justcircleprod.randomspaceimages.domain.repository
 
 import kotlinx.coroutines.flow.Flow
 
-interface DataStoreRepository {
+interface SettingsRepository {
     suspend fun saveSetting(key: String, value: String)
 
     fun readSetting(key: String): Flow<String?>

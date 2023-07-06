@@ -1,11 +1,11 @@
-package com.justcircleprod.randomspaceimages.data.room.dao
+package com.justcircleprod.randomspaceimages.data.local.favourites.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import com.justcircleprod.randomspaceimages.data.models.NASALibraryImageEntry
+import com.justcircleprod.randomspaceimages.domain.model.NASALibraryImageEntry
 
 @Dao
 interface NASALibraryFavouritesDao {

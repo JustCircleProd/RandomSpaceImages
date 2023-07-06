@@ -2,9 +2,9 @@ package com.justcircleprod.randomspaceimages.ui.random.randomFavouritesPage
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.justcircleprod.randomspaceimages.data.models.NASALibraryImageEntry
-import com.justcircleprod.randomspaceimages.data.repositories.roomRepository.DefaultRoomRepository
-import com.justcircleprod.randomspaceimages.ui.random.nasaLibraryBaseViewModel.NASALibraryBaseViewModel
+import com.justcircleprod.randomspaceimages.data.repository.NASALibraryFavouritesRepositoryImpl
+import com.justcircleprod.randomspaceimages.domain.model.NASALibraryImageEntry
+import com.justcircleprod.randomspaceimages.ui.random.randomBaseViewModel.RandomBaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,8 +12,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RandomFavouritesPageViewModel @Inject constructor(roomRepository: DefaultRoomRepository) :
-    NASALibraryBaseViewModel(roomRepository) {
+class RandomFavouritesPageViewModel @Inject constructor(nasaLibraryFavouritesRepository: NASALibraryFavouritesRepositoryImpl) :
+    RandomBaseViewModel(nasaLibraryFavouritesRepository) {
 
     val favourites = MutableLiveData<List<NASALibraryImageEntry>>()
 
@@ -29,7 +29,7 @@ class RandomFavouritesPageViewModel @Inject constructor(roomRepository: DefaultR
             setLoadingOrRefreshing(refresh, true)
 
             favourites.postValue(
-                roomRepository.getAllNASALibraryFavourites()
+                nasaLibraryFavouritesRepository.getAllNASALibraryFavourites()
             )
 
             setLoadingOrRefreshing(refresh, false)

@@ -25,8 +25,8 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewModelScope
 import com.justcircleprod.randomspaceimages.R
-import com.justcircleprod.randomspaceimages.data.models.NASALibraryImageEntry
 import com.justcircleprod.randomspaceimages.data.remote.nasaLibrary.NASALibraryConstants
+import com.justcircleprod.randomspaceimages.domain.model.NASALibraryImageEntry
 import com.justcircleprod.randomspaceimages.ui.common.BackButton
 import com.justcircleprod.randomspaceimages.ui.common.ImageActionMenu
 import com.justcircleprod.randomspaceimages.ui.common.fromServerFormatToAppFormat

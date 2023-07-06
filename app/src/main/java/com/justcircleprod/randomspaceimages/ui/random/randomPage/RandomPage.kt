@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import com.justcircleprod.randomspaceimages.R
-import com.justcircleprod.randomspaceimages.data.models.NASALibraryImageEntry
+import com.justcircleprod.randomspaceimages.domain.model.NASALibraryImageEntry
 import com.justcircleprod.randomspaceimages.ui.common.ErrorInfo
 import com.justcircleprod.randomspaceimages.ui.common.ErrorInfoCard
 import com.justcircleprod.randomspaceimages.ui.common.ProgressIndicator

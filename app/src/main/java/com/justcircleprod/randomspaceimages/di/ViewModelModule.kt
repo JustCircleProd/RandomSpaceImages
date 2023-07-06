@@ -4,8 +4,8 @@ import com.justcircleprod.randomspaceimages.data.remote.apod.APODAPI
 import com.justcircleprod.randomspaceimages.data.remote.apod.APODConstants
 import com.justcircleprod.randomspaceimages.data.remote.nasaLibrary.NASALibraryAPI
 import com.justcircleprod.randomspaceimages.data.remote.nasaLibrary.NASALibraryConstants
-import com.justcircleprod.randomspaceimages.data.repositories.apodRepository.DefaultAPODRepository
-import com.justcircleprod.randomspaceimages.data.repositories.nasaLibraryRepository.DefaultNASALibraryRepository
+import com.justcircleprod.randomspaceimages.data.repository.APODRepositoryImpl
+import com.justcircleprod.randomspaceimages.data.repository.NASALibraryRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,8 +29,8 @@ object ViewModelModule {
 
     @Provides
     @ViewModelScoped
-    fun provideDefaultNASALibraryRepository(nasaLibraryAPI: NASALibraryAPI) =
-        DefaultNASALibraryRepository(nasaLibraryAPI)
+    fun provideNASALibraryRepository(nasaLibraryAPI: NASALibraryAPI) =
+        NASALibraryRepositoryImpl(nasaLibraryAPI)
 
     @Provides
     @ViewModelScoped
@@ -49,6 +49,6 @@ object ViewModelModule {
 
     @Provides
     @ViewModelScoped
-    fun provideDefaultAPODRepository(apodAPI: APODAPI) =
-        DefaultAPODRepository(apodAPI)
+    fun provideAPODRepository(apodAPI: APODAPI) =
+        APODRepositoryImpl(apodAPI)
 }

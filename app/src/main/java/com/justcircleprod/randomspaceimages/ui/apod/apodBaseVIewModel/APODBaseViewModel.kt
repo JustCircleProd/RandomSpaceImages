@@ -2,31 +2,30 @@ package com.justcircleprod.randomspaceimages.ui.apod.apodBaseVIewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.justcircleprod.randomspaceimages.data.dataStore.DataStoreConstants
-import com.justcircleprod.randomspaceimages.data.models.APODEntry
-import com.justcircleprod.randomspaceimages.data.repositories.dataStoreRepository.DefaultDataStoreRepository
-import com.justcircleprod.randomspaceimages.data.repositories.roomRepository.DefaultRoomRepository
+import com.justcircleprod.randomspaceimages.data.local.settings.DataStoreConstants
+import com.justcircleprod.randomspaceimages.domain.model.APODEntry
+import com.justcircleprod.randomspaceimages.domain.repository.APODFavouritesRepository
+import com.justcircleprod.randomspaceimages.domain.repository.SettingsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 abstract class APODBaseViewModel(
-    protected val roomRepository: DefaultRoomRepository,
-    protected val dataStoreRepository: DefaultDataStoreRepository
-) :
-    ViewModel() {
-    fun isAddedToFavourites(date: String) = roomRepository.isAddedToAPODFavourites(date)
+    protected val apodFavouritesRepository: APODFavouritesRepository,
+    protected val settingsRepository: SettingsRepository
+) : ViewModel() {
+    fun isAddedToFavourites(date: String) = apodFavouritesRepository.isAddedToAPODFavourites(date)
     val qualityOfSavingAndSharingImages =
-        dataStoreRepository.readSetting(DataStoreConstants.QUALITY_OF_SAVING_AND_SHARING_IMAGES)
+        settingsRepository.readSetting(DataStoreConstants.QUALITY_OF_SAVING_AND_SHARING_IMAGES)
 
     fun addToFavourites(apodEntry: APODEntry) {
         viewModelScope.launch(Dispatchers.IO) {
-            roomRepository.addToAPODFavourites(apodEntry)
+            apodFavouritesRepository.addToAPODFavourites(apodEntry)
         }
     }
 
     fun removeFromFavourites(apodEntry: APODEntry) {
         viewModelScope.launch(Dispatchers.IO) {
-            roomRepository.removeFromAPODFavourites(apodEntry)
+            apodFavouritesRepository.removeFromAPODFavourites(apodEntry)
         }
     }
 }

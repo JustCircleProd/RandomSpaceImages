@@ -1,13 +1,14 @@
-package com.justcircleprod.randomspaceimages.data.repositories.nasaLibraryRepository
+package com.justcircleprod.randomspaceimages.data.repository
 
 import com.justcircleprod.randomspaceimages.data.remote.nasaLibrary.NASALibraryAPI
 import com.justcircleprod.randomspaceimages.data.remote.nasaLibrary.responses.NASALibraryImageList
+import com.justcircleprod.randomspaceimages.domain.repository.NASALibraryRepository
 import com.justcircleprod.randomspaceimages.util.Resource
 import dagger.hilt.android.scopes.ViewModelScoped
 import javax.inject.Inject
 
 @ViewModelScoped
-class DefaultNASALibraryRepository @Inject constructor(private val nasaLibraryAPI: NASALibraryAPI) :
+class NASALibraryRepositoryImpl @Inject constructor(private val nasaLibraryAPI: NASALibraryAPI) :
     NASALibraryRepository {
 
     override suspend fun getImages(

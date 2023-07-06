@@ -20,9 +20,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
 import com.justcircleprod.randomspaceimages.R
-import com.justcircleprod.randomspaceimages.data.models.NASALibraryImageEntry
+import com.justcircleprod.randomspaceimages.domain.model.NASALibraryImageEntry
 import com.justcircleprod.randomspaceimages.ui.common.bounceClick
-import com.justcircleprod.randomspaceimages.ui.random.nasaLibraryBaseViewModel.NASALibraryBaseViewModel
+import com.justcircleprod.randomspaceimages.ui.random.randomBaseViewModel.RandomBaseViewModel
 import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.components.rememberImageComponent
@@ -33,7 +33,7 @@ import com.skydoves.landscapist.placeholder.shimmer.ShimmerPlugin
 @Composable
 fun NASALibraryImageEntryItem(
     nasaLibraryImageEntry: NASALibraryImageEntry,
-    viewModel: NASALibraryBaseViewModel,
+    viewModel: RandomBaseViewModel,
     onImageEntryClick: (nasaLibraryImageEntry: NASALibraryImageEntry) -> Unit
 ) {
     val isClickEnabled = remember { mutableStateOf(false) }
@@ -97,7 +97,7 @@ fun NASALibraryImageEntryImage(
 }
 
 @Composable
-fun ImageExtra(nasaLibraryImageEntry: NASALibraryImageEntry, viewModel: NASALibraryBaseViewModel) {
+fun ImageExtra(nasaLibraryImageEntry: NASALibraryImageEntry, viewModel: RandomBaseViewModel) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -130,7 +130,7 @@ fun ImageTitle(imageTitle: String, modifier: Modifier) {
 @Composable
 fun FavouriteButton(
     nasaLibraryImageEntry: NASALibraryImageEntry,
-    viewModel: NASALibraryBaseViewModel
+    viewModel: RandomBaseViewModel
 ) {
     val isAdded by viewModel.isAddedToFavourites(nasaLibraryImageEntry.nasaId).observeAsState()
 

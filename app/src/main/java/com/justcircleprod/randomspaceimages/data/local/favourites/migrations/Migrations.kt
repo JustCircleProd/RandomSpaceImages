@@ -1,4 +1,4 @@
-package com.justcircleprod.randomspaceimages.data.room.migrations
+package com.justcircleprod.randomspaceimages.data.local.favourites.migrations
 
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase

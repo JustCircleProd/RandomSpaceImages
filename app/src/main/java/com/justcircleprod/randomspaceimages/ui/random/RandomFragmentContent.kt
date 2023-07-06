@@ -24,7 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.justcircleprod.randomspaceimages.R
-import com.justcircleprod.randomspaceimages.data.models.NASALibraryImageEntry
+import com.justcircleprod.randomspaceimages.domain.model.NASALibraryImageEntry
 import com.justcircleprod.randomspaceimages.ui.common.pagerTabIndicatorOffset
 import com.justcircleprod.randomspaceimages.ui.random.common.SearchButton
 import com.justcircleprod.randomspaceimages.ui.random.randomFavouritesPage.RandomFavouritesPage

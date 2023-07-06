@@ -1,11 +1,11 @@
 package com.justcircleprod.randomspaceimages.ui.apod.apodPage
 
 import androidx.lifecycle.viewModelScope
-import com.justcircleprod.randomspaceimages.data.models.APODEntry
 import com.justcircleprod.randomspaceimages.data.remote.apod.APODConstants
-import com.justcircleprod.randomspaceimages.data.repositories.apodRepository.DefaultAPODRepository
-import com.justcircleprod.randomspaceimages.data.repositories.dataStoreRepository.DefaultDataStoreRepository
-import com.justcircleprod.randomspaceimages.data.repositories.roomRepository.DefaultRoomRepository
+import com.justcircleprod.randomspaceimages.data.repository.APODFavouritesRepositoryImpl
+import com.justcircleprod.randomspaceimages.data.repository.APODRepositoryImpl
+import com.justcircleprod.randomspaceimages.data.repository.SettingsRepositoryImpl
+import com.justcircleprod.randomspaceimages.domain.model.APODEntry
 import com.justcircleprod.randomspaceimages.ui.apod.apodBaseVIewModel.APODBaseViewModel
 import com.justcircleprod.randomspaceimages.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,10 +17,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class APODPageViewModel @Inject constructor(
-    private val apodRepository: DefaultAPODRepository,
-    roomRepository: DefaultRoomRepository,
-    dataStoreRepository: DefaultDataStoreRepository
-) : APODBaseViewModel(roomRepository, dataStoreRepository) {
+    private val apodRepository: APODRepositoryImpl,
+    apodFavouritesRepository: APODFavouritesRepositoryImpl,
+    settingsRepository: SettingsRepositoryImpl
+) : APODBaseViewModel(apodFavouritesRepository, settingsRepository) {
     val apodList = MutableStateFlow<MutableList<APODEntry>>(mutableListOf())
 
     val isLoading = MutableStateFlow(true)

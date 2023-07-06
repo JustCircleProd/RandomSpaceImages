@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.justcircleprod.randomspaceimages.R
-import com.justcircleprod.randomspaceimages.data.models.NASALibraryImageEntry
+import com.justcircleprod.randomspaceimages.domain.model.NASALibraryImageEntry
 import com.justcircleprod.randomspaceimages.ui.common.BackButton
 import com.justcircleprod.randomspaceimages.ui.common.ErrorInfo
 import com.justcircleprod.randomspaceimages.ui.common.ErrorInfoCard
@@ -190,6 +190,7 @@ fun NoResults(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.rocket_icon_space_size)))
         Icon(
             painter = painterResource(id = R.drawable.icon_rocket),
+            tint = colorResource(id = R.color.icon_tint),
             contentDescription = null,
             modifier = Modifier.size(dimensionResource(id = R.dimen.info_icon_size))
         )

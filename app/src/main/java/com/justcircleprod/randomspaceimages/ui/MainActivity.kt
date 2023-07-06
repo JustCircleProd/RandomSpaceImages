@@ -12,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.justcircleprod.randomspaceimages.R
-import com.justcircleprod.randomspaceimages.data.dataStore.DataStoreConstants
+import com.justcircleprod.randomspaceimages.data.local.settings.DataStoreConstants
 import com.justcircleprod.randomspaceimages.databinding.ActivityMainBinding
 import com.justcircleprod.randomspaceimages.ui.bottomNavigation.BottomNavItem
 import com.justcircleprod.randomspaceimages.ui.bottomNavigation.BottomNavigation

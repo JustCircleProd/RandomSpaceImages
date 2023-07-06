@@ -1,11 +1,12 @@
-package com.justcircleprod.randomspaceimages.data.repositories.apodRepository
+package com.justcircleprod.randomspaceimages.data.repository
 
-import com.justcircleprod.randomspaceimages.data.models.APODEntry
 import com.justcircleprod.randomspaceimages.data.remote.apod.APODAPI
+import com.justcircleprod.randomspaceimages.domain.model.APODEntry
+import com.justcircleprod.randomspaceimages.domain.repository.APODRepository
 import com.justcircleprod.randomspaceimages.util.Resource
 import javax.inject.Inject
 
-class DefaultAPODRepository @Inject constructor(private val apodAPI: APODAPI) : APODRepository {
+class APODRepositoryImpl @Inject constructor(private val apodAPI: APODAPI) : APODRepository {
     override suspend fun getTodayAPOD(): Resource<APODEntry> {
         return try {
             Resource.Success(

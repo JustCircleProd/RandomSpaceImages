@@ -1,6 +1,6 @@
 package com.justcircleprod.randomspaceimages.data.remote.apod
 
-import com.justcircleprod.randomspaceimages.data.models.APODEntry
+import com.justcircleprod.randomspaceimages.domain.model.APODEntry
 import retrofit2.http.GET
 import retrofit2.http.Query
 

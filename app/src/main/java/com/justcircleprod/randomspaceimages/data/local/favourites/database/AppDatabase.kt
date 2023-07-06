@@ -1,15 +1,15 @@
-package com.justcircleprod.randomspaceimages.data.room.database
+package com.justcircleprod.randomspaceimages.data.local.favourites.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.justcircleprod.randomspaceimages.data.models.APODEntry
-import com.justcircleprod.randomspaceimages.data.models.NASALibraryImageEntry
-import com.justcircleprod.randomspaceimages.data.room.dao.APODFavouritesDao
-import com.justcircleprod.randomspaceimages.data.room.dao.NASALibraryFavouritesDao
-import com.justcircleprod.randomspaceimages.data.room.migrations.MIGRATION_1_2
-import com.justcircleprod.randomspaceimages.data.room.migrations.MIGRATION_2_3
+import com.justcircleprod.randomspaceimages.data.local.favourites.dao.APODFavouritesDao
+import com.justcircleprod.randomspaceimages.data.local.favourites.dao.NASALibraryFavouritesDao
+import com.justcircleprod.randomspaceimages.data.local.favourites.migrations.MIGRATION_1_2
+import com.justcircleprod.randomspaceimages.data.local.favourites.migrations.MIGRATION_2_3
+import com.justcircleprod.randomspaceimages.domain.model.APODEntry
+import com.justcircleprod.randomspaceimages.domain.model.NASALibraryImageEntry
 
 @Database(
     version = 3,

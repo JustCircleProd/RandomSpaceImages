@@ -2,36 +2,36 @@ package com.justcircleprod.randomspaceimages.ui.more
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.justcircleprod.randomspaceimages.data.dataStore.DataStoreConstants
-import com.justcircleprod.randomspaceimages.data.repositories.dataStoreRepository.DefaultDataStoreRepository
+import com.justcircleprod.randomspaceimages.data.local.settings.DataStoreConstants
+import com.justcircleprod.randomspaceimages.data.repository.SettingsRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MoreViewModel @Inject constructor(private val dataStoreRepository: DefaultDataStoreRepository) :
+class MoreViewModel @Inject constructor(private val settingsRepository: SettingsRepositoryImpl) :
     ViewModel() {
-    val themeValue = dataStoreRepository.readSetting(DataStoreConstants.THEME_KEY)
-    val startScreenValue = dataStoreRepository.readSetting(DataStoreConstants.START_SCREEN)
+    val themeValue = settingsRepository.readSetting(DataStoreConstants.THEME_KEY)
+    val startScreenValue = settingsRepository.readSetting(DataStoreConstants.START_SCREEN)
     val qualityOfSavingAndSharingImages =
-        dataStoreRepository.readSetting(DataStoreConstants.QUALITY_OF_SAVING_AND_SHARING_IMAGES)
+        settingsRepository.readSetting(DataStoreConstants.QUALITY_OF_SAVING_AND_SHARING_IMAGES)
 
     fun saveThemeValue(themeValue: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            dataStoreRepository.saveSetting(DataStoreConstants.THEME_KEY, themeValue)
+            settingsRepository.saveSetting(DataStoreConstants.THEME_KEY, themeValue)
         }
     }
 
     fun saveStartScreenValue(startScreenValue: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            dataStoreRepository.saveSetting(DataStoreConstants.START_SCREEN, startScreenValue)
+            settingsRepository.saveSetting(DataStoreConstants.START_SCREEN, startScreenValue)
         }
     }
 
     fun saveQualityOfSavingAndSharingImagesValue(value: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            dataStoreRepository.saveSetting(
+            settingsRepository.saveSetting(
                 DataStoreConstants.QUALITY_OF_SAVING_AND_SHARING_IMAGES,
                 value
             )

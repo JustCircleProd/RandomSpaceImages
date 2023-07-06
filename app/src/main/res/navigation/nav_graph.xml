@@ -93,7 +93,7 @@
 
         <argument
             android:name="nasaLibraryImageEntry"
-            app:argType="com.justcircleprod.randomspaceimages.data.models.NASALibraryImageEntry" />
+            app:argType="com.justcircleprod.randomspaceimages.domain.model.NASALibraryImageEntry" />
 
         <action
             android:id="@+id/to_detail_image"

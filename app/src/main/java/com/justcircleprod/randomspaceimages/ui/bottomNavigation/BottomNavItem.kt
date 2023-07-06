@@ -4,7 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import com.justcircleprod.randomspaceimages.R
-import com.justcircleprod.randomspaceimages.data.dataStore.DataStoreConstants
+import com.justcircleprod.randomspaceimages.data.local.settings.DataStoreConstants
 
 sealed class BottomNavItem(
     @IdRes val navigationId: Int,

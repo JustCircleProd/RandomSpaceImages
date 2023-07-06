@@ -1,14 +1,15 @@
-package com.justcircleprod.randomspaceimages.data.repositories.dataStoreRepository
+package com.justcircleprod.randomspaceimages.data.repository
 
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.justcircleprod.randomspaceimages.data.dataStore.DataStoreManager
+import com.justcircleprod.randomspaceimages.data.local.settings.DataStoreManager
+import com.justcircleprod.randomspaceimages.domain.repository.SettingsRepository
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @ViewModelScoped
-class DefaultDataStoreRepository @Inject constructor(private val dataStoreManager: DataStoreManager) :
-    DataStoreRepository {
+class SettingsRepositoryImpl @Inject constructor(private val dataStoreManager: DataStoreManager) :
+    SettingsRepository {
 
     override suspend fun saveSetting(key: String, value: String) {
         dataStoreManager.saveSetting(stringPreferencesKey(key), value)

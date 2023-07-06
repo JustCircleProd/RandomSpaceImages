@@ -1,10 +1,11 @@
 package com.justcircleprod.randomspaceimages.di
 
 import android.content.Context
-import com.justcircleprod.randomspaceimages.data.dataStore.DataStoreManager
-import com.justcircleprod.randomspaceimages.data.repositories.dataStoreRepository.DefaultDataStoreRepository
-import com.justcircleprod.randomspaceimages.data.repositories.roomRepository.DefaultRoomRepository
-import com.justcircleprod.randomspaceimages.data.room.database.AppDatabase
+import com.justcircleprod.randomspaceimages.data.local.favourites.database.AppDatabase
+import com.justcircleprod.randomspaceimages.data.local.settings.DataStoreManager
+import com.justcircleprod.randomspaceimages.data.repository.APODFavouritesRepositoryImpl
+import com.justcircleprod.randomspaceimages.data.repository.NASALibraryFavouritesRepositoryImpl
+import com.justcircleprod.randomspaceimages.data.repository.SettingsRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,13 +18,18 @@ import javax.inject.Singleton
 object AppModule {
     @Singleton
     @Provides
-    fun provideRoomDatabase(@ApplicationContext context: Context) =
+    fun provideAppDatabase(@ApplicationContext context: Context) =
         AppDatabase.getInstance(context)
 
     @Singleton
     @Provides
-    fun provideDefaultRoomRepository(roomDatabase: AppDatabase) =
-        DefaultRoomRepository(roomDatabase)
+    fun provideAPODFavouritesRepository(appDatabase: AppDatabase) =
+        APODFavouritesRepositoryImpl(appDatabase)
+
+    @Singleton
+    @Provides
+    fun provideNASALibraryFavouritesRepository(appDatabase: AppDatabase) =
+        NASALibraryFavouritesRepositoryImpl(appDatabase)
 
     @Singleton
     @Provides
@@ -32,6 +38,6 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideDefaultDataStoreRepository(dataStoreManager: DataStoreManager) =
-        DefaultDataStoreRepository(dataStoreManager)
+    fun provideSettingsRepository(dataStoreManager: DataStoreManager) =
+        SettingsRepositoryImpl(dataStoreManager)
 }

@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.justcircleprod.randomspaceimages.R
-import com.justcircleprod.randomspaceimages.data.dataStore.DataStoreConstants
+import com.justcircleprod.randomspaceimages.data.local.settings.DataStoreConstants
 import com.justcircleprod.randomspaceimages.ui.more.expandableCard.ExpandableCard
 import com.justcircleprod.randomspaceimages.ui.more.licenses.Licenses
 import com.justcircleprod.randomspaceimages.ui.more.licenses.LicensesList

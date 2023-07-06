@@ -1,4 +1,4 @@
-package com.justcircleprod.randomspaceimages.data.dataStore
+package com.justcircleprod.randomspaceimages.data.local.settings
 
 import android.content.Context
 import androidx.datastore.preferences.core.Preferences

@@ -1,11 +1,11 @@
 package com.justcircleprod.randomspaceimages.ui.random.randomPage
 
 import androidx.lifecycle.viewModelScope
-import com.justcircleprod.randomspaceimages.data.models.NASALibraryImageEntry
 import com.justcircleprod.randomspaceimages.data.remote.nasaLibrary.NASALibraryConstants
-import com.justcircleprod.randomspaceimages.data.repositories.nasaLibraryRepository.DefaultNASALibraryRepository
-import com.justcircleprod.randomspaceimages.data.repositories.roomRepository.DefaultRoomRepository
-import com.justcircleprod.randomspaceimages.ui.random.nasaLibraryBaseViewModel.NASALibraryBaseViewModel
+import com.justcircleprod.randomspaceimages.data.repository.NASALibraryFavouritesRepositoryImpl
+import com.justcircleprod.randomspaceimages.data.repository.NASALibraryRepositoryImpl
+import com.justcircleprod.randomspaceimages.domain.model.NASALibraryImageEntry
+import com.justcircleprod.randomspaceimages.ui.random.randomBaseViewModel.RandomBaseViewModel
 import com.justcircleprod.randomspaceimages.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,9 +15,9 @@ import kotlin.math.ceil
 
 @HiltViewModel
 class RandomPageViewModel @Inject constructor(
-    private val nasaLibraryRepository: DefaultNASALibraryRepository,
-    roomRepository: DefaultRoomRepository
-) : NASALibraryBaseViewModel(roomRepository = roomRepository) {
+    private val nasaLibraryRepository: NASALibraryRepositoryImpl,
+    nasaLibraryFavouritesRepository: NASALibraryFavouritesRepositoryImpl
+) : RandomBaseViewModel(nasaLibraryFavouritesRepository = nasaLibraryFavouritesRepository) {
 
     private val page = MutableStateFlow(0)
     private val year = MutableStateFlow(NASALibraryConstants.YEAR_END)

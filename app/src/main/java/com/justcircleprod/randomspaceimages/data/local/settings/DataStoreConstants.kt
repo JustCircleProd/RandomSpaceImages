@@ -1,4 +1,4 @@
-package com.justcircleprod.randomspaceimages.data.dataStore
+package com.justcircleprod.randomspaceimages.data.local.settings
 
 object DataStoreConstants {
     const val THEME_KEY = "THEME"

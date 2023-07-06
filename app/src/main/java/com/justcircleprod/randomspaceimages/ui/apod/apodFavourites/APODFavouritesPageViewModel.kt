@@ -2,10 +2,10 @@ package com.justcircleprod.randomspaceimages.ui.apod.apodFavourites
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.justcircleprod.randomspaceimages.data.models.APODEntry
 import com.justcircleprod.randomspaceimages.data.remote.apod.APODConstants
-import com.justcircleprod.randomspaceimages.data.repositories.dataStoreRepository.DefaultDataStoreRepository
-import com.justcircleprod.randomspaceimages.data.repositories.roomRepository.DefaultRoomRepository
+import com.justcircleprod.randomspaceimages.data.repository.APODFavouritesRepositoryImpl
+import com.justcircleprod.randomspaceimages.data.repository.SettingsRepositoryImpl
+import com.justcircleprod.randomspaceimages.domain.model.APODEntry
 import com.justcircleprod.randomspaceimages.ui.apod.apodBaseVIewModel.APODBaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,9 +16,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class APODFavouritesPageViewModel @Inject constructor(
-    roomRepository: DefaultRoomRepository,
-    dataStoreRepository: DefaultDataStoreRepository
-) : APODBaseViewModel(roomRepository, dataStoreRepository) {
+    apodFavouritesRepository: APODFavouritesRepositoryImpl,
+    settingsRepository: SettingsRepositoryImpl
+) : APODBaseViewModel(apodFavouritesRepository, settingsRepository) {
 
     val favourites = MutableLiveData<List<APODEntry>>()
 
@@ -33,9 +33,10 @@ class APODFavouritesPageViewModel @Inject constructor(
         viewModelScope.launch {
             setLoadingOrRefreshing(refresh, true)
 
-            val sortedFavourites = roomRepository.getAllAPODFavourites().sortedByDescending {
-                SimpleDateFormat(APODConstants.DATE_FORMAT, Locale.US).parse(it.date)
-            }
+            val sortedFavourites =
+                apodFavouritesRepository.getAllAPODFavourites().sortedByDescending {
+                    SimpleDateFormat(APODConstants.DATE_FORMAT, Locale.US).parse(it.date)
+                }
             favourites.postValue(
                 sortedFavourites
             )

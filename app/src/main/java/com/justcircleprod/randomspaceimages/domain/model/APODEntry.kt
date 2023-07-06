@@ -1,4 +1,4 @@
-package com.justcircleprod.randomspaceimages.data.models
+package com.justcircleprod.randomspaceimages.domain.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

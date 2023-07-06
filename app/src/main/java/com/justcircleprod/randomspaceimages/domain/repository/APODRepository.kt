@@ -1,6 +1,6 @@
-package com.justcircleprod.randomspaceimages.data.repositories.apodRepository
+package com.justcircleprod.randomspaceimages.domain.repository
 
-import com.justcircleprod.randomspaceimages.data.models.APODEntry
+import com.justcircleprod.randomspaceimages.domain.model.APODEntry
 import com.justcircleprod.randomspaceimages.util.Resource
 
 interface APODRepository {

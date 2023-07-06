@@ -34,8 +34,8 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewModelScope
 import com.justcircleprod.randomspaceimages.R
-import com.justcircleprod.randomspaceimages.data.models.APODEntry
 import com.justcircleprod.randomspaceimages.data.remote.apod.APODConstants
+import com.justcircleprod.randomspaceimages.domain.model.APODEntry
 import com.justcircleprod.randomspaceimages.ui.apod.apodBaseVIewModel.APODBaseViewModel
 import com.justcircleprod.randomspaceimages.ui.common.ImageActionMenu
 import com.justcircleprod.randomspaceimages.ui.common.ProgressIndicator
@@ -278,7 +278,7 @@ fun APODInfo(apodEntry: APODEntry) {
                 .padding(top = dimensionResource(id = R.dimen.apod_item_info_spacer_size))
         ) {
             Text(
-                text = apodEntry.title,
+                text = apodEntry.title.trim(),
                 color = colorResource(id = R.color.text),
                 fontFamily = LatoFontFamily,
                 fontSize = 18.sp,
@@ -301,7 +301,7 @@ fun APODInfo(apodEntry: APODEntry) {
             Spacer(Modifier.height(dimensionResource(id = R.dimen.apod_item_info_spacer_size)))
 
             Text(
-                text = apodEntry.explanation,
+                text = apodEntry.explanation.trim(),
                 color = colorResource(id = R.color.text),
                 fontFamily = LatoFontFamily,
                 fontSize = 16.sp
@@ -310,12 +310,16 @@ fun APODInfo(apodEntry: APODEntry) {
             if (apodEntry.copyright != null) {
                 Spacer(Modifier.height(dimensionResource(id = R.dimen.apod_item_info_spacer_size)))
 
+                val copyrightText = buildAnnotatedString {
+                    append(stringResource(id = R.string.copyright))
+                    append(" ")
+                    append(
+                        apodEntry.copyright.trim().replace("\n", "")
+                    )
+                }
+
                 Text(
-                    text = buildAnnotatedString {
-                        append(stringResource(id = R.string.copyright))
-                        append(" ")
-                        append(apodEntry.copyright)
-                    },
+                    text = copyrightText,
                     color = colorResource(id = R.color.second_text),
                     fontFamily = LatoFontFamily,
                     fontSize = 15.sp

@@ -42,7 +42,7 @@ import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.justcircleprod.randomspaceimages.R
-import com.justcircleprod.randomspaceimages.data.dataStore.DataStoreConstants
+import com.justcircleprod.randomspaceimages.data.local.settings.DataStoreConstants
 import com.justcircleprod.randomspaceimages.ui.extensions.getActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
