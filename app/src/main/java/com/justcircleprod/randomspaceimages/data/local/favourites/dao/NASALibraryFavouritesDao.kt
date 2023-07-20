@@ -13,7 +13,10 @@ interface NASALibraryFavouritesDao {
     suspend fun getAll(): List<NASALibraryImageEntry>
 
     @Query("SELECT EXISTS(SELECT * FROM nasa_library_favourites WHERE nasaId = :nasaId)")
-    fun isAdded(nasaId: String): LiveData<Boolean>
+    fun isAddedLiveData(nasaId: String): LiveData<Boolean>
+
+    @Query("SELECT EXISTS(SELECT * FROM nasa_library_favourites WHERE nasaId = :nasaId)")
+    suspend fun isAdded(nasaId: String): Boolean
 
     @Insert
     suspend fun add(nasaLibraryImageEntry: NASALibraryImageEntry)

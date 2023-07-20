@@ -1,17 +1,33 @@
 package com.justcircleprod.randomspaceimages.ui.apod.apodEntryItem
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,150 +37,96 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.lifecycle.viewModelScope
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.justcircleprod.randomspaceimages.R
-import com.justcircleprod.randomspaceimages.data.remote.apod.APODConstants
 import com.justcircleprod.randomspaceimages.domain.model.APODEntry
 import com.justcircleprod.randomspaceimages.ui.apod.apodBaseVIewModel.APODBaseViewModel
-import com.justcircleprod.randomspaceimages.ui.common.ImageActionMenu
+import com.justcircleprod.randomspaceimages.ui.apod.apodPagesSnackbarState.APODPagesSnackBarState
+import com.justcircleprod.randomspaceimages.ui.common.ImageActionButtons
 import com.justcircleprod.randomspaceimages.ui.common.ProgressIndicator
-import com.justcircleprod.randomspaceimages.ui.common.VideoActionMenu
-import com.justcircleprod.randomspaceimages.ui.common.fromServerFormatToAppFormat
-import com.justcircleprod.randomspaceimages.ui.common.localCompositions.LocalImageActionStates
+import com.justcircleprod.randomspaceimages.ui.common.VideoActionButtons
+import com.justcircleprod.randomspaceimages.ui.extensions.getActivity
 import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.components.rememberImageComponent
 import com.skydoves.landscapist.glide.GlideImage
 import com.skydoves.landscapist.glide.GlideImageState
 import com.skydoves.landscapist.placeholder.shimmer.ShimmerPlugin
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import java.util.Locale
 
 @Composable
 fun APODEntryItem(
     apodEntry: APODEntry,
+    apodStates: APODStates,
     viewModel: APODBaseViewModel,
-    scaffoldState: ScaffoldState,
-    coroutineScope: CoroutineScope,
-    onImageClick: (imageUrl: String, imageUrlHd: String?) -> Unit
+    context: Context,
+    onImageClick: (imageUrl: String, imageUrlHd: String?) -> Unit,
+    onOpenVideoError: () -> Unit,
+    onFavouriteButtonClick: () -> Unit,
+    onSaveImageButtonClick: () -> Unit,
+    onShareImageButtonClick: () -> Unit,
+    onShareVideoButtonClick: () -> Unit,
+    onTranslateButtonClick: () -> Unit
 ) {
     Card(
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.apod_item_rounded_corner_radius)),
         backgroundColor = colorResource(id = R.color.card_background),
         elevation = dimensionResource(id = R.dimen.card_elevation)
     ) {
-        ConstraintLayout(
-            modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.apod_item_card_content_bottom_space_size))
+        val isImageClickEnabled = remember { mutableStateOf(false) }
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = dimensionResource(id = R.dimen.apod_item_card_content_bottom_space_size))
         ) {
-            val (contentColumn, actionButtons) = createRefs()
-
-            val isImageClickEnabled = remember { mutableStateOf(false) }
-
-            Column(
-                modifier = Modifier
-                    .constrainAs(contentColumn) {
-                        top.linkTo(parent.top)
-                        start.linkTo(parent.start)
-                        bottom.linkTo(parent.bottom)
-                        end.linkTo(parent.end)
-                    }
-                    .fillMaxWidth()
-            ) {
-                if (apodEntry.media_type == "image") {
-                    APODImage(
-                        apodEntry = apodEntry,
-                        onImageClick = onImageClick,
-                        isClickEnabled = isImageClickEnabled
-                    )
-                } else {
-                    val context = LocalContext.current
-
-                    Video(
-                        videoUrl = apodEntry.url,
-                        onOpenError = {
-                            coroutineScope.launch {
-                                scaffoldState.snackbarHostState.showSnackbar(
-                                    context.getString(R.string.failed_to_open_video),
-                                    duration = SnackbarDuration.Short
-                                )
-                            }
-                        }
-                    )
-                }
-
-                APODInfo(apodEntry = apodEntry)
+            if (apodEntry.media_type == "image") {
+                APODImage(
+                    title = apodEntry.title,
+                    url = apodEntry.url,
+                    hdurl = apodEntry.hdurl,
+                    onImageClick = onImageClick,
+                    isClickEnabled = isImageClickEnabled
+                )
+            } else {
+                Video(
+                    videoUrl = apodEntry.url,
+                    onOpenError = onOpenVideoError
+                )
             }
 
-            val isAddedToFavourites =
-                viewModel.isAddedToFavourites(apodEntry.date).observeAsState()
+            APODInfo(apodStates)
 
-            when {
-                isImageClickEnabled.value && apodEntry.media_type == "image" -> {
-                    ImageActionMenu(
-                        scaffoldState = scaffoldState,
-                        coroutineScope = coroutineScope,
-                        viewModelScope = viewModel.viewModelScope,
-                        title = apodEntry.title,
-                        savingImageToGallery = LocalImageActionStates.current.savingToGallery,
-                        sharingImage = LocalImageActionStates.current.sharingImage,
-                        qualityOfSavingAndSharingImages = viewModel.qualityOfSavingAndSharingImages,
-                        href = apodEntry.url,
-                        hrefHd = apodEntry.hdurl,
-                        isAddedToFavourites = isAddedToFavourites,
-                        onFavouriteButtonClick = {
-                            if (isAddedToFavourites.value == true) {
-                                viewModel.removeFromFavourites(apodEntry)
-                            } else {
-                                viewModel.addToFavourites(apodEntry)
-                            }
-                        },
-                        modifier = Modifier
-                            .constrainAs(actionButtons) {
-                                top.linkTo(parent.top, margin = 9.dp)
-                                end.linkTo(parent.end)
-                            }
-                            .padding(horizontal = dimensionResource(id = R.dimen.action_buttons_horizontal_space_size))
-                    )
-                }
-                apodEntry.media_type == "video" -> {
-                    VideoActionMenu(
-                        title = apodEntry.title,
-                        href = apodEntry.hdurl ?: apodEntry.url,
-                        isAddedToFavourites = isAddedToFavourites,
-                        onFavouriteButtonClick = {
-                            if (isAddedToFavourites.value == true) {
-                                viewModel.removeFromFavourites(apodEntry)
-                            } else {
-                                viewModel.addToFavourites(apodEntry)
-                            }
-                        },
-                        modifier = Modifier
-                            .constrainAs(actionButtons) {
-                                top.linkTo(parent.top, margin = 9.dp)
-                                end.linkTo(parent.end)
-                            }
-                            .padding(horizontal = dimensionResource(id = R.dimen.action_buttons_horizontal_space_size))
-                    )
-                }
-            }
+            ActionButtons(
+                apodEntry = apodEntry,
+                apodStates = apodStates,
+                context = context,
+                viewModel = viewModel,
+                onFavouriteButtonClick = onFavouriteButtonClick,
+                onSaveImageButtonClick = onSaveImageButtonClick,
+                onShareImageButtonClick = onShareImageButtonClick,
+                onShareVideoButtonClick = onShareVideoButtonClick,
+                onTranslateButtonClick = onTranslateButtonClick
+            )
         }
     }
 }
 
 @Composable
-fun APODImage(
-    apodEntry: APODEntry,
+private fun APODImage(
+    title: String,
+    url: String,
+    hdurl: String?,
     isClickEnabled: MutableState<Boolean>,
     onImageClick: (imageUrl: String, imageUrlHd: String?) -> Unit
 ) {
@@ -184,9 +146,9 @@ fun APODImage(
             }
 
             GlideImage(
-                imageModel = { apodEntry.url },
+                imageModel = { url },
                 imageOptions = ImageOptions(
-                    contentDescription = apodEntry.title
+                    contentDescription = title
                 ),
                 onImageStateChanged = {
                     when (it) {
@@ -217,7 +179,7 @@ fun APODImage(
                         ),
                     ) {
                         if (isClickEnabled.value) {
-                            onImageClick(apodEntry.url, apodEntry.hdurl)
+                            onImageClick(url, hdurl)
                         }
                     }
             )
@@ -226,7 +188,7 @@ fun APODImage(
 }
 
 @Composable
-fun Video(videoUrl: String, onOpenError: () -> Unit) {
+private fun Video(videoUrl: String, onOpenError: () -> Unit) {
     val uriHandler = LocalUriHandler.current
 
     Box(contentAlignment = Alignment.Center) {
@@ -269,7 +231,12 @@ fun Video(videoUrl: String, onOpenError: () -> Unit) {
 }
 
 @Composable
-fun APODInfo(apodEntry: APODEntry) {
+private fun APODInfo(apodStates: APODStates) {
+    val title by apodStates.title.collectAsStateWithLifecycle()
+    val date by apodStates.date.collectAsStateWithLifecycle()
+    val explanation by apodStates.explanation.collectAsStateWithLifecycle()
+    val copyright by apodStates.copyright.collectAsStateWithLifecycle()
+
     SelectionContainer {
         Column(
             modifier = Modifier
@@ -278,53 +245,139 @@ fun APODInfo(apodEntry: APODEntry) {
                 .padding(top = dimensionResource(id = R.dimen.apod_item_info_spacer_size))
         ) {
             Text(
-                text = apodEntry.title.trim(),
+                text = title,
                 color = colorResource(id = R.color.text),
                 fontFamily = LatoFontFamily,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
 
-            val formattedDate =
-                fromServerFormatToAppFormat(apodEntry.date, APODConstants.DATE_FORMAT)
-
-            if (formattedDate != null) {
-                Text(
-                    text = formattedDate,
-                    color = colorResource(id = R.color.second_text),
-                    fontFamily = LatoFontFamily,
-                    fontSize = 15.sp,
-                    maxLines = 1
-                )
-            }
+            Text(
+                text = date,
+                color = colorResource(id = R.color.second_text),
+                fontFamily = LatoFontFamily,
+                fontSize = 15.sp,
+                maxLines = 1
+            )
 
             Spacer(Modifier.height(dimensionResource(id = R.dimen.apod_item_info_spacer_size)))
 
             Text(
-                text = apodEntry.explanation.trim(),
+                text = explanation,
                 color = colorResource(id = R.color.text),
                 fontFamily = LatoFontFamily,
                 fontSize = 16.sp
             )
 
-            if (apodEntry.copyright != null) {
+            if (copyright != null) {
                 Spacer(Modifier.height(dimensionResource(id = R.dimen.apod_item_info_spacer_size)))
 
-                val copyrightText = buildAnnotatedString {
-                    append(stringResource(id = R.string.copyright))
-                    append(" ")
-                    append(
-                        apodEntry.copyright.trim().replace("\n", "")
-                    )
-                }
-
                 Text(
-                    text = copyrightText,
+                    text = copyright!!,
                     color = colorResource(id = R.color.second_text),
                     fontFamily = LatoFontFamily,
                     fontSize = 15.sp
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun ActionButtons(
+    apodEntry: APODEntry,
+    apodStates: APODStates,
+    context: Context,
+    viewModel: APODBaseViewModel,
+    onFavouriteButtonClick: () -> Unit,
+    onSaveImageButtonClick: () -> Unit,
+    onShareImageButtonClick: () -> Unit,
+    onShareVideoButtonClick: () -> Unit,
+    onTranslateButtonClick: () -> Unit,
+) {
+    val isAddedToFavourites =
+        viewModel.isAddedToFavouritesLiveData(apodEntry.date).observeAsState()
+
+    val hasWriteExternalStoragePermission = remember {
+        mutableStateOf(
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) == PackageManager.PERMISSION_GRANTED
+            } else {
+                true
+            }
+        )
+    }
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            hasWriteExternalStoragePermission.value = isGranted
+
+            if (isGranted) {
+                onSaveImageButtonClick()
+                return@rememberLauncherForActivityResult
+            }
+
+            context.getActivity()?.let {
+                if (!ActivityCompat.shouldShowRequestPermissionRationale(
+                        it,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    )
+                ) {
+                    viewModel.snackBarState.value = APODPagesSnackBarState.GrantPermission
+                } else {
+                    viewModel.snackBarState.value = APODPagesSnackBarState.PermissionIsRequired
+                }
+            }
+        }
+    )
+
+    val translating = apodStates.translating.collectAsStateWithLifecycle()
+    val translated = apodStates.translated.collectAsStateWithLifecycle()
+
+    val withTranslateButton = Locale.getDefault().language != "en"
+
+    when (apodEntry.media_type) {
+        "image" -> {
+            ImageActionButtons(
+                savingImageToGallery = viewModel.savingToGallery,
+                onSaveButtonClick = {
+                    if (hasWriteExternalStoragePermission.value) {
+                        onSaveImageButtonClick()
+                    } else {
+                        permissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    }
+                },
+                sharingImage = viewModel.sharingImage,
+                onShareButtonClick = onShareImageButtonClick,
+                isAddedToFavourites = isAddedToFavourites,
+                onFavouriteButtonClick = onFavouriteButtonClick,
+                withTranslateButton = withTranslateButton,
+                translating = translating.value,
+                translated = translated.value,
+                onTranslateButtonClick = onTranslateButtonClick,
+                modifier = Modifier
+                    .padding(top = dimensionResource(id = R.dimen.apod_screen_action_button_top_space_size))
+                    .padding(horizontal = dimensionResource(id = R.dimen.apod_screen_action_button_horizontal_space_size))
+            )
+        }
+
+        "video" -> {
+            VideoActionButtons(
+                isAddedToFavourites = isAddedToFavourites,
+                onFavouriteButtonClick = onFavouriteButtonClick,
+                onShareButtonClick = onShareVideoButtonClick,
+                withTranslateButton = withTranslateButton,
+                translating = translating.value,
+                translated = translated.value,
+                onTranslateButtonClick = onTranslateButtonClick,
+                modifier = Modifier
+                    .padding(top = dimensionResource(id = R.dimen.apod_screen_action_button_top_space_size))
+                    .padding(horizontal = dimensionResource(id = R.dimen.apod_screen_action_button_horizontal_space_size))
+            )
         }
     }
 }

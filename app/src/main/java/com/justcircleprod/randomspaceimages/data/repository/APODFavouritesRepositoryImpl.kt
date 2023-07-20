@@ -13,7 +13,10 @@ class APODFavouritesRepositoryImpl @Inject constructor(private val appDatabase: 
     override suspend fun getAllAPODFavourites(): List<APODEntry> =
         appDatabase.apodFavouritesDao().getAll()
 
-    override fun isAddedToAPODFavourites(date: String): LiveData<Boolean> =
+    override fun isAddedToAPODFavouritesLiveData(date: String): LiveData<Boolean> =
+        appDatabase.apodFavouritesDao().isAddedLiveData(date)
+
+    override suspend fun isAddedToAPODFavourites(date: String): Boolean =
         appDatabase.apodFavouritesDao().isAdded(date)
 
     override suspend fun addToAPODFavourites(apodEntry: APODEntry) {

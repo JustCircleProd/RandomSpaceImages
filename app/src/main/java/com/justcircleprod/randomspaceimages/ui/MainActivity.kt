@@ -4,10 +4,10 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
                     viewModel.bottomNavItems.value = BottomNavItem.getItems(startScreen)
 
                     setContent {
-                        val bottomNavItems by viewModel.bottomNavItems.collectAsState()
+                        val bottomNavItems by viewModel.bottomNavItems.collectAsStateWithLifecycle()
 
                         BottomNavigation(
                             navController = navController,

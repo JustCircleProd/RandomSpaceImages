@@ -32,6 +32,9 @@
 
     <color name="shimmer_highlights">#cccccc</color>
 
+    <color name="action_button_background">#F1F1F1</color>
+    <color name="action_button_icon_tint">#818181</color>
+
     <color name="ripple">#444444</color>
 
     <color name="image_ripple">#cccccc</color>

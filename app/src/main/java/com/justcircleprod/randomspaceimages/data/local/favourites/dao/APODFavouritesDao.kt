@@ -13,7 +13,10 @@ interface APODFavouritesDao {
     suspend fun getAll(): List<APODEntry>
 
     @Query("SELECT EXISTS(SELECT * FROM apod_favourites WHERE date = :date)")
-    fun isAdded(date: String): LiveData<Boolean>
+    fun isAddedLiveData(date: String): LiveData<Boolean>
+
+    @Query("SELECT EXISTS(SELECT * FROM apod_favourites WHERE date = :date)")
+    suspend fun isAdded(date: String): Boolean
 
     @Insert
     suspend fun add(apodEntry: APODEntry)

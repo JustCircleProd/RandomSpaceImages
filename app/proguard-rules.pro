@@ -20,7 +20,7 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep public class com.justcircleprod.randomspaceimages.data.models.** { *; }
+-keep public class com.justcircleprod.randomspaceimages.domain.model.** { *; }
 -keep class com.justcircleprod.randomspaceimages.data.remote.nasaLibrary.responses.** { *; }
 
 ##---------------Begin: proguard configuration for Retrofit  ----------

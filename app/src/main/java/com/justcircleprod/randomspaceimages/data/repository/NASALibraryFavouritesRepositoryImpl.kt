@@ -12,7 +12,10 @@ class NASALibraryFavouritesRepositoryImpl @Inject constructor(private val appDat
     override suspend fun getAllNASALibraryFavourites(): List<NASALibraryImageEntry> =
         appDatabase.nasaLibraryFavouritesDao().getAll()
 
-    override fun isAddedToNASALibraryFavourites(nasaId: String) =
+    override fun isAddedToNASALibraryFavouritesLiveData(nasaId: String) =
+        appDatabase.nasaLibraryFavouritesDao().isAddedLiveData(nasaId)
+
+    override suspend fun isAddedToNASALibraryFavourites(nasaId: String) =
         appDatabase.nasaLibraryFavouritesDao().isAdded(nasaId)
 
     override suspend fun addToNASALibraryFavourites(nasaLibraryImageEntry: NASALibraryImageEntry) {

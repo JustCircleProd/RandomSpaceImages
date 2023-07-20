@@ -4,7 +4,11 @@ import android.graphics.drawable.Drawable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
@@ -164,7 +168,7 @@ fun HdButton(
         modifier = modifier
             .clip(CircleShape)
             .background(Color.Black.copy(0.45f))
-            .size(dimensionResource(id = R.dimen.action_icon_button_size))
+            .size(dimensionResource(id = R.dimen.back_and_hd_button_size))
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(

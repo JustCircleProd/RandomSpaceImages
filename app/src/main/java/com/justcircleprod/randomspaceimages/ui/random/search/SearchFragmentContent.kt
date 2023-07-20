@@ -65,7 +65,7 @@ fun SearchFragmentContent(
         val solarSystemSuggestions = remember { solarSystem }
 
         LazyVerticalGrid(
-            columns = GridCells.Adaptive(dimensionResource(id = R.dimen.image_list_min_grid_cell_size)),
+            columns = GridCells.Adaptive(dimensionResource(id = R.dimen.random_list_min_grid_cell_size)),
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.search_screen_arrangement)),
             horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.search_screen_arrangement)),
             contentPadding = PaddingValues(bottom = dimensionResource(id = R.dimen.search_screen_bottom_space_size)),

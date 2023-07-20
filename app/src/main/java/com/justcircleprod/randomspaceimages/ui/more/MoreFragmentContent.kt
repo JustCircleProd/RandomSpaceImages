@@ -3,13 +3,24 @@ package com.justcircleprod.randomspaceimages.ui.more
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.RadioButton
+import androidx.compose.material.RadioButtonDefaults
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.data.local.settings.DataStoreConstants
 import com.justcircleprod.randomspaceimages.ui.more.expandableCard.ExpandableCard
@@ -69,7 +81,7 @@ fun MoreFragmentContent(viewModel: MoreViewModel) {
 @Composable
 fun ThemeCard(viewModel: MoreViewModel) {
     val themeValue =
-        viewModel.themeValue.collectAsState(initial = "not_initialized")
+        viewModel.themeValue.collectAsStateWithLifecycle(initialValue = "not_initialized")
 
     ExpandableCard(cardTitle = stringResource(id = R.string.app_theme)) { contentModifier ->
         val radioButtonItems = listOf(
@@ -140,7 +152,7 @@ fun ThemeCard(viewModel: MoreViewModel) {
 @Composable
 fun StartScreenCard(viewModel: MoreViewModel) {
     val startScreen =
-        viewModel.startScreenValue.collectAsState(initial = "not_initialized")
+        viewModel.startScreenValue.collectAsStateWithLifecycle(initialValue = "not_initialized")
 
     ExpandableCard(cardTitle = stringResource(id = R.string.start_screen)) { contentModifier ->
         val radioButtonItems = listOf(
@@ -208,7 +220,7 @@ fun StartScreenCard(viewModel: MoreViewModel) {
 @Composable
 fun QualityOfSavingAndSharingImagesCard(viewModel: MoreViewModel) {
     val qualityOfSavingAndSharingImages =
-        viewModel.qualityOfSavingAndSharingImages.collectAsState(initial = "not_initialized")
+        viewModel.qualityOfSavingAndSharingImages.collectAsStateWithLifecycle(initialValue = "not_initialized")
 
     ExpandableCard(cardTitle = stringResource(id = R.string.quality_of_saving_and_sharing_images)) { contentModifier ->
         val radioButtonItems = listOf(

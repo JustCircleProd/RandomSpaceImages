@@ -21,17 +21,7 @@
     <dimen name="tabs_button_icon_size">22dp</dimen>
 
 
-    <dimen name="image_list_min_grid_cell_size">160dp</dimen>
-    <dimen name="image_list_vertical_arrangement">10dp</dimen>
-    <dimen name="image_list_horizontal_arrangement">8dp</dimen>
-    <dimen name="image_list_bottom_space">86dp</dimen>
-
-    <dimen name="image_list_item_extra_padding_top">2dp</dimen>
-    <dimen name="image_list_title_padding_start">4dp</dimen>
-    <dimen name="image_list_favourite_button_size">24dp</dimen>
-    <dimen name="image_list_favourite_icon_size">20dp</dimen>
-
-
+    <dimen name="card_rounded_corner_radius">20dp</dimen>
     <dimen name="card_content_horizontal_space">20dp</dimen>
     <dimen name="card_elevation">2dp</dimen>
 
@@ -42,21 +32,18 @@
     <dimen name="progress_indicator_size">22dp</dimen>
 
 
+    <dimen name="back_and_hd_button_size">42dp</dimen>
     <dimen name="back_button_icon_size">20dp</dimen>
 
-    <dimen name="action_buttons_horizontal_space_size">9dp</dimen>
-    <dimen name="action_icon_button_size">42dp</dimen>
-    <dimen name="action_menu_button_icon_size">25dp</dimen>
 
-    <dimen name="action_button_progress_indicator_size">21dp</dimen>
+    <dimen name="action_button_width">62dp</dimen>
+    <dimen name="action_button_height">32dp</dimen>
 
+    <dimen name="action_button_icon_size">24dp</dimen>
 
-    <dimen name="detail_card_content_vertical_space">12dp</dimen>
-    <dimen name="detail_screen_bottom_space">20dp</dimen>
-    <dimen name="description_top_space_size">4dp</dimen>
+    <dimen name="action_buttons_space_between">6dp</dimen>
 
-    <dimen name="center_and_date_info_padding_top">6dp</dimen>
-    <dimen name="center_and_date_info_padding_bottom">4dp</dimen>
+    <dimen name="action_button_progress_indicator_size">20dp</dimen>
 
 
     <dimen name="rocket_icon_space_size">2dp</dimen>
@@ -67,6 +54,32 @@
     <dimen name="error_info_card_horizontal_space_size">6dp</dimen>
     <dimen name="error_info_card_vertical_space_size">8dp</dimen>
     <dimen name="error_info_card_icon_size">18dp</dimen>
+
+
+    <dimen name="button_rounded_corner_radius">30dp</dimen>
+    <dimen name="button_padding_vertical">12dp</dimen>
+    <dimen name="button_padding_horizontal">30dp</dimen>
+
+
+    <dimen name="detail_image_progress_indicator_spacer_size">9dp</dimen>
+
+
+    <dimen name="random_list_min_grid_cell_size">160dp</dimen>
+    <dimen name="random_list_vertical_arrangement">10dp</dimen>
+    <dimen name="random_list_horizontal_arrangement">8dp</dimen>
+    <dimen name="random_list_bottom_space">86dp</dimen>
+
+    <dimen name="random_list_item_extra_padding_top">2dp</dimen>
+    <dimen name="random_list_item_title_padding_start">4dp</dimen>
+    <dimen name="random_list_item_favourite_icon_size">20dp</dimen>
+
+
+    <dimen name="detail_card_content_bottom_space_size">9dp</dimen>
+    <dimen name="detail_card_content_horizontal_space_size">12dp</dimen>
+    <dimen name="detail_info_space_size">6dp</dimen>
+    <dimen name="detail_action_button_horizontal_space_size">9dp</dimen>
+    <dimen name="detail_screen_action_button_top_space_size">10dp</dimen>
+    <dimen name="detail_screen_bottom_space">86dp</dimen>
 
 
     <dimen name="search_screen_min_grid_cell_size">160dp</dimen>
@@ -95,7 +108,7 @@
     <dimen name="suggestion_card_height">100dp</dimen>
 
 
-    <dimen name="apod_screen_bottom_space">86dp</dimen>
+    <dimen name="apod_screen_bottom_space">186dp</dimen>
     <dimen name="apod_snackbar_host_bottom_space_size">80dp</dimen>
 
     <dimen name="apod_tabs_elements_space_size">6dp</dimen>
@@ -114,13 +127,10 @@
     <dimen name="apod_item_play_video_button_size">56dp</dimen>
     <dimen name="apod_item_play_video_icon_button_size">24dp</dimen>
 
+    <dimen name="apod_screen_action_button_top_space_size">10dp</dimen>
+    <dimen name="apod_screen_action_button_horizontal_space_size">9dp</dimen>
 
-    <dimen name="button_rounded_corner_radius">30dp</dimen>
-    <dimen name="button_padding_vertical">12dp</dimen>
-    <dimen name="button_padding_horizontal">30dp</dimen>
-
-
-    <dimen name="detail_image_progress_indicator_spacer_size">9dp</dimen>
+    <dimen name="apod_screen_load_more_button_and_progress_top_space_size">12dp</dimen>
 
 
     <dimen name="more_screen_top_space_size">4dp</dimen>

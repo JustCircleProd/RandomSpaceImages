@@ -4,7 +4,12 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
@@ -31,7 +36,7 @@ import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
 @Composable
 fun ExpandableCard(
     cardTitle: String,
-    CardContent: @Composable (contentModifier: Modifier) -> Unit
+    cardContent: @Composable (contentModifier: Modifier) -> Unit
 ) {
     val isCardExpanded = rememberSaveable { mutableStateOf(false) }
     val angle by animateFloatAsState(if (isCardExpanded.value) 180f else 0f)
@@ -85,7 +90,7 @@ fun ExpandableCard(
 
             AnimatedVisibility(visible = isCardExpanded.value)
             {
-                CardContent(contentModifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.more_card_vertical_space_size)))
+                cardContent(contentModifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.more_card_vertical_space_size)))
             }
         }
     }

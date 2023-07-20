@@ -7,12 +7,15 @@ import com.justcircleprod.randomspaceimages.data.repository.APODRepositoryImpl
 import com.justcircleprod.randomspaceimages.data.repository.SettingsRepositoryImpl
 import com.justcircleprod.randomspaceimages.domain.model.APODEntry
 import com.justcircleprod.randomspaceimages.ui.apod.apodBaseVIewModel.APODBaseViewModel
+import com.justcircleprod.randomspaceimages.ui.apod.apodEntryItem.APODStates
 import com.justcircleprod.randomspaceimages.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,7 +24,7 @@ class APODPageViewModel @Inject constructor(
     apodFavouritesRepository: APODFavouritesRepositoryImpl,
     settingsRepository: SettingsRepositoryImpl
 ) : APODBaseViewModel(apodFavouritesRepository, settingsRepository) {
-    val apodList = MutableStateFlow<MutableList<APODEntry>>(mutableListOf())
+    val apodList = mutableListOf<APODEntry>()
 
     val isLoading = MutableStateFlow(true)
     val loadError = MutableStateFlow(false)
@@ -38,10 +41,70 @@ class APODPageViewModel @Inject constructor(
         loadTodayAPOD()
     }
 
-    fun loadTodayAPOD(refresh: Boolean = false) {
+    fun onEvent(event: APODPageEvent) {
+        when (event) {
+            is APODPageEvent.LoadTodayAPOD -> {
+                loadTodayAPOD(refresh = event.refresh)
+            }
+
+            is APODPageEvent.LoadMoreAPODs -> {
+                loadMoreAPODs()
+            }
+
+            is APODPageEvent.OnDatePicked -> {
+                loadAPODByDay(dateInMills = event.dateInMills)
+            }
+
+            is APODPageEvent.OnCancelDateButtonClick -> {
+                cancelDateAndRefreshList()
+            }
+
+            is APODPageEvent.OnFavouriteButtonClick -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    if (apodFavouritesRepository.isAddedToAPODFavourites(event.apodEntry.date)) {
+                        apodFavouritesRepository.removeFromAPODFavourites(event.apodEntry)
+                    } else {
+                        apodFavouritesRepository.addToAPODFavourites(event.apodEntry)
+                    }
+                }
+            }
+
+            is APODPageEvent.SaveImage -> {
+                saveImage(
+                    context = event.context,
+                    title = event.title,
+                    url = event.url,
+                    hdurl = event.hdUrl
+                )
+            }
+
+            is APODPageEvent.ShareImage -> {
+                shareImage(
+                    context = event.context,
+                    title = event.title,
+                    url = event.url,
+                    hdurl = event.hdUrl
+                )
+            }
+
+            is APODPageEvent.ShareVideo -> {
+                shareVideo(
+                    context = event.context,
+                    title = event.title,
+                    url = event.url
+                )
+            }
+
+            is APODPageEvent.Translate -> {
+                translate(event.apodIndex)
+            }
+        }
+    }
+
+    private fun loadTodayAPOD(refresh: Boolean = false) {
         viewModelScope.launch {
             if (refresh) {
-                apodList.value.clear()
+                clearLists()
             }
             setLoadingOrRefreshing(refresh, true)
 
@@ -54,8 +117,9 @@ class APODPageViewModel @Inject constructor(
                     APODConstants.DATE_FORMAT,
                     Locale.US
                 ).parse(result.data!!.date)!!
-                apodList.value =
-                    (apodList.value + mutableListOf(result.data)) as MutableList<APODEntry>
+
+                apodList.add(result.data)
+                apodsStates.value.add(APODStates.fromAPODEntry(result.data))
             } else {
                 loadError.value = true
             }
@@ -65,7 +129,7 @@ class APODPageViewModel @Inject constructor(
     }
 
     // load 5 more apods from the lastDate value
-    fun loadMoreAPODs() {
+    private fun loadMoreAPODs() {
         viewModelScope.launch {
             isLoading.value = true
 
@@ -118,7 +182,9 @@ class APODPageViewModel @Inject constructor(
                     APODConstants.DATE_FORMAT,
                     Locale.US
                 ).parse(reversedData[reversedData.size - 1].date)!!
-                apodList.value = (apodList.value + reversedData) as MutableList<APODEntry>
+
+                apodList.addAll(reversedData)
+                apodsStates.value.addAll(reversedData.map { APODStates.fromAPODEntry(it) })
             } else {
                 loadError.value = true
             }
@@ -127,11 +193,12 @@ class APODPageViewModel @Inject constructor(
         }
     }
 
-    fun loadAPODByDay(dateInMills: Long) {
+    private fun loadAPODByDay(dateInMills: Long) {
         viewModelScope.launch {
             pickedDateInMills.value = dateInMills
 
-            apodList.value.clear()
+            clearLists()
+
             isLoading.value = true
 
             val result = apodRepository.getAPODByDate(
@@ -141,7 +208,8 @@ class APODPageViewModel @Inject constructor(
             if (result is Resource.Success || result.data != null) {
                 loadError.value = false
 
-                apodList.value = mutableListOf(result.data!!)
+                apodList.add(result.data!!)
+                apodsStates.value.add(APODStates.fromAPODEntry(result.data))
             } else {
                 loadError.value = true
             }
@@ -150,12 +218,24 @@ class APODPageViewModel @Inject constructor(
         }
     }
 
+    private fun cancelDateAndRefreshList() {
+        pickedDateInMills.value = null
+        clearLists()
+        loadTodayAPOD()
+    }
+
     private fun setLoadingOrRefreshing(refresh: Boolean, targetValue: Boolean) {
         if (refresh) {
             isRefreshing.value = targetValue
         } else {
             isLoading.value = targetValue
         }
+    }
+
+    private fun clearLists() {
+        apodList.clear()
+        apodsStates.value.clear()
+        clearLastTexts()
     }
 
     private infix fun Date.minus(other: Date): Date {

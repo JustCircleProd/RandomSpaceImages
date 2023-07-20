@@ -21,4 +21,11 @@ class MainViewModel @Inject constructor(settingsRepository: SettingsRepositoryIm
     // states are stored here so downloads don't overlap
     val savingToGallery = MutableStateFlow(false)
     val sharingImage = MutableStateFlow(false)
+
+    override fun onCleared() {
+        super.onCleared()
+
+        savingToGallery.value = false
+        sharingImage.value = false
+    }
 }

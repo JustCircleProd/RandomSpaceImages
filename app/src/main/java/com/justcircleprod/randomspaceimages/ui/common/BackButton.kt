@@ -30,7 +30,7 @@ fun BackButton(
         modifier = modifier
             .clip(CircleShape)
             .background(Color.Black.copy(0.45f))
-            .size(dimensionResource(id = R.dimen.action_icon_button_size))
+            .size(dimensionResource(id = R.dimen.back_and_hd_button_size))
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(

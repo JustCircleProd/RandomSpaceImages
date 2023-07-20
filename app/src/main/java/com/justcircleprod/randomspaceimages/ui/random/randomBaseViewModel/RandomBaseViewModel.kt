@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 abstract class RandomBaseViewModel(protected val nasaLibraryFavouritesRepository: NASALibraryFavouritesRepository) :
     ViewModel() {
     fun isAddedToFavourites(nasaId: String) =
-        nasaLibraryFavouritesRepository.isAddedToNASALibraryFavourites(nasaId)
+        nasaLibraryFavouritesRepository.isAddedToNASALibraryFavouritesLiveData(nasaId)
 
     fun addToFavourites(nasaLibraryImageEntry: NASALibraryImageEntry) {
         viewModelScope.launch(Dispatchers.IO) {

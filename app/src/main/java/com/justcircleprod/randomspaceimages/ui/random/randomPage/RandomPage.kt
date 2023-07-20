@@ -9,12 +9,12 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.domain.model.NASALibraryImageEntry
 import com.justcircleprod.randomspaceimages.ui.common.ErrorInfo
@@ -28,14 +28,14 @@ fun RandomPage(
     viewModel: RandomPageViewModel,
     onImageEntryClick: (nasaLibraryImageEntry: NASALibraryImageEntry) -> Unit
 ) {
-    val images by viewModel.images.collectAsState()
+    val images by viewModel.images.collectAsStateWithLifecycle()
 
-    val isLoading by viewModel.isLoading.collectAsState()
-    val loadError by viewModel.loadError.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
+    val loadError by viewModel.loadError.collectAsStateWithLifecycle()
 
-    val isRefreshing by viewModel.isRefreshing.collectAsState()
+    val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
 
-    val endReached by viewModel.endReached.collectAsState()
+    val endReached by viewModel.endReached.collectAsStateWithLifecycle()
 
     val pullRefreshState = rememberPullRefreshState(
         refreshing = isRefreshing,
@@ -66,10 +66,10 @@ fun RandomPage(
             }
 
             LazyVerticalGrid(
-                columns = GridCells.Adaptive(dimensionResource(id = R.dimen.image_list_min_grid_cell_size)),
-                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.image_list_vertical_arrangement)),
-                horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.image_list_horizontal_arrangement)),
-                contentPadding = PaddingValues(bottom = dimensionResource(id = R.dimen.image_list_bottom_space)),
+                columns = GridCells.Adaptive(dimensionResource(id = R.dimen.random_list_min_grid_cell_size)),
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.random_list_vertical_arrangement)),
+                horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.random_list_horizontal_arrangement)),
+                contentPadding = PaddingValues(bottom = dimensionResource(id = R.dimen.random_list_bottom_space)),
                 modifier = Modifier
                     .padding(horizontal = dimensionResource(id = R.dimen.elements_space_size))
                     .fillMaxSize()
@@ -94,7 +94,7 @@ fun RandomPage(
 
                 if (loadError && images.isNotEmpty()) {
                     item(span = { GridItemSpan(maxLineSpan) }) {
-                        Spacer(Modifier.height(dimensionResource(id = R.dimen.image_list_bottom_space)))
+                        Spacer(Modifier.height(dimensionResource(id = R.dimen.random_list_bottom_space)))
                     }
                 }
             }

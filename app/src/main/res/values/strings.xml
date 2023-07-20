@@ -11,12 +11,6 @@
 
     <string name="detail_image">Detail Image</string>
 
-    <string name="additional_information">Additional Information</string>
-
-    <string name="location">Location:</string>
-    <string name="secondary_creator">Secondary Creator:</string>
-    <string name="photographer">Photographer:</string>
-
     <string name="back_button">Back button</string>
 
     <string name="open_action_menu">Open action menu</string>
@@ -29,14 +23,20 @@
     <string name="permission_is_required">Permission is required to save to gallery</string>
     <string name="grant_permission">Please grant permission in app settings</string>
 
-    <string name="save_to_gallery">Save to gallery</string>
+    <string name="save_to_gallery">Save the image to gallery</string>
     <string name="saving_the_image">Saving the image… Please, don\'t leave this page</string>
     <string name="successfully_saved_to_gallery">Successfully saved to gallery</string>
-    <string name="failed_to_save">Failed to save</string>
+    <string name="failed_to_save">Failed to save the image</string>
 
     <string name="preparing_to_share">Preparing to share… Please, don\'t leave this page</string>
     <string name="watch_more_in_the_app">Watch more in the app:\nhttps://play.google.com/store/apps/details?id=com.justcircleprod.randomspaceimages</string>
     <string name="failed_to_share">Failed to share</string>
+
+    <string name="translate">Translate</string>
+    <string name="downloading_language_model">Downloading language model… Please, don\'t leave this page</string>
+    <string name="failed_to_download_language_model">Failed to download language model</string>
+    <string name="failed_to_translate">Failed to translate</string>
+    <string name="translating">Translating… Please, don\'t leave this page</string>
 
     <string name="dismiss">Dismiss</string>
 
@@ -63,8 +63,6 @@
 
     <string name="select_a_date">Select a date</string>
     <string name="cancel_date_selection">Cancel date selection</string>
-
-    <string name="copyright">Copyright:</string>
 
     <string name="load_more">Load more</string>
 

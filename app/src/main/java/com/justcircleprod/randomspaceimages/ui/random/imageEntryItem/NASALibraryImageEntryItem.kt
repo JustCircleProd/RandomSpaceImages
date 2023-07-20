@@ -2,13 +2,23 @@ package com.justcircleprod.randomspaceimages.ui.random.imageEntryItem
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -102,7 +112,7 @@ fun ImageExtra(nasaLibraryImageEntry: NASALibraryImageEntry, viewModel: RandomBa
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .padding(top = dimensionResource(id = R.dimen.image_list_item_extra_padding_top))
+            .padding(top = dimensionResource(id = R.dimen.random_list_item_extra_padding_top))
     ) {
         if (nasaLibraryImageEntry.title != null) {
             ImageTitle(
@@ -123,12 +133,12 @@ fun ImageTitle(imageTitle: String, modifier: Modifier) {
         maxLines = 1,
         fontSize = 14.sp,
         overflow = TextOverflow.Ellipsis,
-        modifier = modifier.padding(start = dimensionResource(id = R.dimen.image_list_title_padding_start))
+        modifier = modifier.padding(start = dimensionResource(id = R.dimen.random_list_item_title_padding_start))
     )
 }
 
 @Composable
-fun FavouriteButton(
+private fun FavouriteButton(
     nasaLibraryImageEntry: NASALibraryImageEntry,
     viewModel: RandomBaseViewModel
 ) {
@@ -146,7 +156,7 @@ fun FavouriteButton(
             else -> colorResource(id = R.color.favourite_list_button_neutral)
         },
         modifier = Modifier
-            .size(dimensionResource(id = R.dimen.image_list_favourite_icon_size))
+            .size(dimensionResource(id = R.dimen.random_list_item_favourite_icon_size))
             .bounceClick {
                 if (isAdded == true) {
                     viewModel.removeFromFavourites(nasaLibraryImageEntry)
