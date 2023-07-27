@@ -192,7 +192,7 @@ fun PickDateButtons(
     ) {
         Icon(
             painter = painterResource(id = R.drawable.icon_pick_date),
-            contentDescription = stringResource(id = R.string.select_a_date),
+            contentDescription = stringResource(id = R.string.date_selection),
             tint = if (pickedDate.value != null) colorResource(id = R.color.primary) else colorResource(
                 id = R.color.icon_tint
             ),

@@ -297,7 +297,7 @@ fun QualityOfSavingAndSharingImagesCard(viewModel: MoreViewModel) {
 
 @Composable
 fun WhereAreTheImagesFromCard() {
-    ExpandableCard(cardTitle = stringResource(id = R.string.about_apis)) { contentModifier ->
+    ExpandableCard(cardTitle = stringResource(id = R.string.about_sources)) { contentModifier ->
         Column(
             modifier = contentModifier
                 .padding(horizontal = dimensionResource(id = R.dimen.more_card_horizontal_space_size))
@@ -343,6 +343,8 @@ fun WhereAreTheImagesFromCard() {
 
 @Composable
 fun DevelopersAndLicensesCard() {
+    val licenses = remember { Licenses }
+
     ExpandableCard(cardTitle = stringResource(id = R.string.developers_and_licenses)) { contentModifier ->
         Column(
             modifier = contentModifier
@@ -359,7 +361,7 @@ fun DevelopersAndLicensesCard() {
 
             Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.more_card_content_paragraph_space_size)))
 
-            LicensesList(licenses = Licenses)
+            LicensesList(licenses = licenses)
         }
     }
 }

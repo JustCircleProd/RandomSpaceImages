@@ -9,14 +9,8 @@
     <string name="error_info_card_text">There is an error. Scroll or Swipe down to Retry</string>
     <string name="retry">Retry</string>
 
-    <string name="detail_image">Detail Image</string>
-
     <string name="back_button">Back button</string>
 
-    <string name="open_action_menu">Open action menu</string>
-    <string name="close_action_menu">Close action menu</string>
-
-    <string name="favourite_button">Favourite button</string>
     <string name="add_to_favourite">Add to favourites</string>
     <string name="remove_from_favourite">Remove from favourites</string>
 
@@ -61,15 +55,13 @@
 
     <string name="search_no_results">No results</string>
 
-    <string name="select_a_date">Select a date</string>
+    <string name="date_selection">Date Selection</string>
     <string name="cancel_date_selection">Cancel date selection</string>
 
     <string name="load_more">Load more</string>
 
     <string name="open_video_in_another_app">Open video in another app</string>
     <string name="failed_to_open_video">Failed to open video</string>
-
-    <string name="loading_image_in_high_resolution">Loading the image in high resolution</string>
 
     <string name="more">More</string>
 
@@ -85,7 +77,7 @@
     <string name="high_quality">High</string>
     <string name="quality_of_saving_and_sharing_images_hint">Some images can be saved and shared in high quality. This requires more time and memory (up to several tens of MB).</string>
 
-    <string name="about_apis">About APIs</string>
+    <string name="about_sources">About sources</string>
 
     <string name="where_are_the_media_from">Where are the media from?</string>
     <string name="where_are_the_media_from_text">All media are taken from official APIs from NASA, such as APOD and the NASA Image and Video Library.</string>
@@ -94,8 +86,4 @@
     <string name="request_limits_text">The NASA APIs has a limit on the number of requests for a certain period of time.\nIf you are sure that there are no errors on your part, but you still see an error message, we recommend waiting for some time before making the next request.</string>
 
     <string name="developers_and_licenses">Developers and Licenses</string>
-
-    <string name="developers">Developers</string>
-
-    <string name="licenses">Licenses</string>
 </resources>

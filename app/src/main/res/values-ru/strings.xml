@@ -1,0 +1,89 @@
+<resources>
+    <string name="app_name">Random Space Images (APOD)</string>
+
+    <string name="random">Случайные</string>
+    <string name="apod">APOD</string>
+    <string name="favourites">Избранное</string>
+
+    <string name="error_info_text">Произошла ошибка.\nСделайте свайп вниз, чтобы повторить попытку</string>
+    <string name="error_info_card_text">Произошла ошибка. Сделайте скролл или свайп вниз, чтобы повторить попытку</string>
+    <string name="retry">Повторить попытку</string>
+
+    <string name="back_button">Назад</string>
+
+    <string name="add_to_favourite">Добавить в Избранное</string>
+    <string name="remove_from_favourite">Убрать из Избранного</string>
+
+    <string name="permission_is_required">Для сохранения в галерею требуется разрешение</string>
+    <string name="grant_permission">Пожалуйста, предоставьте разрешение в настройках приложения</string>
+
+    <string name="save_to_gallery">Сохранить изображение в галерею</string>
+    <string name="saving_the_image">Сохранение изображения… Пожалуйста, не покидайте эту страницу</string>
+    <string name="successfully_saved_to_gallery">Изображение успешно сохранено в галерею</string>
+    <string name="failed_to_save">Не удалось сохранить изображение в галерею</string>
+
+    <string name="preparing_to_share">Подготовка к передаче… Пожалуйста, не покидайте эту страницу</string>
+    <string name="watch_more_in_the_app">Смотрите больше в приложении:\nhttps://play.google.com/store/apps/details?id=com.justcircleprod.randomspaceimages</string>
+    <string name="failed_to_share">Не удалось поделиться</string>
+
+    <string name="translate">Перевести</string>
+    <string name="downloading_language_model">Загрузка языковой модели… Пожалуйста, не покидайте эту страницу</string>
+    <string name="failed_to_download_language_model">Не удалось загрузить языковую модель</string>
+    <string name="failed_to_translate">Не удалось перевести</string>
+    <string name="translating">Производится перевод… Пожалуйста, не покидайте эту страницу</string>
+
+    <string name="dismiss">Закрыть</string>
+
+    <string name="no_favourites">Нет избранных.\nСделайте свайп вниз для обновления</string>
+
+    <string name="search">Поиск</string>
+    <string name="search_bar_placeholder">Поиск по любому полю (название, местоположение и т.д.)</string>
+
+    <string name="year_range">Годы</string>
+
+    <string name="solar_system">Солнечная система</string>
+    <string name="sun">Солнце</string>
+    <string name="mercury">Меркурий</string>
+    <string name="venus">Венера</string>
+    <string name="earth">Земля</string>
+    <string name="moon">Луна</string>
+    <string name="mars">Марс</string>
+    <string name="jupiter">Юпитер</string>
+    <string name="saturn">Сатурн</string>
+    <string name="uranus">Уран</string>
+    <string name="neptune">Нептун</string>
+
+    <string name="search_no_results">Ничего не найдено</string>
+
+    <string name="date_selection">Выбор даты</string>
+    <string name="cancel_date_selection">Отменить выбор даты</string>
+
+    <string name="load_more">Загрузить ещё</string>
+
+    <string name="open_video_in_another_app">Открыть видео в другом приложении</string>
+    <string name="failed_to_open_video">Не удалось открыть видео в другом приложении</string>
+
+    <string name="more">Прочее</string>
+
+    <string name="app_theme">Тема приложения</string>
+    <string name="system_default_theme">Системная</string>
+    <string name="light_theme">Светлая</string>
+    <string name="dark_theme">Тёмная</string>
+
+    <string name="start_screen">Начальный экран</string>
+
+    <string name="quality_of_saving_and_sharing_images">Качество сохранения и передачи изображений</string>
+    <string name="standard_quality">Стандартное</string>
+    <string name="high_quality">Высокое</string>
+    <string name="quality_of_saving_and_sharing_images_hint">Некоторые изображения можно сохранить и передать в высоком качестве. Это требует больше времени и памяти (до нескольких десятков МБ).</string>
+
+    <string name="about_sources">Об источниках</string>
+
+    <string name="where_are_the_media_from">Откуда медиа?</string>
+    <string name="where_are_the_media_from_text">Все медиа берутся из официальных API от NASA, таких как APOD и NASA Image and Video Library.</string>
+
+    <string name="request_limits">Лимит запросов</string>
+    <string name="request_limits_text">NASA API имеют лимит запросов за определённый период времени.\nЕсли вы уверены, что на вашей стороне нет ошибки, но вы всё ещё видите сообщение о ней, то рекомендуем подождать некоторое время перед совершением следующего запроса.</string>
+
+    <string name="developers_and_licenses">Разработчики и лицензии</string>
+</resources>

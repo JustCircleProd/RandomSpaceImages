@@ -98,8 +98,9 @@ fun SearchFragmentContent(
 
             items(solarSystemSuggestions.size) {
                 SuggestionCard(
-                    suggestionStringRes = solarSystemSuggestions[it].first,
-                    SuggestionImageRes = solarSystemSuggestions[it].second,
+                    suggestionStringRes = solarSystemSuggestions[it][0] as Int,
+                    suggestionText = solarSystemSuggestions[it][1] as String,
+                    SuggestionImageRes = solarSystemSuggestions[it][2] as Int,
                     onClick = onSuggestionCardClick
                 )
             }

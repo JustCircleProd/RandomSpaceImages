@@ -75,7 +75,8 @@ fun ExpandableCard(
                     fontFamily = LatoFontFamily,
                     fontWeight = FontWeight.SemiBold,
                     overflow = TextOverflow.Ellipsis,
-                    fontSize = 17.sp
+                    fontSize = 17.sp,
+                    modifier = Modifier.weight(1f)
                 )
 
                 Icon(
@@ -88,8 +89,7 @@ fun ExpandableCard(
                 )
             }
 
-            AnimatedVisibility(visible = isCardExpanded.value)
-            {
+            AnimatedVisibility(visible = isCardExpanded.value) {
                 cardContent(contentModifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.more_card_vertical_space_size)))
             }
         }

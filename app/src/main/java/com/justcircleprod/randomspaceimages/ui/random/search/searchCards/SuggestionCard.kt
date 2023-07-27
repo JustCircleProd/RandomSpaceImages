@@ -35,11 +35,10 @@ import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
 @Composable
 fun SuggestionCard(
     @StringRes suggestionStringRes: Int,
+    suggestionText: String,
     @DrawableRes SuggestionImageRes: Int,
     onClick: (String) -> Unit
 ) {
-    val suggestionText = stringResource(id = suggestionStringRes)
-
     Card(
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.main_rounded_corner_radius)),
         modifier = Modifier
