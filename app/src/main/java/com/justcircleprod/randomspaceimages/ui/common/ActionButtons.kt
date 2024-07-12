@@ -170,11 +170,12 @@ private fun ActionButton(
                 }
             }
     ) {
-        content(contentModifier = Modifier
-            .graphicsLayer {
+        content(
+            Modifier.graphicsLayer {
                 scaleX = scale
                 scaleY = scale
-            })
+            }
+        )
     }
 }
 

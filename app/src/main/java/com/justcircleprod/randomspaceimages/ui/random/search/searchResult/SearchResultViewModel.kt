@@ -114,6 +114,7 @@ class SearchResultViewModel @Inject constructor(
 
                 // addAds()
             }
+
             is Resource.Error -> {
                 loadError.value = true
             }

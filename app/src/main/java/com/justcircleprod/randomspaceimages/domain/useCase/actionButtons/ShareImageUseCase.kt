@@ -40,7 +40,7 @@ class ShareImage(
                 override fun onLoadFailed(
                     e: GlideException?,
                     model: Any?,
-                    target: Target<Drawable>?,
+                    target: Target<Drawable>,
                     isFirstResource: Boolean
                 ): Boolean {
                     onShareFailed()
@@ -48,14 +48,14 @@ class ShareImage(
                 }
 
                 override fun onResourceReady(
-                    resource: Drawable?,
-                    model: Any?,
+                    resource: Drawable,
+                    model: Any,
                     target: Target<Drawable>?,
-                    dataSource: DataSource?,
+                    dataSource: DataSource,
                     isFirstResource: Boolean
                 ): Boolean {
                     viewModelScope.launch {
-                        resource?.let {
+                        resource.let {
                             val uri = if (href.endsWith(".gif")) {
                                 CachedImageHelper.saveGif(context, it as GifDrawable)
                             } else {

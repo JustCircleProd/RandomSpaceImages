@@ -12,7 +12,7 @@ sealed class BottomNavItem(
     @StringRes val titleResId: Int,
     @DrawableRes val iconResId: Int
 ) {
-    object Random :
+    data object Random :
         BottomNavItem(
             R.id.navigation_random,
             R.id.to_random,
@@ -20,14 +20,14 @@ sealed class BottomNavItem(
             R.drawable.icon_random
         )
 
-    object APOD : BottomNavItem(
+    data object APOD : BottomNavItem(
         R.id.navigation_apod,
         R.id.to_apod,
         R.string.apod,
         R.drawable.icon_apod
     )
 
-    object More :
+    data object More :
         BottomNavItem(R.id.navigation_more, R.id.to_more, R.string.more, R.drawable.icon_more)
 
     companion object {

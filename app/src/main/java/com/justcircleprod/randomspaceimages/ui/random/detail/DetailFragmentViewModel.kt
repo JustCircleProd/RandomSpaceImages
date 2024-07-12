@@ -35,6 +35,7 @@ class DetailViewModel @Inject constructor(
     private val nasaLibraryImageEntry =
         state.get<Parcelable>("nasaLibraryImageEntry") as NASALibraryImageEntry?
 
+    val imageLoaded = MutableStateFlow(false)
     val title = MutableStateFlow("")
     val date = MutableStateFlow("")
     val description = MutableStateFlow("")

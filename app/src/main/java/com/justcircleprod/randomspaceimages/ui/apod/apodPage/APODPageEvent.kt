@@ -6,9 +6,9 @@ import com.justcircleprod.randomspaceimages.domain.model.APODEntry
 
 sealed class APODPageEvent {
     data class LoadTodayAPOD(val refresh: Boolean) : APODPageEvent()
-    object LoadMoreAPODs : APODPageEvent()
+    data object LoadMoreAPODs : APODPageEvent()
     data class OnDatePicked(val dateInMills: Long) : APODPageEvent()
-    object OnCancelDateButtonClick : APODPageEvent()
+    data object OnCancelDateButtonClick : APODPageEvent()
     data class OnFavouriteButtonClick(val apodEntry: APODEntry) : APODPageEvent()
     data class SaveImage(
         val context: Context,

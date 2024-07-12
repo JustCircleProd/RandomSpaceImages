@@ -6,8 +6,10 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,7 +36,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -50,13 +51,12 @@ import com.justcircleprod.randomspaceimages.R
 import com.justcircleprod.randomspaceimages.domain.model.NASALibraryImageEntry
 import com.justcircleprod.randomspaceimages.ui.common.BackButton
 import com.justcircleprod.randomspaceimages.ui.common.ImageActionButtons
+import com.justcircleprod.randomspaceimages.ui.common.ProgressIndicator
 import com.justcircleprod.randomspaceimages.ui.extensions.getActivity
 import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
 import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.components.rememberImageComponent
 import com.skydoves.landscapist.glide.GlideImage
 import com.skydoves.landscapist.glide.GlideImageState
-import com.skydoves.landscapist.placeholder.shimmer.ShimmerPlugin
 import kotlinx.coroutines.launch
 import java.util.Locale
 
@@ -291,6 +291,7 @@ fun DetailFragmentContent(
                             .padding(bottom = dimensionResource(id = R.dimen.detail_card_content_bottom_space_size))
                     ) {
                         Image(
+                            viewModel = viewModel,
                             title = nasaLibraryImageEntry.title,
                             imageHref = nasaLibraryImageEntry.imageHref,
                             onImageClick = onImageClick
@@ -323,51 +324,53 @@ fun DetailFragmentContent(
 
 @Composable
 private fun Image(
+    viewModel: DetailViewModel,
     title: String?,
     imageHref: String,
     onImageClick: (imageUrl: String) -> Unit
 ) {
-    var isClickEnabled by remember { mutableStateOf(false) }
+    val imageLoaded = viewModel.imageLoaded.collectAsStateWithLifecycle()
 
-    GlideImage(
-        imageModel = { imageHref },
-        imageOptions = ImageOptions(
-            contentDescription = title
-        ),
-        onImageStateChanged = {
-            when (it) {
-                GlideImageState.None -> {}
-                GlideImageState.Loading -> {}
-                is GlideImageState.Success -> {
-                    isClickEnabled = true
-                }
-
-                is GlideImageState.Failure -> {}
-            }
-        },
-        component = rememberImageComponent {
-            +ShimmerPlugin(
-                baseColor = colorResource(id = R.color.background),
-                highlightColor = colorResource(id = R.color.shimmer_highlights),
-                durationMillis = 1400,
-                dropOff = 0.65f,
-                tilt = 20f
+    Box(Modifier.fillMaxWidth()) {
+        if (!imageLoaded.value) {
+            ProgressIndicator(
+                cardBackgroundColor = colorResource(id = R.color.apod_item_image_progress_card_background),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(dimensionResource(id = R.dimen.detail_image_progress_height))
+                    .background(colorResource(id = R.color.card_background))
             )
-        },
-        modifier = Modifier
-            .fillMaxSize()
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = rememberRipple(
-                    bounded = true,
-                    color = colorResource(id = R.color.image_ripple)
-                ),
-            ) {
-                if (isClickEnabled) {
+        }
+
+        GlideImage(
+            imageModel = { imageHref },
+            imageOptions = ImageOptions(
+                contentDescription = title
+            ),
+            onImageStateChanged = {
+                when (it) {
+                    GlideImageState.None -> {}
+                    GlideImageState.Loading -> {}
+                    is GlideImageState.Success -> {
+                        viewModel.imageLoaded.value = true
+                    }
+
+                    is GlideImageState.Failure -> {}
+                }
+            },
+            modifier = Modifier
+                .fillMaxSize()
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(
+                        bounded = true,
+                        color = colorResource(id = R.color.image_ripple)
+                    ),
+                ) {
                     onImageClick(imageHref)
                 }
-            }
-    )
+        )
+    }
 }
 
 @Composable

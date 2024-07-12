@@ -90,7 +90,7 @@ fun ExpandableCard(
             }
 
             AnimatedVisibility(visible = isCardExpanded.value) {
-                cardContent(contentModifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.more_card_vertical_space_size)))
+                cardContent(Modifier.padding(bottom = dimensionResource(id = R.dimen.more_card_vertical_space_size)))
             }
         }
     }

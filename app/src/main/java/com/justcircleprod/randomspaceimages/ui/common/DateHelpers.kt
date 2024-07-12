@@ -1,7 +1,7 @@
 package com.justcircleprod.randomspaceimages.ui.common
 
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 fun fromServerFormatToAppFormat(dateStr: String, pattern: String): String? {
     val date = SimpleDateFormat(pattern, Locale.US)

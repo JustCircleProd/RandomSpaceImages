@@ -14,10 +14,8 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,7 +35,7 @@ import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.components.rememberImageComponent
 import com.skydoves.landscapist.glide.GlideImage
-import com.skydoves.landscapist.glide.GlideImageState
+import com.skydoves.landscapist.placeholder.shimmer.Shimmer
 import com.skydoves.landscapist.placeholder.shimmer.ShimmerPlugin
 
 @Composable
@@ -46,8 +44,6 @@ fun NASALibraryImageEntryItem(
     viewModel: RandomBaseViewModel,
     onImageEntryClick: (nasaLibraryImageEntry: NASALibraryImageEntry) -> Unit
 ) {
-    val isClickEnabled = remember { mutableStateOf(false) }
-
     Column(
         modifier = Modifier
             .clip(RoundedCornerShape(dimensionResource(id = R.dimen.main_rounded_corner_radius)))
@@ -58,20 +54,17 @@ fun NASALibraryImageEntryItem(
                     color = colorResource(id = R.color.ripple)
                 ),
             ) {
-                if (isClickEnabled.value) {
-                    onImageEntryClick(nasaLibraryImageEntry)
-                }
+                onImageEntryClick(nasaLibraryImageEntry)
             }
     ) {
-        NASALibraryImageEntryImage(nasaLibraryImageEntry, isClickEnabled)
+        NASALibraryImageEntryImage(nasaLibraryImageEntry)
         ImageExtra(nasaLibraryImageEntry, viewModel)
     }
 }
 
 @Composable
 fun NASALibraryImageEntryImage(
-    nasaLibraryImageEntry: NASALibraryImageEntry,
-    isClickEnabled: MutableState<Boolean>
+    nasaLibraryImageEntry: NASALibraryImageEntry
 ) {
     GlideImage(
         imageModel = { nasaLibraryImageEntry.imageHref },
@@ -80,23 +73,15 @@ fun NASALibraryImageEntryImage(
             alignment = Alignment.Center,
             contentDescription = nasaLibraryImageEntry.title
         ),
-        onImageStateChanged = {
-            when (it) {
-                GlideImageState.None -> {}
-                GlideImageState.Loading -> {}
-                is GlideImageState.Success -> {
-                    isClickEnabled.value = true
-                }
-                is GlideImageState.Failure -> {}
-            }
-        },
         component = rememberImageComponent {
             +ShimmerPlugin(
-                baseColor = colorResource(id = R.color.background),
-                highlightColor = colorResource(id = R.color.shimmer_highlights),
-                durationMillis = 1400,
-                dropOff = 0.65f,
-                tilt = 20f
+                Shimmer.Flash(
+                    baseColor = colorResource(id = R.color.background),
+                    highlightColor = colorResource(id = R.color.shimmer_highlights),
+                    duration = 1400,
+                    dropOff = 0.65f,
+                    tilt = 20f
+                )
             )
         },
         modifier = Modifier

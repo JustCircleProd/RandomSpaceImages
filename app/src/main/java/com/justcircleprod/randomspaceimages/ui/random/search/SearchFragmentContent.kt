@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -37,8 +38,8 @@ fun SearchFragmentContent(
         scaffoldState = rememberScaffoldState()
     ) { scaffoldPadding ->
         val searchText = rememberSaveable { mutableStateOf("") }
-        val yearStart = rememberSaveable { mutableStateOf(YEAR_START) }
-        val yearEnd = rememberSaveable { mutableStateOf(YEAR_END) }
+        val yearStart = rememberSaveable { mutableIntStateOf(YEAR_START) }
+        val yearEnd = rememberSaveable { mutableIntStateOf(YEAR_END) }
 
         val focusManager = LocalFocusManager.current
 
@@ -47,8 +48,8 @@ fun SearchFragmentContent(
 
             onSearchCallback(
                 searchText.value,
-                yearStart.value,
-                yearEnd.value
+                yearStart.intValue,
+                yearEnd.intValue
             )
         }
 
@@ -57,8 +58,8 @@ fun SearchFragmentContent(
 
             onSearchCallback(
                 suggestionText,
-                yearStart.value,
-                yearEnd.value
+                yearStart.intValue,
+                yearEnd.intValue
             )
         }
 
@@ -100,7 +101,7 @@ fun SearchFragmentContent(
                 SuggestionCard(
                     suggestionStringRes = solarSystemSuggestions[it][0] as Int,
                     suggestionText = solarSystemSuggestions[it][1] as String,
-                    SuggestionImageRes = solarSystemSuggestions[it][2] as Int,
+                    suggestionImageRes = solarSystemSuggestions[it][2] as Int,
                     onClick = onSuggestionCardClick
                 )
             }

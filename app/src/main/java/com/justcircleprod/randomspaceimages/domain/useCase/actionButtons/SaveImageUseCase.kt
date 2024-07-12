@@ -38,7 +38,7 @@ class SaveImageUseCase(
                 override fun onLoadFailed(
                     e: GlideException?,
                     model: Any?,
-                    target: Target<Drawable>?,
+                    target: Target<Drawable>,
                     isFirstResource: Boolean
                 ): Boolean {
                     onSaveFailed()
@@ -46,14 +46,14 @@ class SaveImageUseCase(
                 }
 
                 override fun onResourceReady(
-                    resource: Drawable?,
-                    model: Any?,
+                    resource: Drawable,
+                    model: Any,
                     target: Target<Drawable>?,
-                    dataSource: DataSource?,
+                    dataSource: DataSource,
                     isFirstResource: Boolean
                 ): Boolean {
                     viewModelScope.launch {
-                        resource?.let { imageDrawable ->
+                        resource.let { imageDrawable ->
                             val savedSuccessfully = if (href.endsWith(".gif")) {
                                 saveGifToExternalStorage(
                                     context,
@@ -106,8 +106,10 @@ class SaveImageUseCase(
                 val contentResolver = context.contentResolver
                 contentResolver.insert(imageCollection, contentValues)?.also { uri ->
                     contentResolver.openOutputStream(uri).use { outputStream ->
-                        if (!bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)) {
-                            throw IOException("Couldn't save bitmap")
+                        outputStream?.let {
+                            if (!bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)) {
+                                throw IOException("Couldn't save bitmap")
+                            }
                         }
                     }
                 } ?: throw IOException("Couldn't create MediaStore entry")

@@ -4,8 +4,8 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
 val MIGRATION_1_2: Migration = object : Migration(1, 2) {
-    override fun migrate(database: SupportSQLiteDatabase) {
-        with(database) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        with(db) {
             execSQL("ALTER TABLE favourites RENAME to nasa_library_favourites")
 
             execSQL(
@@ -25,8 +25,8 @@ val MIGRATION_1_2: Migration = object : Migration(1, 2) {
 }
 
 val MIGRATION_2_3: Migration = object : Migration(2, 3) {
-    override fun migrate(database: SupportSQLiteDatabase) {
-        with(database) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        with(db) {
             execSQL(
                 "CREATE TABLE IF NOT EXISTS apod_favourites_backup(" +
                         "copyright TEXT," +

@@ -26,7 +26,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -58,10 +57,8 @@ import com.justcircleprod.randomspaceimages.ui.common.VideoActionButtons
 import com.justcircleprod.randomspaceimages.ui.extensions.getActivity
 import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
 import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.components.rememberImageComponent
 import com.skydoves.landscapist.glide.GlideImage
 import com.skydoves.landscapist.glide.GlideImageState
-import com.skydoves.landscapist.placeholder.shimmer.ShimmerPlugin
 import java.util.Locale
 
 @Composable
@@ -83,8 +80,6 @@ fun APODEntryItem(
         backgroundColor = colorResource(id = R.color.card_background),
         elevation = dimensionResource(id = R.dimen.card_elevation)
     ) {
-        val isImageClickEnabled = remember { mutableStateOf(false) }
-
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -92,11 +87,11 @@ fun APODEntryItem(
         ) {
             if (apodEntry.media_type == "image") {
                 APODImage(
+                    apodStates = apodStates,
                     title = apodEntry.title,
                     url = apodEntry.url,
                     hdurl = apodEntry.hdurl,
-                    onImageClick = onImageClick,
-                    isClickEnabled = isImageClickEnabled
+                    onImageClick = onImageClick
                 )
             } else {
                 Video(
@@ -124,18 +119,20 @@ fun APODEntryItem(
 
 @Composable
 private fun APODImage(
+    apodStates: APODStates,
     title: String,
     url: String,
     hdurl: String?,
-    isClickEnabled: MutableState<Boolean>,
     onImageClick: (imageUrl: String, imageUrlHd: String?) -> Unit
 ) {
+    val imageLoaded = apodStates.imageLoaded.collectAsStateWithLifecycle()
+
     Card(
         shape = RectangleShape,
         elevation = 0.dp
     ) {
         Box(Modifier.fillMaxWidth()) {
-            if (!isClickEnabled.value) {
+            if (!imageLoaded.value) {
                 ProgressIndicator(
                     cardBackgroundColor = colorResource(id = R.color.apod_item_image_progress_card_background),
                     modifier = Modifier
@@ -155,19 +152,11 @@ private fun APODImage(
                         GlideImageState.None -> {}
                         GlideImageState.Loading -> {}
                         is GlideImageState.Success -> {
-                            isClickEnabled.value = true
+                            apodStates.imageLoaded.value = true
                         }
+
                         is GlideImageState.Failure -> {}
                     }
-                },
-                component = rememberImageComponent {
-                    +ShimmerPlugin(
-                        baseColor = colorResource(id = R.color.background),
-                        highlightColor = colorResource(id = R.color.shimmer_highlights),
-                        durationMillis = 1400,
-                        dropOff = 0.65f,
-                        tilt = 20f
-                    )
                 },
                 modifier = Modifier
                     .fillMaxSize()
@@ -178,9 +167,7 @@ private fun APODImage(
                             color = colorResource(id = R.color.image_ripple)
                         ),
                     ) {
-                        if (isClickEnabled.value) {
-                            onImageClick(url, hdurl)
-                        }
+                        onImageClick(url, hdurl)
                     }
             )
         }

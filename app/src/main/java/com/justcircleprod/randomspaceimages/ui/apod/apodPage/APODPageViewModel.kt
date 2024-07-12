@@ -149,6 +149,7 @@ class APODPageViewModel @Inject constructor(
                 startDate == minDate -> {
                     endReached.value = true
                 }
+
                 startDate < minDate -> {
                     endReached.value = true
                     return@launch

@@ -9,7 +9,6 @@
     <color name="black">#000</color>
 
     <color name="error_card_background">#efced5</color>
-    <color name="icon_button_shadow">#2e2e2e</color>
 
     <color name="primary">@color/blue_dark</color>
     <color name="secondary">@color/red</color>
@@ -25,8 +24,6 @@
     <color name="second_text">#555555</color>
 
     <color name="card_background">#ffffff</color>
-
-    <color name="line_color">#ffffff</color>
 
     <color name="favourite_list_button_neutral">#444444</color>
 

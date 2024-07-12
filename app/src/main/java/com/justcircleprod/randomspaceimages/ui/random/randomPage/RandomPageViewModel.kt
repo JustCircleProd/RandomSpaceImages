@@ -90,6 +90,7 @@ class RandomPageViewModel @Inject constructor(
 
                     /*addAds()*/
                 }
+
                 result is Resource.Error -> {
                     loadError.value = true
                 }

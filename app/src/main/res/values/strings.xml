@@ -1,13 +1,12 @@
 <resources>
-    <string name="app_name">Random Space Images (APOD)</string>
+    <string name="app_name">Space Explorer</string>
 
     <string name="random">Random</string>
-    <string name="apod">APOD</string>
+    <string name="apod">Daily</string>
     <string name="favourites">Favourites</string>
 
     <string name="error_info_text">There is an error.\nSwipe down to Retry</string>
     <string name="error_info_card_text">There is an error. Scroll or Swipe down to Retry</string>
-    <string name="retry">Retry</string>
 
     <string name="back_button">Back button</string>
 

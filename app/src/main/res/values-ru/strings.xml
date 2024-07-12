@@ -1,13 +1,12 @@
 <resources>
-    <string name="app_name">Random Space Images (APOD)</string>
+    <string name="app_name">Space Explorer</string>
 
     <string name="random">Случайные</string>
-    <string name="apod">APOD</string>
+    <string name="apod">Ежедневное</string>
     <string name="favourites">Избранное</string>
 
-    <string name="error_info_text">Произошла ошибка.\nСделайте свайп вниз, чтобы повторить попытку</string>
-    <string name="error_info_card_text">Произошла ошибка. Сделайте скролл или свайп вниз, чтобы повторить попытку</string>
-    <string name="retry">Повторить попытку</string>
+    <string name="error_info_text">Произошла ошибка.\nПроведите вниз, чтобы повторить попытку</string>
+    <string name="error_info_card_text">Произошла ошибка. Прокрутите или проведите вниз, чтобы повторить попытку</string>
 
     <string name="back_button">Назад</string>
 
@@ -34,7 +33,7 @@
 
     <string name="dismiss">Закрыть</string>
 
-    <string name="no_favourites">Нет избранных.\nСделайте свайп вниз для обновления</string>
+    <string name="no_favourites">Нет избранных.\nПроведите вниз для обновления</string>
 
     <string name="search">Поиск</string>
     <string name="search_bar_placeholder">Поиск по любому полю (название, местоположение и т.д.)</string>

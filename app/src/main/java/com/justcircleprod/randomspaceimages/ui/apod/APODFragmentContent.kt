@@ -4,16 +4,34 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.ScrollableTabRow
+import androidx.compose.material.Tab
+import androidx.compose.material.TabRowDefaults
+import androidx.compose.material.Text
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,7 +64,7 @@ fun APODFragmentContent(
     onPickDateButtonClick: () -> Unit,
     onAPODEntryImageClick: (imageUrl: String, imageUrlHd: String?) -> Unit
 ) {
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState(pageCount = { APODTabItem.items.size })
 
     Column {
         Row(
@@ -72,7 +90,7 @@ fun APODFragmentContent(
             )
         }
 
-        HorizontalPager(pageCount = APODTabItem.items.size, state = pagerState) { page ->
+        HorizontalPager(state = pagerState) { page ->
             when (page) {
                 0 -> {
                     APODPage(
@@ -103,9 +121,11 @@ fun Tabs(pagerState: PagerState, pickedDate: State<Long?>) {
                 pagerState.currentPage == 0 && pickedDate.value != null -> {
                     LocalConfiguration.current.screenWidthDp.dp - dimensionResource(id = R.dimen.apod_tabs_two_buttons_summary_width)
                 }
+
                 pagerState.currentPage == 0 && pickedDate.value == null -> {
                     LocalConfiguration.current.screenWidthDp.dp - dimensionResource(id = R.dimen.apod_tabs_one_button_summary_width)
                 }
+
                 else -> {
                     LocalConfiguration.current.screenWidthDp.dp
                 }
@@ -122,9 +142,11 @@ fun Tabs(pagerState: PagerState, pickedDate: State<Long?>) {
                         0 -> {
                             colorResource(id = R.color.primary)
                         }
+
                         1 -> {
                             colorResource(id = R.color.secondary)
                         }
+
                         else -> {
                             colorResource(id = R.color.primary)
                         }

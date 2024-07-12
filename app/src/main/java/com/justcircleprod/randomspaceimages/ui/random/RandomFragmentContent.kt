@@ -2,12 +2,24 @@ package com.justcircleprod.randomspaceimages.ui.random
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Scaffold
+import androidx.compose.material.ScrollableTabRow
+import androidx.compose.material.Tab
+import androidx.compose.material.TabRowDefaults
+import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -48,7 +60,7 @@ fun RandomFragmentContent(
         backgroundColor = colorResource(id = R.color.background),
         scaffoldState = rememberScaffoldState()
     ) { scaffoldPadding ->
-        val pagerState = rememberPagerState()
+        val pagerState = rememberPagerState(pageCount = { RandomTabItem.items.size })
 
         Column(modifier = Modifier.padding(scaffoldPadding)) {
             Row(
@@ -66,7 +78,7 @@ fun RandomFragmentContent(
                 }
             }
 
-            HorizontalPager(pageCount = RandomTabItem.items.size, state = pagerState) { page ->
+            HorizontalPager(state = pagerState) { page ->
                 when (page) {
                     0 -> {
                         RandomPage(
@@ -74,6 +86,7 @@ fun RandomFragmentContent(
                             onImageEntryClick = onImageEntryClick
                         )
                     }
+
                     1 -> {
                         RandomFavouritesPage(
                             viewModel = favouriteViewModel,
@@ -111,9 +124,11 @@ fun Tabs(pagerState: PagerState) {
                         0 -> {
                             colorResource(id = R.color.primary)
                         }
+
                         1 -> {
                             colorResource(id = R.color.secondary)
                         }
+
                         else -> {
                             colorResource(id = R.color.primary)
                         }

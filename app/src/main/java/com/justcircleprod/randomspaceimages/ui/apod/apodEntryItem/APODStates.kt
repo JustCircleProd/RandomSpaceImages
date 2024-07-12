@@ -6,10 +6,11 @@ import com.justcircleprod.randomspaceimages.ui.common.fromServerFormatToAppForma
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class APODStates(
+    val imageLoaded: MutableStateFlow<Boolean> = MutableStateFlow(false),
     val title: MutableStateFlow<String> = MutableStateFlow(""),
     val date: MutableStateFlow<String> = MutableStateFlow(""),
     val explanation: MutableStateFlow<String> = MutableStateFlow(""),
-    val copyright: MutableStateFlow<String?> = MutableStateFlow("null"),
+    val copyright: MutableStateFlow<String?> = MutableStateFlow(""),
     val translating: MutableStateFlow<Boolean> = MutableStateFlow(false),
     val translated: MutableStateFlow<Boolean> = MutableStateFlow(false)
 ) {

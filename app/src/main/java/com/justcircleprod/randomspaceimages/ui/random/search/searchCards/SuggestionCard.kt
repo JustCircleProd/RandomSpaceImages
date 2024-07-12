@@ -36,7 +36,7 @@ import com.justcircleprod.randomspaceimages.ui.theme.LatoFontFamily
 fun SuggestionCard(
     @StringRes suggestionStringRes: Int,
     suggestionText: String,
-    @DrawableRes SuggestionImageRes: Int,
+    @DrawableRes suggestionImageRes: Int,
     onClick: (String) -> Unit
 ) {
     Card(
@@ -60,7 +60,7 @@ fun SuggestionCard(
             modifier = Modifier.fillMaxSize()
         ) {
             Image(
-                painter = painterResource(id = SuggestionImageRes),
+                painter = painterResource(id = suggestionImageRes),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 colorFilter = ColorFilter.tint(Color.Black.copy(0.4f), BlendMode.Darken),
